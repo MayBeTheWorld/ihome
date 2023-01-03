@@ -1,0 +1,50 @@
+.tabBar {
+	width: 750rpx;
+	height: 98rpx;
+	position: fixed;
+	z-index: 999;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	border-top: #ababab 1rpx solid;
+	box-shadow: rgba(0, 0, 0, 0.4) 0rpx 0rpx 10rpx 2rpx;
+}
+
+.tabBarView {
+	width: 25%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.tabBarContent {
+	width: 98rpx;
+	height: 98rpx;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.imageView {
+	width: 55%;
+	height: 55%;
+	margin-top: 5rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.textView {
+	width: 60rpx;
+	height: 32rpx;
+	color: #32B0B5;
+	transform: translateY(-25%);
+	font-size: 24rpx;
+	text-align: center;
+}

@@ -1,0 +1,1 @@
+<view> 测试登录状态：{{a}}</view><button bindtap="{{b}}"> 点击提交登录 </button><button bindtap="{{c}}"> 点击退出登录 </button>

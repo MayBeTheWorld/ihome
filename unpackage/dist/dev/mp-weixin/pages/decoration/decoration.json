@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "装修",
+  "usingComponents": {
+    "public-tab-bar": "../../components/publicTabBar/publicTabBar"
+  }
+}

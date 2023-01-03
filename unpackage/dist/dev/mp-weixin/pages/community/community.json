@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "社区",
+  "usingComponents": {
+    "public-tab-bar": "../../components/publicTabBar/publicTabBar"
+  }
+}
