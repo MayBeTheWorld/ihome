@@ -1,7 +1,7 @@
 
 .header {
 	width: 100%;
-	height: 98rpx;
+	height: 100rpx;
     position: relative;
     display: flex;
 	justify-content: space-around;
@@ -11,7 +11,7 @@
 
 .profileView{
 	display: block;
-	margin: 5rpx 5rpx;
+	margin: 10rpx 10rpx;
 	border-radius: 50rpx;
 }
 
@@ -29,19 +29,22 @@
 }
 
 .icon {
-	width: 50rpx;
-	height: 50rpx;
+	width: 60rpx;
+	height: 60rpx;
 }
 
 .searchBox {
 	width: 100%;
 	margin: 0 0 0 20rpx;
+	padding: 10rpx 20rpx;
 	display: flex;
 	flex-direction: row;
 	justify-items: center;
 	align-items: center;
-	border-radius: 10rpx;
-	border: 2rpx solid #32B0B5;
+	border-radius: 50rpx;
+	border: 0rpx;
+	background-color: rgba(0, 0, 0, 0.05);
+	
 }
 
 .search {
@@ -58,9 +61,11 @@
 	height: 268rpx;
 	margin: 30rpx auto 44rpx;
 }
-.swiper{
+
+/* .swiper{
 	height: 268rpx;
 }
+
 .item{
 	position:relative;
 	display: block;
@@ -70,8 +75,30 @@
 	border-radius: 14rpx;
 	overflow: hidden;
 }
+
 .img {
 	display: block;
 	width: 100%;
 	height: 100%;
+}
+ */
+
+.styleChooseBox{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+	padding: 20rpx 0;
+}
+
+.buildingStyle{
+	display: flex;
+	align-items: center;
+	font-weight: 900;
+	height: 50rpx;
+}
+
+.styleChooseView{
+	height: 90rpx;
 }

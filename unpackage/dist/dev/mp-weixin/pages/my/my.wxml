@@ -1,1 +1,1 @@
-<view class="systemBox"><public-tab-bar wx:if="{{a}}" u-i="4b75c344-0" bind:__l="__l" u-p="{{a}}"></public-tab-bar><button bindtap="{{b}}">点击跳转登录</button></view>
+<view class="systemBox"><public-tab-bar wx:if="{{a}}" u-i="4b75c344-0" bind:__l="__l" u-p="{{a}}"/><button bindtap="{{b}}">点击跳转登录</button></view>

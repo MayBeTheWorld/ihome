@@ -1,6 +1,6 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
-const store = new common_vendor.index.Store({
+const store = common_vendor.createStore({
   state: {
     isLogin: false
   },

@@ -1,6 +1,6 @@
 .tabBar {
 	width: 750rpx;
-	height: 98rpx;
+	height: 110rpx;
 	position: fixed;
 	z-index: 999;
 	bottom: 0;
@@ -8,8 +8,6 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	border-top: #ababab 2rpx solid;
-	box-shadow: rgba(0, 0, 0, 0.4) 0rpx 0rpx 25rpx 5rpx;
 }
 .tabBarView {
 	width: 25%;
@@ -35,6 +33,9 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+}
+image {
+	height: 60rpx;
 }
 .textView {
 	width: 60rpx;

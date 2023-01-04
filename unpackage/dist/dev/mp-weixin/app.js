@@ -11,7 +11,7 @@ if (!Math) {
 }
 const _sfc_main = {
   onLaunch: function() {
-    common_vendor.index$1.hideTabBar();
+    common_vendor.index.hideTabBar();
     console.log("App Launch");
   },
   onShow: function() {
@@ -25,6 +25,8 @@ const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(store_index.store);
+  app.use(common_vendor.uviewPlus);
+  common_vendor.index.$u.config.unit = "rpx";
   return {
     app
   };

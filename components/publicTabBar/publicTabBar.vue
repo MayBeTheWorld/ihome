@@ -42,27 +42,22 @@
 				<view class="textView">我的</view>
 			</view>
 		</view>
-<!-- 		<button @click="log">
-			
-		</button> -->
 	</view>
 </template>
 
-<script setup>
-	import { toRefs, defineProps } from 'vue'
+<script setup name="publicTabBar">
+	import { defineProps } from 'vue'
 	
-	const name = 'publicTabBar'
+	//取得父组件传值并结构
 	const props = defineProps({
-		activePage: String,
+		activePage: {
+			type: String,
+			default:''
+		}
 	})
-	const { activePage } = props
 	
-	// const log = ()=> {
-	// 	console.log(activePage)
-	// }
-
 	function gotoIndexMenu (aim) {
-		if (aim != activePage) {
+		if (aim != props.activePage) {
 			switch (aim) {
 				case '0':
 					uni.switchTab({
