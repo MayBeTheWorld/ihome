@@ -3,5 +3,6 @@
   "projectname": "爱佳装",
   "setting": {
     "compileHotReLoad": true
-  }
+  },
+  "libVersion": "2.29.1"
 }

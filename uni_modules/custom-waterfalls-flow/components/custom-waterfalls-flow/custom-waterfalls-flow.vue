@@ -287,7 +287,8 @@
 <style lang="scss" scoped>
 	.waterfalls-flow {
 		overflow: hidden;
-
+		padding: 0 20rpx;
+		
 		&-column {
 			float: left;
 		}

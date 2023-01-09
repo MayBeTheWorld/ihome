@@ -25,6 +25,7 @@
 /* 文章场景相关 */
 .waterfalls-flow.data-v-6aaf0fae {
   overflow: hidden;
+  padding: 0 20rpx;
 }
 .waterfalls-flow-column.data-v-6aaf0fae {
   float: left;

@@ -22,17 +22,7 @@
   "libVersion": "2.26.1",
   "appid": "wxbf5d3fb8be31f377",
   "projectname": "知佳装",
-  "condition": {
-    "miniprogram": {
-      "list": [
-        {
-          "name": "pages/index/index",
-          "pathName": "pages/index/index",
-          "query": ""
-        }
-      ]
-    }
-  },
+  "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2

@@ -83,10 +83,6 @@
 	height: calc(100vh - 110rpx - 90rpx - 110rpx);
 }
 
-.swiper-item {
-	padding: 0 20rpx;
-}
-
 .descBox {
 	margin: 0 20rpx;
 }

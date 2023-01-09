@@ -40,7 +40,8 @@
 				<swiper-item>
 					<scroll-view class="waterfallsFlowBox" scroll-y="true" >
 						<view>
-							<custom-waterfalls-flow class="swiper-item" :column="column" :listStyle="listStyle" ref="waterfallsFlowRef" :value="data.list0">
+							<custom-waterfalls-flow class="swiper-item" :column="column" 
+							:listStyle="listStyle" ref="waterfallsFlowRef" :value="data.list0">
 								<!-- #ifdef MP-WEIXIN -->
 								    <view class="flowItem" v-for="(item,index) in data.list0" :key="index" slot="slot{{index}}">
 										<view class="descBox">
@@ -73,7 +74,6 @@
 														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
 														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 														size="40" ></u-icon>
-														<!--  -->
 													</view>
 												</view>
 								            </view>
@@ -285,7 +285,7 @@
 	//风格索引，默认第一个
 	const styleItem = ref(0);
 	function swiperChange(e) {
-		// console.log(e);
+		console.log(e.detail.current);
 		styleItem.value = e.detail.current;
 	};
 	
