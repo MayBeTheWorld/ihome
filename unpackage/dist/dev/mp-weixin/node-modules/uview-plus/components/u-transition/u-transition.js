@@ -23,7 +23,7 @@ const _sfc_main = {
       };
     }
   },
-  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.transition, common_vendor.props$3],
+  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.transition, common_vendor.props$5],
   watch: {
     show: {
       handler(newVal) {

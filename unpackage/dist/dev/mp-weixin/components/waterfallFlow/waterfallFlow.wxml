@@ -1,1 +1,0 @@
-<scroll-view class="cardScroll" scroll-y="true"><view class="cardBox"><view wx:for="{{a}}" wx:for-item="item" class="card"><image class="cardPic" src="{{item.a}}"></image><view class="cardText"><text class="text" selectable="false">{{item.b}}</text></view></view></view></scroll-view>

@@ -4,8 +4,8 @@ const _sfc_main = {
   __name: "publicTabBar",
   props: {
     activePage: {
-      type: String,
-      default: ""
+      type: Number,
+      default: 0
     }
   },
   setup(__props) {

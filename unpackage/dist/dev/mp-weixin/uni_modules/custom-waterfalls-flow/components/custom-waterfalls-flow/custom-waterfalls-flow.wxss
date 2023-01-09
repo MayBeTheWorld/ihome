@@ -23,31 +23,31 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.cardScroll {
-  /*110rpx为header的高度,90rpx为风格选项条的高度，110rpx为底部导航栏的高度*/
-  height: calc(100vh - 110rpx - 90rpx - 110rpx);
-}
-.cardBox {
-  width: 750rpx;
-}
-.cardBox .card {
-  display: block;
-  float: left;
-  background-color: #ffffff;
-  margin: 10rpx;
-  width: 350rpx;
-  border-radius: 10rpx;
+.waterfalls-flow.data-v-6aaf0fae {
   overflow: hidden;
-  box-shadow: 0px 1.7px 3.6px rgba(0, 0, 0, 0.024), 0px 4.6px 10px rgba(0, 0, 0, 0.035), 0px 11.2px 24.1px rgba(0, 0, 0, 0.046), 0px 37px 80px rgba(0, 0, 0, 0.07);
 }
-.cardBox .card .cardPic {
+.waterfalls-flow-column.data-v-6aaf0fae {
+  float: left;
+}
+.column-value.data-v-6aaf0fae {
+  width: 100%;
+  font-size: 0;
+  overflow: hidden;
+  transition: opacity 0.4s;
+  opacity: 0;
+}
+.column-value-show.data-v-6aaf0fae {
+  opacity: 1;
+}
+.column-value .inner.data-v-6aaf0fae {
+  font-size: 30rpx;
+}
+.column-value .img.data-v-6aaf0fae {
   width: 100%;
 }
-.cardBox .card .cardText {
-  margin: 0 20rpx 10rpx 20rpx;
+.column-value .img-hide.data-v-6aaf0fae {
+  display: none;
 }
-.cardBox .card .cardText .text {
-  font-size: 0.8rem;
-  font-weight: 900;
-  font-family: cursive;
+.column-value .img-error.data-v-6aaf0fae {
+  background: #f2f2f2 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAiAQMAAAAatXkPAAAABlBMVEUAAADMzMzIT8AyAAAAAXRSTlMAQObYZgAAAIZJREFUCNdlzjEKwkAUBNAfEGyCuYBkLyLuxRYW2SKlV1JSeA2tUiZg4YrLjv9PGsHqNTPMSAQuyAJgRDHSyvBPwtZoSJXakeJI9iuRLGDygdl6V0yKDtyMAeMPZySj8yfD+UapvRPj2JOwkyAooSV5IwdDjPdCPspe8LyTl9IKJvDETKKRv6vnlUasgg0fAAAAAElFTkSuQmCC) no-repeat center center;
 }

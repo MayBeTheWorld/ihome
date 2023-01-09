@@ -2,7 +2,7 @@
 const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "u-loading-icon",
-  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$2],
+  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$4],
   data() {
     return {
       array12: Array.from({

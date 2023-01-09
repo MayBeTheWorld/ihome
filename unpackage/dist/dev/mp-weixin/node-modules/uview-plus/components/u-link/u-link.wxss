@@ -23,28 +23,21 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.loginState {
+view.data-v-dedad317, scroll-view.data-v-dedad317, swiper-item.data-v-dedad317 {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  font-size: 48rpx;
-  font-weight: 900;
-  margin: 30rpx 0;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
 }
-.loginState .profileView {
-  margin: 0 30rpx;
-}
-.loginInfo {
+.u-link.data-v-dedad317 {
+  line-height: 1;
+
   display: flex;
+
   flex-direction: row;
-  justify-content: space-between;
-  color: #666666;
-  margin: 0 40rpx;
-  font-size: 30rpx;
-}
-.loginInfo .Info {
+  flex-wrap: wrap;
   flex: 1;
-}
-.loginInfo .Info3 {
-  flex: 1.5;
 }

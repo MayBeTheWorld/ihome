@@ -19,6 +19,7 @@ export function createApp() {
   const app = createSSRApp(App)
   app.use(Store);
   app.use(uviewPlus);
+  app.config.globalProperties.msg = 'hello';
   uni.$u.config.unit = 'rpx'
   return {
     app
@@ -51,3 +52,4 @@ export function createApp() {
 // 		this.$refs.toast.hideToast();
 // 	}, 100);
 // }
+

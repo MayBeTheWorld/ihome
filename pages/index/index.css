@@ -1,4 +1,5 @@
 
+/* 头部功能部分 */
 .header {
 	width: 100%;
 	height: 100rpx;
@@ -56,33 +57,7 @@
 	padding-top: 5rpx;
 }
 
-.banner {
-	width: 100%;
-	height: 268rpx;
-	margin: 30rpx auto 44rpx;
-}
-
-/* .swiper{
-	height: 268rpx;
-}
-
-.item{
-	position:relative;
-	display: block;
-	width: 686rpx;
-	height: 268rpx;
-	margin: 0 auto;
-	border-radius: 14rpx;
-	overflow: hidden;
-}
-
-.img {
-	display: block;
-	width: 100%;
-	height: 100%;
-}
- */
-
+/* 风格选择栏部分 */
 .styleChooseBox{
 	display: flex;
 	flex-direction: row;
@@ -101,4 +76,49 @@
 
 .styleChooseView{
 	height: 90rpx;
+}
+
+/* 瀑布流组件部分 */
+.waterfallsFlowBox{
+	height: calc(100vh - 110rpx - 90rpx - 110rpx);
+}
+
+.swiper-item {
+	padding: 0 20rpx;
+}
+
+.descBox {
+	margin: 0 20rpx;
+}
+
+.desc {
+	margin-top: 20rpx;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	text-overflow: '';
+	overflow: hidden;
+}
+
+.userBox {
+	margin: 20rpx 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.user {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.userName {
+	padding-left: 10rpx;
+}
+
+.star {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

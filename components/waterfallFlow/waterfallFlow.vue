@@ -1,3 +1,4 @@
+<!-- 弃用组件 -->
 <template>
 	<scroll-view class="cardScroll" scroll-y="true" >
 		<view class="cardBox">

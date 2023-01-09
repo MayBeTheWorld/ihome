@@ -51,8 +51,8 @@
 	//取得父组件传值并结构
 	const props = defineProps({
 		activePage: {
-			type: String,
-			default:''
+			type: Number,
+			default: 0
 		}
 	})
 	
