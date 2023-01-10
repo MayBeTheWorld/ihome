@@ -3,7 +3,7 @@ const common_vendor = require("../../../../common/vendor.js");
 const uvText = () => "../u-text/u-text.js";
 const _sfc_main = {
   name: "u--text",
-  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$3],
+  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$4],
   components: {
     uvText
   }
@@ -40,5 +40,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/Projects/\u7231\u4F73\u88C5/node_modules/uview-plus/components/u--text/u--text.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u--text/u--text.vue"]]);
 wx.createComponent(Component);

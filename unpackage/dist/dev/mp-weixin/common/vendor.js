@@ -27,10 +27,11 @@ function normalizeStyle(value2) {
   }
 }
 const listDelimiterRE = /;(?![^(]*\))/g;
-const propertyDelimiterRE = /:(.+)/;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*.*?\*\//gs;
 function parseStringStyle(cssText) {
   const ret = {};
-  cssText.split(listDelimiterRE).forEach((item) => {
+  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
     if (item) {
       const tmp = item.split(propertyDelimiterRE);
       tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
@@ -1256,8 +1257,8 @@ function populateParameters(fromRes, toRes) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.6.9",
-    uniRuntimeVersion: "3.6.9",
+    uniCompileVersion: "3.6.15",
+    uniRuntimeVersion: "3.6.15",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -1749,8 +1750,9 @@ function trigger(target, type, key, newValue, oldValue, oldTarget) {
   if (type === "clear") {
     deps = [...depsMap.values()];
   } else if (key === "length" && isArray$1(target)) {
+    const newLength = toNumber(newValue);
     depsMap.forEach((dep, key2) => {
-      if (key2 === "length" || key2 >= newValue) {
+      if (key2 === "length" || key2 >= newLength) {
         deps.push(dep);
       }
     });
@@ -2781,7 +2783,73 @@ function checkRecursiveUpdates(seen, fn) {
     }
   }
 }
+let devtools;
+let buffer = [];
+let devtoolsNotInstalled = false;
 function emit(event, ...args) {
+  if (devtools) {
+    devtools.emit(event, ...args);
+  } else if (!devtoolsNotInstalled) {
+    buffer.push({ event, args });
+  }
+}
+function setDevtoolsHook(hook, target) {
+  var _a2, _b;
+  devtools = hook;
+  if (devtools) {
+    devtools.enabled = true;
+    buffer.forEach(({ event, args }) => devtools.emit(event, ...args));
+    buffer = [];
+  } else if (typeof window !== "undefined" && window.HTMLElement && !((_b = (_a2 = window.navigator) === null || _a2 === void 0 ? void 0 : _a2.userAgent) === null || _b === void 0 ? void 0 : _b.includes("jsdom"))) {
+    const replay = target.__VUE_DEVTOOLS_HOOK_REPLAY__ = target.__VUE_DEVTOOLS_HOOK_REPLAY__ || [];
+    replay.push((newHook) => {
+      setDevtoolsHook(newHook, target);
+    });
+    setTimeout(() => {
+      if (!devtools) {
+        target.__VUE_DEVTOOLS_HOOK_REPLAY__ = null;
+        devtoolsNotInstalled = true;
+        buffer = [];
+      }
+    }, 3e3);
+  } else {
+    devtoolsNotInstalled = true;
+    buffer = [];
+  }
+}
+function devtoolsInitApp(app, version2) {
+  emit("app:init", app, version2, {
+    Fragment,
+    Text,
+    Comment,
+    Static
+  });
+}
+const devtoolsComponentAdded = /* @__PURE__ */ createDevtoolsComponentHook("component:added");
+const devtoolsComponentUpdated = /* @__PURE__ */ createDevtoolsComponentHook("component:updated");
+const _devtoolsComponentRemoved = /* @__PURE__ */ createDevtoolsComponentHook("component:removed");
+const devtoolsComponentRemoved = (component) => {
+  if (devtools && typeof devtools.cleanupBuffer === "function" && !devtools.cleanupBuffer(component)) {
+    _devtoolsComponentRemoved(component);
+  }
+};
+function createDevtoolsComponentHook(hook) {
+  return (component) => {
+    emit(
+      hook,
+      component.appContext.app,
+      component.uid,
+      component.uid === 0 ? void 0 : component.parent ? component.parent.uid : 0,
+      component
+    );
+  };
+}
+const devtoolsPerfStart = /* @__PURE__ */ createDevtoolsPerformanceHook("perf:start");
+const devtoolsPerfEnd = /* @__PURE__ */ createDevtoolsPerformanceHook("perf:end");
+function createDevtoolsPerformanceHook(hook) {
+  return (component, type, time) => {
+    emit(hook, component.appContext.app, component.uid, component, type, time);
+  };
 }
 function devtoolsComponentEmit(component, event, params) {
   emit("component:emit", component.appContext.app, component, event, params);
@@ -2815,7 +2883,7 @@ function emit$1(instance, event, ...rawArgs) {
     const modifiersKey = `${modelArg === "modelValue" ? "model" : modelArg}Modifiers`;
     const { number: number2, trim: trim2 } = props2[modifiersKey] || EMPTY_OBJ;
     if (trim2) {
-      args = rawArgs.map((a) => a.trim());
+      args = rawArgs.map((a) => isString(a) ? a.trim() : a);
     }
     if (number2) {
       args = rawArgs.map(toNumber);
@@ -3009,7 +3077,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
       callWithErrorHandling(fn, instance, 4);
     };
   };
-  let oldValue = isMultiSource ? [] : INITIAL_WATCHER_VALUE;
+  let oldValue = isMultiSource ? new Array(source.length).fill(INITIAL_WATCHER_VALUE) : INITIAL_WATCHER_VALUE;
   const job = () => {
     if (!effect.active) {
       return;
@@ -3022,7 +3090,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
         }
         callWithAsyncErrorHandling(cb, instance, 3, [
           newValue,
-          oldValue === INITIAL_WATCHER_VALUE ? void 0 : oldValue,
+          oldValue === INITIAL_WATCHER_VALUE ? void 0 : isMultiSource && oldValue[0] === INITIAL_WATCHER_VALUE ? [] : oldValue,
           onCleanup
         ]);
         oldValue = newValue;
@@ -3059,12 +3127,13 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
   } else {
     effect.run();
   }
-  return () => {
+  const unwatch = () => {
     effect.stop();
     if (instance && instance.scope) {
       remove(instance.scope.effects, effect);
     }
   };
+  return unwatch;
 }
 function instanceWatch(source, value2, options) {
   const publicThis = this.proxy;
@@ -3257,14 +3326,12 @@ const publicPropertiesMap = /* @__PURE__ */ extend(/* @__PURE__ */ Object.create
   $watch: (i) => instanceWatch.bind(i)
 });
 const isReservedPrefix = (key) => key === "_" || key === "$";
+const hasSetupBinding = (state, key) => state !== EMPTY_OBJ && !state.__isScriptSetup && hasOwn(state, key);
 const PublicInstanceProxyHandlers = {
   get({ _: instance }, key) {
     const { ctx, setupState, data, props: props2, accessCache, type, appContext } = instance;
     if (key === "__isVue") {
       return true;
-    }
-    if (setupState !== EMPTY_OBJ && setupState.__isScriptSetup && hasOwn(setupState, key)) {
-      return setupState[key];
     }
     let normalizedProps;
     if (key[0] !== "$") {
@@ -3280,7 +3347,7 @@ const PublicInstanceProxyHandlers = {
           case 3:
             return props2[key];
         }
-      } else if (setupState !== EMPTY_OBJ && hasOwn(setupState, key)) {
+      } else if (hasSetupBinding(setupState, key)) {
         accessCache[key] = 1;
         return setupState[key];
       } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
@@ -3322,18 +3389,21 @@ const PublicInstanceProxyHandlers = {
   },
   set({ _: instance }, key, value2) {
     const { data, setupState, ctx } = instance;
-    if (setupState !== EMPTY_OBJ && hasOwn(setupState, key)) {
+    if (hasSetupBinding(setupState, key)) {
       setupState[key] = value2;
       return true;
+    } else if (setupState.__isScriptSetup && hasOwn(setupState, key)) {
+      warn$1(`Cannot mutate <script setup> binding "${key}" from Options API.`);
+      return false;
     } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
       data[key] = value2;
       return true;
     } else if (hasOwn(instance.props, key)) {
-      warn$1(`Attempting to mutate prop "${key}". Props are readonly.`, instance);
+      warn$1(`Attempting to mutate prop "${key}". Props are readonly.`);
       return false;
     }
     if (key[0] === "$" && key.slice(1) in instance) {
-      warn$1(`Attempting to mutate public property "${key}". Properties starting with $ are reserved and readonly.`, instance);
+      warn$1(`Attempting to mutate public property "${key}". Properties starting with $ are reserved and readonly.`);
       return false;
     } else {
       if (key in instance.appContext.config.globalProperties) {
@@ -3350,7 +3420,7 @@ const PublicInstanceProxyHandlers = {
   },
   has({ _: { data, setupState, accessCache, ctx, appContext, propsOptions } }, key) {
     let normalizedProps;
-    return !!accessCache[key] || data !== EMPTY_OBJ && hasOwn(data, key) || setupState !== EMPTY_OBJ && hasOwn(setupState, key) || (normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key) || hasOwn(ctx, key) || hasOwn(publicPropertiesMap, key) || hasOwn(appContext.config.globalProperties, key);
+    return !!accessCache[key] || data !== EMPTY_OBJ && hasOwn(data, key) || hasSetupBinding(setupState, key) || (normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key) || hasOwn(ctx, key) || hasOwn(publicPropertiesMap, key) || hasOwn(appContext.config.globalProperties, key);
   },
   defineProperty(target, key, descriptor) {
     if (descriptor.get != null) {
@@ -3998,7 +4068,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
       const normalizedKey = camelize(key);
       if (validatePropName(normalizedKey)) {
         const opt = raw[key];
-        const prop = normalized[normalizedKey] = isArray$1(opt) || isFunction(opt) ? { type: opt } : opt;
+        const prop = normalized[normalizedKey] = isArray$1(opt) || isFunction(opt) ? { type: opt } : Object.assign({}, opt);
         if (prop) {
           const booleanIndex = getTypeIndex(Boolean, prop.type);
           const stringIndex = getTypeIndex(String, prop.type);
@@ -4246,7 +4316,46 @@ function createAppAPI(render, hydrate) {
     return app;
   };
 }
+let supported;
+let perf;
+function startMeasure(instance, type) {
+  if (instance.appContext.config.performance && isSupported()) {
+    perf.mark(`vue-${type}-${instance.uid}`);
+  }
+  {
+    devtoolsPerfStart(instance, type, isSupported() ? perf.now() : Date.now());
+  }
+}
+function endMeasure(instance, type) {
+  if (instance.appContext.config.performance && isSupported()) {
+    const startTag = `vue-${type}-${instance.uid}`;
+    const endTag = startTag + `:end`;
+    perf.mark(endTag);
+    perf.measure(`<${formatComponentName(instance, instance.type)}> ${type}`, startTag, endTag);
+    perf.clearMarks(startTag);
+    perf.clearMarks(endTag);
+  }
+  {
+    devtoolsPerfEnd(instance, type, isSupported() ? perf.now() : Date.now());
+  }
+}
+function isSupported() {
+  if (supported !== void 0) {
+    return supported;
+  }
+  if (typeof window !== "undefined" && window.performance) {
+    supported = true;
+    perf = window.performance;
+  } else {
+    supported = false;
+  }
+  return supported;
+}
 const queuePostRenderEffect = queuePostFlushCb;
+const Fragment = Symbol("Fragment");
+const Text = Symbol("Text");
+const Comment = Symbol("Comment");
+const Static = Symbol("Static");
 function isVNode(value2) {
   return value2 ? value2.__v_isVNode === true : false;
 }
@@ -4499,6 +4608,9 @@ function getExposeProxy(instance) {
           return target[key];
         }
         return instance.proxy[key];
+      },
+      has(target, key) {
+        return key in target || key in publicPropertiesMap;
       }
     }));
   }
@@ -4531,7 +4643,7 @@ function formatComponentName(instance, Component2, isRoot = false) {
 const computed$1 = (getterOrOptions, debugOptions) => {
   return computed(getterOrOptions, debugOptions, isInSSRComponentSetup);
 };
-const version$1 = "3.2.41";
+const version$1 = "3.2.45";
 function unwrapper(target) {
   return unref(target);
 }
@@ -4860,8 +4972,15 @@ function mountComponent(initialVNode, options) {
   }
   {
     pushWarningContext(initialVNode);
+    startMeasure(instance, `mount`);
+  }
+  {
+    startMeasure(instance, `init`);
   }
   setupComponent(instance);
+  {
+    endMeasure(instance, `init`);
+  }
   {
     if (options.parentComponent && instance.proxy) {
       options.parentComponent.ctx.$children.push(getExposeProxy(instance) || instance.proxy);
@@ -4870,6 +4989,7 @@ function mountComponent(initialVNode, options) {
   setupRenderEffect(instance);
   {
     popWarningContext();
+    endMeasure(instance, `mount`);
   }
   return instance.proxy;
 }
@@ -4966,18 +5086,42 @@ function setupRenderEffect(instance) {
       onBeforeUnmount(() => {
         setRef$1(instance, true);
       }, instance);
+      {
+        startMeasure(instance, `patch`);
+      }
       patch(instance, renderComponentRoot(instance));
+      {
+        endMeasure(instance, `patch`);
+      }
+      {
+        devtoolsComponentAdded(instance);
+      }
     } else {
-      const { bu, u } = instance;
+      const { next, bu, u } = instance;
+      {
+        pushWarningContext(next || instance.vnode);
+      }
       toggleRecurse(instance, false);
       updateComponentPreRender();
       if (bu) {
         invokeArrayFns$1(bu);
       }
       toggleRecurse(instance, true);
+      {
+        startMeasure(instance, `patch`);
+      }
       patch(instance, renderComponentRoot(instance));
+      {
+        endMeasure(instance, `patch`);
+      }
       if (u) {
         queuePostRenderEffect$1(u);
+      }
+      {
+        devtoolsComponentUpdated(instance);
+      }
+      {
+        popWarningContext();
       }
     }
   };
@@ -5011,9 +5155,31 @@ function unmountComponent(instance) {
   queuePostRenderEffect$1(() => {
     instance.isUnmounted = true;
   });
+  {
+    devtoolsComponentRemoved(instance);
+  }
 }
 const oldCreateApp = createAppAPI();
+function getTarget() {
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  if (typeof my !== "undefined") {
+    return my;
+  }
+}
 function createVueApp(rootComponent, rootProps = null) {
+  const target = getTarget();
+  target.__VUE__ = true;
+  {
+    setDevtoolsHook(target.__VUE_DEVTOOLS_GLOBAL_HOOK__, target);
+  }
   const app = oldCreateApp(rootComponent, rootProps);
   const appContext = app._context;
   initAppConfig(appContext.config);
@@ -5038,6 +5204,9 @@ function createVueApp(rootComponent, rootProps = null) {
       props: null
     });
     app._instance = instance.$;
+    {
+      devtoolsInitApp(app, version$1);
+    }
     instance.$app = app;
     instance.$createComponent = createComponent2;
     instance.$destroyComponent = destroyComponent;
@@ -5948,6 +6117,10 @@ function parseComponent(vueOptions, { parse: parse2, mocks: mocks2, isPage: isPa
     lifetimes: initLifetimes2({ mocks: mocks2, isPage: isPage2, initRelation: initRelation2, vueOptions }),
     pageLifetimes: {
       show() {
+        {
+          devtoolsComponentRemoved(this.$vm.$);
+          devtoolsComponentAdded(this.$vm.$);
+        }
         this.$vm && this.$vm.$callHook("onPageShow");
       },
       hide() {
@@ -6621,7 +6794,7 @@ var Store = function Store2(options) {
   var strict = options.strict;
   if (strict === void 0)
     strict = false;
-  var devtools = options.devtools;
+  var devtools2 = options.devtools;
   this._committing = false;
   this._actions = /* @__PURE__ */ Object.create(null);
   this._actionSubscribers = [];
@@ -6632,7 +6805,7 @@ var Store = function Store2(options) {
   this._subscribers = [];
   this._makeLocalGettersCache = /* @__PURE__ */ Object.create(null);
   this._scope = null;
-  this._devtools = devtools;
+  this._devtools = devtools2;
   var store = this;
   var ref2 = this;
   var dispatch2 = ref2.dispatch;
@@ -9918,7 +10091,7 @@ const install2 = (Vue) => {
 const uviewPlus = {
   install: install2
 };
-const props$6 = {
+const props$7 = {
   props: {
     src: {
       type: String,
@@ -10195,7 +10368,7 @@ const icons = {
   "uicon-zh": "\uE70A",
   "uicon-en": "\uE692"
 };
-const props$5 = {
+const props$6 = {
   props: {
     name: {
       type: String,
@@ -10264,6 +10437,34 @@ const props$5 = {
     stop: {
       type: Boolean,
       default: defprops.icon.stop
+    }
+  }
+};
+const props$5 = {
+  props: {
+    indicatorWidth: {
+      type: [String, Number],
+      default: defprops.scrollList.indicatorWidth
+    },
+    indicatorBarWidth: {
+      type: [String, Number],
+      default: defprops.scrollList.indicatorBarWidth
+    },
+    indicator: {
+      type: Boolean,
+      default: defprops.scrollList.indicator
+    },
+    indicatorColor: {
+      type: String,
+      default: defprops.scrollList.indicatorColor
+    },
+    indicatorActiveColor: {
+      type: String,
+      default: defprops.scrollList.indicatorActiveColor
+    },
+    indicatorStyle: {
+      type: [String, Object],
+      default: defprops.scrollList.indicatorStyle
     }
   }
 };
@@ -10645,13 +10846,14 @@ exports.n = n;
 exports.o = o;
 exports.openType = openType;
 exports.p = p;
-exports.props = props$6;
-exports.props$1 = props$5;
-exports.props$2 = props$4;
-exports.props$3 = props$3;
-exports.props$4 = props$2;
-exports.props$5 = props$1;
-exports.props$6 = props;
+exports.props = props$7;
+exports.props$1 = props$6;
+exports.props$2 = props$5;
+exports.props$3 = props$4;
+exports.props$4 = props$3;
+exports.props$5 = props$2;
+exports.props$6 = props$1;
+exports.props$7 = props;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;

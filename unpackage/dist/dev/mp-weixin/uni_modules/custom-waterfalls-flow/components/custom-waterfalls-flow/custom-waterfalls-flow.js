@@ -243,9 +243,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
               "img-error": !item2[$data.data.imageKey]
             }),
             d: item2[$data.data.imageKey],
-            e: common_vendor.o(($event) => $options.imgLoad(item2, index + 1)),
-            f: common_vendor.o(($event) => $options.imgError(item2, index + 1)),
-            g: common_vendor.o(($event) => $options.imageClick(item2))
+            e: common_vendor.o(($event) => $options.imgLoad(item2, index + 1), index2),
+            f: common_vendor.o(($event) => $options.imgError(item2, index + 1), index2),
+            g: common_vendor.o(($event) => $options.imageClick(item2), index2)
           }, $data.data.seat == 2 ? {
             h: common_vendor.d(`slot${item2.index}`)
           } : {}, {
@@ -268,5 +268,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: $options.w
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-6aaf0fae"], ["__file", "D:/Projects/\u7231\u4F73\u88C5/uni_modules/custom-waterfalls-flow/components/custom-waterfalls-flow/custom-waterfalls-flow.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-6aaf0fae"], ["__file", "D:/desktop/ihome2/uni_modules/custom-waterfalls-flow/components/custom-waterfalls-flow/custom-waterfalls-flow.vue"]]);
 wx.createComponent(Component);

@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "装修",
   "usingComponents": {
-    "public-tab-bar": "../../components/publicTabBar/publicTabBar"
+    "public-tab-bar": "../../components/publicTabBar/publicTabBar",
+    "u-scroll-list": "../../node-modules/uview-plus/components/u-scroll-list/u-scroll-list"
   }
 }

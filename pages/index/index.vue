@@ -1,7 +1,7 @@
 <template>
 	<view class="systemBox">
 		<publicTabBar :activePage="0"/>
-		
+
 		<!-- 头部功能 -->
 		<view class="header">
 			<view class="profileView">
@@ -16,11 +16,11 @@
 				<image class="icon" src="../../static/index/扫一扫.png" mode="aspectFit"></image>
 			</view>
 		</view>
-		
+
 		<!-- 风格选择栏 -->
 		<scroll-view class="styleChooseView" scroll-x="true">
 			<view class="styleChooseBox">
-				<view class="buildingStyle" @click="styleItem = 0" 
+				<view class="buildingStyle" @click="styleItem = 0"
 				:style="{ color: styleItem == 0?'#FEB814':'#363636' }">简欧风</view>
 				<view class="buildingStyle" @click="styleItem = 1"
 				:style="{ color: styleItem == 1?'#FEB814':'#363636' }">中式风</view>
@@ -29,18 +29,27 @@
 				<view class="buildingStyle" @click="styleItem = 3"
 				:style="{ color: styleItem == 3?'#FEB814':'#363636' }">日式风</view>
 				<view class="buildingStyle" @click="styleItem = 4"
+
+
+
+
+
+
+
+
+
 				:style="{ color: styleItem == 4?'#FEB814':'#363636' }">田园风</view>
 			</view>
 		</scroll-view>
-		
+
 		<!-- 瀑布流展示组件 -->
 		<scroll-view class="waterfallsFlowBox" scroll-y="true" >
-			<swiper class="waterfallsFlowBox" :indicator-dots="false" :autoplay="false" 
+			<swiper class="waterfallsFlowBox" :indicator-dots="false" :autoplay="false"
 			:circular="true" :current="styleItem" @change="swiperChange">
 				<swiper-item>
 					<scroll-view class="waterfallsFlowBox" scroll-y="true" >
 						<view>
-							<custom-waterfalls-flow class="swiper-item" :column="column" 
+							<custom-waterfalls-flow class="swiper-item" :column="column"
 							:listStyle="listStyle" ref="waterfallsFlowRef" :value="data.list0">
 								<!-- #ifdef MP-WEIXIN -->
 								    <view class="flowItem" v-for="(item,index) in data.list0" :key="index" slot="slot{{index}}">
@@ -52,7 +61,7 @@
 													<text class="userName">1232321312</text>
 												</view>
 												<view class="star" @click="saveArticle(item)">
-													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 													size="40"></u-icon>
 												</view>
@@ -71,7 +80,7 @@
 														<text class="userName">1232321312</text>
 													</view>
 													<view class="star" @click="saveArticle(item)">
-														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 														size="40" ></u-icon>
 													</view>
@@ -98,7 +107,7 @@
 													<text class="userName">1232321312</text>
 												</view>
 												<view class="star" @click="saveArticle(item)">
-													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 													size="40"></u-icon>
 												</view>
@@ -117,54 +126,7 @@
 														<text class="userName">1232321312</text>
 													</view>
 													<view class="star" @click="saveArticle(item)">
-														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
-														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
-														size="40" ></u-icon>
-														<!--  -->
-													</view>
-												</view>
-								            </view>
-								        </view>
-								    </template>
-								<!-- #endif -->
-							</custom-waterfalls-flow>
-						</view>
-					</scroll-view>
-				</swiper-item>
-				<swiper-item>
-					<scroll-view class="waterfallsFlowBox" scroll-y="true" >
-						<view>
-							<custom-waterfalls-flow class="swiper-item" :column="column" :listStyle="listStyle" ref="waterfallsFlowRef" :value="data.list0">
-								<!-- #ifdef MP-WEIXIN -->
-								    <view class="flowItem" v-for="(item,index) in data.list0" :key="index" slot="slot{{index}}">
-										<view class="descBox">
-											<view class="desc">{{item.desc}}</view>
-											<view class="userBox">
-												<view class="user">
-													<u-avatar :src="src" shape="circle" size="40"></u-avatar>
-													<text class="userName">1232321312</text>
-												</view>
-												<view class="star" @click="saveArticle(item)">
-													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
-													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
-													size="40"></u-icon>
-												</view>
-											</view>
-										</view>
-								    </view>
-								<!-- #endif -->
-								<!-- #ifndef MP-WEIXIN -->
-								    <template v-slot:default="item">
-								        <view class="flowItem">
-								            <view class="descBox">
-								            	<view class="desc">{{item.desc}}</view>
-												<view class="userBox">
-													<view class="user">
-														<u-avatar :src="src" shape="circle" size="50"></u-avatar>
-														<text class="userName">1232321312</text>
-													</view>
-													<view class="star" @click="saveArticle(item)">
-														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 														size="40" ></u-icon>
 														<!--  -->
@@ -192,7 +154,7 @@
 													<text class="userName">1232321312</text>
 												</view>
 												<view class="star" @click="saveArticle(item)">
-													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 													size="40"></u-icon>
 												</view>
@@ -211,7 +173,7 @@
 														<text class="userName">1232321312</text>
 													</view>
 													<view class="star" @click="saveArticle(item)">
-														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 														size="40" ></u-icon>
 														<!--  -->
@@ -239,7 +201,7 @@
 													<text class="userName">1232321312</text>
 												</view>
 												<view class="star" @click="saveArticle(item)">
-													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 													size="40"></u-icon>
 												</view>
@@ -258,7 +220,54 @@
 														<text class="userName">1232321312</text>
 													</view>
 													<view class="star" @click="saveArticle(item)">
-														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'" 
+														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
+														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
+														size="40" ></u-icon>
+														<!--  -->
+													</view>
+												</view>
+								            </view>
+								        </view>
+								    </template>
+								<!-- #endif -->
+							</custom-waterfalls-flow>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<swiper-item>
+					<scroll-view class="waterfallsFlowBox" scroll-y="true" >
+						<view>
+							<custom-waterfalls-flow class="swiper-item" :column="column" :listStyle="listStyle" ref="waterfallsFlowRef" :value="data.list0">
+								<!-- #ifdef MP-WEIXIN -->
+								    <view class="flowItem" v-for="(item,index) in data.list0" :key="index" slot="slot{{index}}">
+										<view class="descBox">
+											<view class="desc">{{item.desc}}</view>
+											<view class="userBox">
+												<view class="user">
+													<u-avatar :src="src" shape="circle" size="40"></u-avatar>
+													<text class="userName">1232321312</text>
+												</view>
+												<view class="star" @click="saveArticle(item)">
+													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
+													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
+													size="40"></u-icon>
+												</view>
+											</view>
+										</view>
+								    </view>
+								<!-- #endif -->
+								<!-- #ifndef MP-WEIXIN -->
+								    <template v-slot:default="item">
+								        <view class="flowItem">
+								            <view class="descBox">
+								            	<view class="desc">{{item.desc}}</view>
+												<view class="userBox">
+													<view class="user">
+														<u-avatar :src="src" shape="circle" size="50"></u-avatar>
+														<text class="userName">1232321312</text>
+													</view>
+													<view class="star" @click="saveArticle(item)">
+														<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
 														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
 														size="40" ></u-icon>
 														<!--  -->
@@ -274,27 +283,27 @@
 				</swiper-item>
 			</swiper>
 		</scroll-view>
-		
+
 	</view>
 </template>
 
 <script setup>
 	import { ref, reactive  } from "vue";
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
-	
+
 	//风格索引，默认第一个
 	const styleItem = ref(0);
 	function swiperChange(e) {
 		console.log(e.detail.current);
 		styleItem.value = e.detail.current;
 	};
-	
+
 	//给瀑布流组件传值，示例数据
 	const data = reactive({
 		list0: [{
 				image: 'https://p3.itc.cn/q_70/images03/20210228/77c2895860cd4b8a84d4a7047a48e92d.jpeg',
 				title: '',
-				desc: '该建筑位于郑州的一个休闲中心，以地势地貌为依托，将建筑、环境、人文汇聚于此。虽然没有使用坡屋顶，但是出挑的屋檐，庭院都有中国传统建筑的意味。',
+				desc: '筑位于郑州的一个休闲中心，以地势地貌为依托，将建筑、环境、人文汇聚于此。虽然没有使用坡屋顶，但是出挑的屋檐，庭院都有中国传统建筑的意味。',
 				id: 1001,
 			},{
 				image: 'https://p0.itc.cn/q_70/images03/20210228/3bac3025b3664ccd85faa83503e5c50b.jpeg',
@@ -355,8 +364,8 @@
 			console.log('收藏取消')
 		}
 	}
-	
-	
+
+
 </script>
 
 <style>
