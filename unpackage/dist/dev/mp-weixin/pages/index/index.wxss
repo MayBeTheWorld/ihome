@@ -110,4 +110,5 @@
 	justify-content: center;
 	flex-wrap: wrap;
 	position: relative;
+	background-color: #FBFBFB;
 }

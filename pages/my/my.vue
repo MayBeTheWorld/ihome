@@ -1,60 +1,120 @@
 <template>
 	<view class="systemBox">
-		<publicTabBar :activePage="3" />
-		
-		<view class="loginState">
-			<!-- #ifdef MP-WEIXIN -->
-				<view class="profileView">
-					<u-avatar :src="src" shape="circle" size="150"></u-avatar>
+		<scroll-view class="pageBox" scroll-y="true" >
+			<publicTabBar :activePage="3" />
+			
+			<view class="loginState">
+				<!-- #ifdef MP-WEIXIN -->
+					<view class="profileView">
+						<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
+					</view>
+				<!-- #endif -->
+				<!-- #ifndef MP-WEIXIN -->
+					<view class="profileView">
+						<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
+					</view>
+				<!-- #endif -->
+				<view class="">
+					未登录
 				</view>
-			<!-- #endif -->
-			<!-- #ifndef MP-WEIXIN -->
-				<view class="profileView">
-					<u-avatar :src="src" shape="circle" size="100"></u-avatar>
+			</view>
+			<view class="loginInfo">
+				<view class="Info">
+					关注：0
 				</view>
-			<!-- #endif -->
-			<view class="">
-				未登录
+				<view class="Info">
+					粉丝：0
+				</view>
+				<view class="Info3">
+					被赞或收藏：0
+				</view>
 			</view>
-		</view>
-		<view class="loginInfo">
-			<view class="Info">
-				关注：0
+			<view class="functionsBox">
+				<view class="functionsTitle">
+					<text>常用工具</text>
+				</view>
+				<view class="functions">
+					<view v-for="func in functionList" :key="func.aim" @click="" class="functioinItem">
+						<!-- 微信无法使用本地图片，需要通过接口返回 -->
+						<!-- #ifdef MP -->
+						<image style="width: 100%;height: 100%;"
+							:src='`../../static/my/${func.aim}.png`' mode="aspectFit">
+						</image>
+						<!-- #endif -->
+						<!-- #ifndef MP -->
+						<image style="width: 100%;height: 100%;"
+							:src="`../../static/my/${func.aim}.png`" mode="aspectFit"></image>
+						<!-- #endif -->
+						<view class="functionsText">
+							{{ func.word }}
+						</view>
+						
+					</view>
+				</view>
 			</view>
-			<view class="Info">
-				粉丝：0
+			<view class="topic hot" style="">
+				<view class="topicTitle">热门话题</view>
+				<view class="topicText">#提升生活品质的小家电</view>
+				<view class="topicText">装修时我最后后悔遗憾的事</view>
 			</view>
-			<view class="Info3">
-				被赞或收藏：0
+			<view class="topic new">
+				<view class="topicTitle">最新话题</view>
+				<view class="topicText">#皮质沙发怎么养护？</view>
+				<view class="topicText">#有没有空气炸锅推荐呀~</view>
 			</view>
-		</view>
-		<view @click="m" class="">
-			123
-		</view>
-		<!-- <button @click="login()">点击跳转登录</button> -->
+			<view class="gap"></view>
+		</scroll-view>
 	</view>
 </template>
 
 <script setup>
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
-import { getCurrentInstance } from "vue";
-
-	const m = () => console.log(getCurrentInstance());
-	const login = ()=>{
-		uni.navigateTo({
-			url: '../login/testLogin'
-		})
-	}
+	import { ref, reactive } from "vue";
+	
+	// 头像变量
+	const profile = ref('https://cdn.uviewui.com/uview/album/1.jpg')
+	// 功能列表
+	const functionList = reactive([{
+		aim: 'comment',
+		word: '发布的评论'
+	},{
+		aim: 'decorationInformation',
+		word: '装修信息'
+	},{
+		aim: 'like',
+		word: '我的点赞'
+	},{
+		aim: 'collect',
+		word: '我的收藏'
+	},{
+		aim: 'article',
+		word: '发布的文章'
+	},{
+		aim: 'novicesGuide',
+		word: '新手攻略'
+	},{
+		aim: 'shoppingCart',
+		word: '购物车'
+	},{
+		aim: 'orders',
+		word: '我的订单'
+	}])
 </script>
 
 <style lang="scss">
+@import url("../overall/system.css");
+// 页面滑动基础
+.pageBox {
+	height: calc(100vh - 110rpx);
+}
+// 用户信息部分
 .loginState {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
-	font-size: 48rpx;
+	font-size: 40rpx;
 	font-weight: 900;
-	margin: 30rpx 0;
+	padding: 30rpx 0;
 	.profileView {
 		margin: 0 30rpx;
 	}
@@ -72,5 +132,58 @@ import { getCurrentInstance } from "vue";
 	.Info3 {
 		flex: 1.5;
 	}
+}
+
+// 常用工具部分
+.functionsTitle {
+	margin: 40rpx 40rpx 0 40rpx;
+	font-weight: 900;
+}
+.functions {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(2, 160rpx);
+	margin: 20rpx 40rpx;
+	.functioinItem {
+		display: flex;
+		flex-direction: column;
+		justify-items: center;
+		width: 100%;
+		margin: 20rpx 0;
+		.functionsText {
+			display: flex;
+			justify-content: center;
+			margin-top: 15rpx;
+			color: #666666;
+			font-size: 26rpx;
+		}
+	}
+}
+
+// 话题部分
+.topic {
+	margin: 0 40rpx 30rpx 40rpx;
+	padding: 40rpx 40rpx 30rpx 40rpx;
+	border-radius: 40rpx;
+	.topicTitle {
+		font-size: 36rpx;
+		margin-bottom: 20rpx;
+	}
+	.topicText {
+		font-size: 24rpx;
+		margin-left: 20rpx;
+		margin-bottom: 15rpx;
+	}
+}
+.hot {
+	background: linear-gradient(to right top, rgb(245,246,248), rgb(229,215,240));
+}
+.new {
+	background: linear-gradient(to right top, rgb(244,246,249), rgb(249,230,214));
+}
+
+// 话题底部填充
+.gap {
+	height: 20rpx;
 }
 </style>

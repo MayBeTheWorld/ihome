@@ -107,7 +107,7 @@ const _sfc_main = {
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
               size: "40"
             }),
-            e: common_vendor.o(($event) => saveArticle(item)),
+            e: common_vendor.o(($event) => saveArticle(item), index),
             f: index
           };
         }),
@@ -134,7 +134,7 @@ const _sfc_main = {
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
               size: "40"
             }),
-            e: common_vendor.o(($event) => saveArticle(item)),
+            e: common_vendor.o(($event) => saveArticle(item), index),
             f: index
           };
         }),
@@ -161,7 +161,7 @@ const _sfc_main = {
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
               size: "40"
             }),
-            e: common_vendor.o(($event) => saveArticle(item)),
+            e: common_vendor.o(($event) => saveArticle(item), index),
             f: index
           };
         }),
@@ -188,7 +188,7 @@ const _sfc_main = {
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
               size: "40"
             }),
-            e: common_vendor.o(($event) => saveArticle(item)),
+            e: common_vendor.o(($event) => saveArticle(item), index),
             f: index
           };
         }),
@@ -215,7 +215,7 @@ const _sfc_main = {
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
               size: "40"
             }),
-            e: common_vendor.o(($event) => saveArticle(item)),
+            e: common_vendor.o(($event) => saveArticle(item), index),
             f: index
           };
         }),

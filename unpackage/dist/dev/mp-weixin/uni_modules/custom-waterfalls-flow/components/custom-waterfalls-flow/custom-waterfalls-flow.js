@@ -243,9 +243,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
               "img-error": !item2[$data.data.imageKey]
             }),
             d: item2[$data.data.imageKey],
-            e: common_vendor.o(($event) => $options.imgLoad(item2, index + 1)),
-            f: common_vendor.o(($event) => $options.imgError(item2, index + 1)),
-            g: common_vendor.o(($event) => $options.imageClick(item2))
+            e: common_vendor.o(($event) => $options.imgLoad(item2, index + 1), index2),
+            f: common_vendor.o(($event) => $options.imgError(item2, index + 1), index2),
+            g: common_vendor.o(($event) => $options.imageClick(item2), index2)
           }, $data.data.seat == 2 ? {
             h: common_vendor.d(`slot${item2.index}`)
           } : {}, {

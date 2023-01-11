@@ -5,7 +5,7 @@
 		<!-- 头部功能 -->
 		<view class="header">
 			<view class="profileView">
-				<image :src='profile' mode="aspectFit"></image>
+				<image :src='profile' @click="m" mode="aspectFit"></image>
 				<!-- "../../static/my/我的.png" -->
 			</view>
 			<view class="searchBox">
@@ -20,9 +20,9 @@
 		<!-- 风格选择栏 -->
 		<scroll-view class="styleChooseView" scroll-x="true">
 			<view class="styleChooseBox">
-				<view class="buildingStyle" @click="styleItem = 0" 
+				<view class="buildingStyle" @click="chooseStyle(0)" 
 				:style="{ color: styleItem == 0?'#FEB814':'#363636' }">简欧风</view>
-				<view class="buildingStyle" @click="styleItem = 1"
+				<view class="buildingStyle" @click="chooseStyle(1)"
 				:style="{ color: styleItem == 1?'#FEB814':'#363636' }">中式风</view>
 				<view class="buildingStyle" @click="styleItem = 2"
 				:style="{ color: styleItem == 2?'#FEB814':'#363636' }">美式风</view>
@@ -279,15 +279,32 @@
 </template>
 
 <script setup>
-	import { ref, reactive  } from "vue";
+	import { ref, reactive, watch, nextTick  } from "vue";
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
 	
+	const m = () => {
+		console.log(styleItem.value)
+	}
 	//风格索引，默认第一个
 	const styleItem = ref(0);
+	const oldStyle = reactive({
+		styleItem: 0
+	});
 	function swiperChange(e) {
-		console.log(e.detail.current);
 		styleItem.value = e.detail.current;
+		console.log(e.detail.current);
+		// console.log(oldStyle.styleItem);
 	};
+	async function chooseStyle(num) {
+		styleItem.value = num
+		// console.log('先')
+		// console.log(styleItem.value)
+		// await nextTick()
+		// styleItem.value = num
+		// console.log('后')
+		// console.log(styleItem.value)
+	};
+	
 	
 	//给瀑布流组件传值，示例数据
 	const data = reactive({

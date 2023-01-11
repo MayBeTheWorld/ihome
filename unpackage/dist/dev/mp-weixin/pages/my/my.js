@@ -12,7 +12,31 @@ const publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
 const _sfc_main = {
   __name: "my",
   setup(__props) {
-    const m = () => console.log(common_vendor.getCurrentInstance());
+    const functionList = common_vendor.reactive([{
+      aim: "comment",
+      word: "\u53D1\u5E03\u7684\u8BC4\u8BBA"
+    }, {
+      aim: "decorationInformation",
+      word: "\u88C5\u4FEE\u4FE1\u606F"
+    }, {
+      aim: "like",
+      word: "\u6211\u7684\u70B9\u8D5E"
+    }, {
+      aim: "collect",
+      word: "\u6211\u7684\u6536\u85CF"
+    }, {
+      aim: "article",
+      word: "\u53D1\u5E03\u7684\u6587\u7AE0"
+    }, {
+      aim: "novicesGuide",
+      word: "\u65B0\u624B\u653B\u7565"
+    }, {
+      aim: "shoppingCart",
+      word: "\u8D2D\u7269\u8F66"
+    }, {
+      aim: "orders",
+      word: "\u6211\u7684\u8BA2\u5355"
+    }]);
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
@@ -23,7 +47,15 @@ const _sfc_main = {
           shape: "circle",
           size: "150"
         }),
-        c: common_vendor.o(m)
+        c: common_vendor.o((...args) => _ctx.test && _ctx.test(...args)),
+        d: common_vendor.f(functionList, (func, k0, i0) => {
+          return {
+            a: common_vendor.t(func.word),
+            b: func.aim,
+            c: common_vendor.o(() => {
+            }, func.aim)
+          };
+        })
       };
     };
   }
