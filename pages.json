@@ -1,79 +1,85 @@
 {
-	"easycom": {
-		// 注意一定要放在custom里，否则无效，https://ask.dcloud.net.cn/question/131175
-		"custom": {  
-		    "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue" 
-		}
-	},
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"app-plus": {
-					"titleNView": false
-				}
-			}
-		},{
-            "path": "pages/decoration/decoration",
-            "style": {
-                "navigationBarTitleText": "装修",
-				"app-plus": {
-					"titleNView": false
-				}
-            }
-            
-        },{
-            "path": "pages/community/community",
-            "style": {
-                "navigationBarTitleText": "社区",
-				"app-plus": {
-					"titleNView": false
-				}
-            } 
-        },{
-            "path" : "pages/my/my",
-            "style":{
-                "navigationBarTitleText": "我的",
-				"app-plus": {
-					"titleNView": false
-				}
-            } 
+  "easycom": {
+    "autoscan": true,
+    // 注意一定要放在custom里，否则无效，https://ask.dcloud.net.cn/question/131175
+    "custom": {
+      "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+      "nut-(.*)?-(.*)": "@/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/$1$2/index.vue",
+      "nut-(.*)": "@/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/$1/index.vue"
+    }
+  },
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "首页",
+        "app-plus": {
+          "titleNView": false
         }
-        ,{
-            "path" : "pages/login/testLogin",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "测试登录",
-                "enablePullDownRefresh": false
-            }
-            
+      }
+    },
+    {
+      "path": "pages/decoration/decoration",
+      "style": {
+        "navigationBarTitleText": "装修",
+        "app-plus": {
+          "titleNView": false
         }
-    ],
-	"tabBar": {
-		"color": "#7A7E83",
-		"selectedColor": "#32B0B5",
-		"list": [
-			{
-				"text": "首页",
-				"pagePath": "pages/index/index"
-			},{
-				"text": "装修",
-				"pagePath": "pages/decoration/decoration"
-			},{
-				"text": "社区",
-				"pagePath": "pages/community/community"
-			},{
-				"text": "我的",
-				"pagePath": "pages/my/my"
-			}
-		]
-	},
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "爱佳装",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
-	}
-	
+      }
+    },
+    {
+      "path": "pages/community/community",
+      "style": {
+        "navigationBarTitleText": "社区",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/my/my",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/login/testLogin",
+      "style": {
+        "navigationBarTitleText": "测试登录",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#32B0B5",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index"
+      },
+      {
+        "text": "装修",
+        "pagePath": "pages/decoration/decoration"
+      },
+      {
+        "text": "社区",
+        "pagePath": "pages/community/community"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/my/my"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "爱佳装",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
 }

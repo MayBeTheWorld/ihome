@@ -2388,6 +2388,35 @@ const shallowUnwrapHandlers = {
 function proxyRefs(objectWithRefs) {
   return isReactive(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 }
+function toRefs(object2) {
+  if (!isProxy(object2)) {
+    console.warn(`toRefs() expects a reactive object but received a plain one.`);
+  }
+  const ret = isArray$1(object2) ? new Array(object2.length) : {};
+  for (const key in object2) {
+    ret[key] = toRef(object2, key);
+  }
+  return ret;
+}
+class ObjectRefImpl {
+  constructor(_object, _key, _defaultValue) {
+    this._object = _object;
+    this._key = _key;
+    this._defaultValue = _defaultValue;
+    this.__v_isRef = true;
+  }
+  get value() {
+    const val = this._object[this._key];
+    return val === void 0 ? this._defaultValue : val;
+  }
+  set value(newVal) {
+    this._object[this._key] = newVal;
+  }
+}
+function toRef(object2, key, defaultValue) {
+  const val = object2[key];
+  return isRef(val) ? val : new ObjectRefImpl(object2, key, defaultValue);
+}
 var _a;
 class ComputedRefImpl {
   constructor(getter, _setter, isReadonly2, isSSR) {
@@ -3190,6 +3219,9 @@ function traverse(value2, seen) {
     }
   }
   return value2;
+}
+function defineComponent(options) {
+  return isFunction(options) ? { setup: options, name: options.name } : options;
 }
 const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
 function onActivated(hook, target) {
@@ -10091,7 +10123,7 @@ const install2 = (Vue) => {
 const uviewPlus = {
   install: install2
 };
-const props$7 = {
+const props$6 = {
   props: {
     src: {
       type: String,
@@ -10368,7 +10400,7 @@ const icons = {
   "uicon-zh": "\uE70A",
   "uicon-en": "\uE692"
 };
-const props$6 = {
+const props$5 = {
   props: {
     name: {
       type: String,
@@ -10437,34 +10469,6 @@ const props$6 = {
     stop: {
       type: Boolean,
       default: defprops.icon.stop
-    }
-  }
-};
-const props$5 = {
-  props: {
-    indicatorWidth: {
-      type: [String, Number],
-      default: defprops.scrollList.indicatorWidth
-    },
-    indicatorBarWidth: {
-      type: [String, Number],
-      default: defprops.scrollList.indicatorBarWidth
-    },
-    indicator: {
-      type: Boolean,
-      default: defprops.scrollList.indicator
-    },
-    indicatorColor: {
-      type: String,
-      default: defprops.scrollList.indicatorColor
-    },
-    indicatorActiveColor: {
-      type: String,
-      default: defprops.scrollList.indicatorActiveColor
-    },
-    indicatorStyle: {
-      type: [String, Object],
-      default: defprops.scrollList.indicatorStyle
     }
   }
 };
@@ -10832,9 +10836,11 @@ const props = {
 };
 exports._export_sfc = _export_sfc;
 exports.button = button;
+exports.computed$1 = computed$1;
 exports.createSSRApp = createSSRApp;
 exports.createStore = createStore;
 exports.d = d;
+exports.defineComponent = defineComponent;
 exports.e = e;
 exports.f = f;
 exports.getCurrentInstance = getCurrentInstance;
@@ -10846,20 +10852,20 @@ exports.n = n;
 exports.o = o;
 exports.openType = openType;
 exports.p = p;
-exports.props = props$7;
-exports.props$1 = props$6;
-exports.props$2 = props$5;
-exports.props$3 = props$4;
-exports.props$4 = props$3;
-exports.props$5 = props$2;
-exports.props$6 = props$1;
-exports.props$7 = props;
+exports.props = props$6;
+exports.props$1 = props$5;
+exports.props$2 = props$4;
+exports.props$3 = props$3;
+exports.props$4 = props$2;
+exports.props$5 = props$1;
+exports.props$6 = props;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.sr = sr;
 exports.t = t;
+exports.toRefs = toRefs;
 exports.useStore = useStore;
 exports.uviewPlus = uviewPlus;
 exports.value = value;

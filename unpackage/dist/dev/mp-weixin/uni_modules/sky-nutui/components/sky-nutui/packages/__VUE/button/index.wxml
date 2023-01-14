@@ -1,0 +1,1 @@
+<view class="{{g}}" style="{{h}}" bindtap="{{i}}"><view class="nut-button__warp"><nut-icon wx:if="{{a}}" u-i="24048885-0" bind:__l="__l" u-p="{{b}}"></nut-icon><nut-icon wx:if="{{c}}" u-i="24048885-1" bind:__l="__l" u-p="{{d}}"></nut-icon><block wx:if="{{e}}" class="{{[f && 'text']}}"><slot></slot></block></view></view>

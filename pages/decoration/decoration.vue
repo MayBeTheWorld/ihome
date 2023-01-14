@@ -1,31 +1,15 @@
 <template>
-	<view class="systemBox">
-		<publicTabBar :activePage="1" />
-	</view>
-  <u-scroll-list>
-    <view v-for="(item, index) in list" :key="index">
-      <image :src="item.thumb"></image>
-    </view>
-  </u-scroll-list>
+  <view class="systemBox">
+    <publicTabBar :activePage="1"/>
+    <nut-button type="primary">主要按钮</nut-button>
+  </view>
 </template>
 
-<script >
+<script>
 export default {
   name: 'decoration',
   setup() {
-    const list = [
-      {
-        thumb: "https://cdn.uviewui.com/uview/goods/1.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/2.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/3.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/4.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/5.jpg"
-      }
-    ]
+    return {}
   }
 }
 

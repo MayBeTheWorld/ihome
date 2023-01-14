@@ -1,0 +1,173 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.nut-button {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  flex-shrink: 0;
+  height: 38px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  line-height: 36px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  -webkit-appearance: none;
+          appearance: none;
+  -webkit-user-select: none;
+          user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+}
+.nut-button .text {
+  margin-left: 5px;
+}
+.nut-button::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  border: inherit;
+  border-color: #000;
+  border-radius: inherit;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  content: " ";
+}
+.nut-button::after {
+  border: none;
+}
+.nut-button:active::before {
+  opacity: 0.1;
+}
+.nut-button__warp {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nut-button--loading::before, .nut-button--disabled::before {
+  display: none;
+}
+.nut-button--default {
+  color: #666666;
+  background: #fff;
+  border: 1px solid #cccccc;
+}
+.nut-button--primary {
+  color: #fff;
+  background: linear-gradient(135deg, #fa2c19 0%, #fa6419 100%);
+  border: 1px solid transparent;
+}
+.nut-button--info {
+  color: #fff;
+  background: linear-gradient(315deg, #498ff2 0%, #4965f2 100%);
+  border: 1px solid transparent;
+}
+.nut-button--success {
+  color: #fff;
+  background: linear-gradient(135deg, #26bf26 0%, #27c530 45%, #28cf3f 83%, #29d446 100%);
+  border: 1px solid transparent;
+}
+.nut-button--danger {
+  color: #fff;
+  background: #fa2c19;
+  border: 1px solid transparent;
+}
+.nut-button--warning {
+  color: #fff;
+  background: linear-gradient(135deg, #ff9e0d 0%, #ffa70d 45%, #ffb60d 83%, #ffbe0d 100%);
+  border: 1px solid transparent;
+}
+.nut-button--plain {
+  background: #fff;
+}
+.nut-button--plain.nut-button--primary {
+  color: #fa2c19;
+  border-color: #fa2c19;
+}
+.nut-button--plain.nut-button--info {
+  color: #496af2;
+  border-color: #496af2;
+}
+.nut-button--plain.nut-button--success {
+  color: #26bf26;
+  border-color: #26bf26;
+}
+.nut-button--plain.nut-button--danger {
+  color: #fa2c19;
+  border-color: #fa2c19;
+}
+.nut-button--plain.nut-button--warning {
+  color: #ff9e0d;
+  border-color: #ff9e0d;
+}
+.nut-button--large {
+  width: 100%;
+  height: 48px;
+  line-height: 46px;
+  font-size: 14px;
+}
+.nut-button--normal {
+  padding: 0 18px;
+  font-size: 14px;
+}
+.nut-button--small {
+  height: 28px;
+  line-height: 26px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+.nut-button--mini {
+  height: 24px;
+  line-height: 1.2;
+  padding: 0 12px;
+  font-size: 12px;
+}
+.nut-button--block {
+  display: block;
+  width: 100%;
+}
+.nut-button--disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+.nut-button--loading {
+  cursor: default;
+  opacity: 0.9;
+}
+.nut-button--round {
+  border-radius: 25px;
+}
+.nut-button--square {
+  border-radius: 0;
+}

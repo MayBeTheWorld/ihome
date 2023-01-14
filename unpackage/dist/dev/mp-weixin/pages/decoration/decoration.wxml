@@ -1,1 +1,1 @@
-<view class="systemBox"><public-tab-bar wx:if="{{a}}" u-i="5d887d2d-0" bind:__l="__l" u-p="{{a}}"/></view><u-scroll-list u-s="{{['d']}}" u-i="5d887d2d-1" bind:__l="__l"><view wx:for="{{b}}" wx:for-item="item" wx:key="b"><image src="{{item.a}}"></image></view></u-scroll-list>
+<view class="systemBox"><public-tab-bar wx:if="{{a}}" u-i="5d887d2d-0" bind:__l="__l" u-p="{{a}}"/><nut-button wx:if="{{b}}" u-s="{{['d']}}" u-i="5d887d2d-1" bind:__l="__l" u-p="{{b}}">主要按钮</nut-button></view>

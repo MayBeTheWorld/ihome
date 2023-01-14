@@ -3,28 +3,26 @@ const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   name: "decoration",
   setup() {
+    return {};
   }
 };
 if (!Array) {
   const _easycom_publicTabBar2 = common_vendor.resolveComponent("publicTabBar");
-  const _easycom_u_scroll_list2 = common_vendor.resolveComponent("u-scroll-list");
-  (_easycom_publicTabBar2 + _easycom_u_scroll_list2)();
+  const _easycom_nut_button2 = common_vendor.resolveComponent("nut-button");
+  (_easycom_publicTabBar2 + _easycom_nut_button2)();
 }
 const _easycom_publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
-const _easycom_u_scroll_list = () => "../../node-modules/uview-plus/components/u-scroll-list/u-scroll-list.js";
+const _easycom_nut_button = () => "../../uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/button/index.js";
 if (!Math) {
-  (_easycom_publicTabBar + _easycom_u_scroll_list)();
+  (_easycom_publicTabBar + _easycom_nut_button)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.p({
       activePage: 1
     }),
-    b: common_vendor.f(_ctx.list, (item, index, i0) => {
-      return {
-        a: item.thumb,
-        b: index
-      };
+    b: common_vendor.p({
+      type: "primary"
     })
   };
 }

@@ -2,6 +2,6 @@
   "navigationBarTitleText": "装修",
   "usingComponents": {
     "public-tab-bar": "../../components/publicTabBar/publicTabBar",
-    "u-scroll-list": "../../node-modules/uview-plus/components/u-scroll-list/u-scroll-list"
+    "nut-button": "../../uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/button/index"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "nut-icon": "../icon/index"
+  }
+}
