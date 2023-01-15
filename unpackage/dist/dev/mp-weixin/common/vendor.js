@@ -1257,8 +1257,8 @@ function populateParameters(fromRes, toRes) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.6.16",
-    uniRuntimeVersion: "3.6.16",
+    uniCompileVersion: "3.6.17",
+    uniRuntimeVersion: "3.6.17",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -10844,6 +10844,7 @@ exports.index = index$1;
 exports.mixin = mixin;
 exports.mpMixin = mpMixin;
 exports.n = n;
+exports.nextTick = nextTick;
 exports.o = o;
 exports.openType = openType;
 exports.p = p;
@@ -10860,6 +10861,7 @@ exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.sr = sr;
 exports.t = t;
+exports.unref = unref;
 exports.useStore = useStore;
 exports.uviewPlus = uviewPlus;
 exports.value = value;

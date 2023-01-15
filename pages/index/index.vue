@@ -1,4 +1,9 @@
 <template>
+	<!-- 去除手机状态栏变化 -->
+	<!-- #ifdef APP-PLUS -->
+	<view class="status-bar"></view>
+	<!-- #endif -->
+	
 	<view class="systemBox">
 		<publicTabBar :activePage="0"/>
 		
@@ -17,25 +22,24 @@
 			</view>
 		</view>
 		
-		<!-- 风格选择栏 -->
-		<scroll-view class="styleChooseView" scroll-x="true">
+		
+		<scroll-view class="indexView" scroll-x="true">
+			<!-- 风格选择栏 -->
 			<view class="styleChooseBox">
 				<view class="buildingStyle" @click="chooseStyle(0)" 
 				:style="{ color: styleItem == 0?'#FEB814':'#363636' }">简欧风</view>
 				<view class="buildingStyle" @click="chooseStyle(1)"
 				:style="{ color: styleItem == 1?'#FEB814':'#363636' }">中式风</view>
-				<view class="buildingStyle" @click="styleItem = 2"
+				<view class="buildingStyle" @click="chooseStyle(2)"
 				:style="{ color: styleItem == 2?'#FEB814':'#363636' }">美式风</view>
-				<view class="buildingStyle" @click="styleItem = 3"
+				<view class="buildingStyle" @click="chooseStyle(3)"
 				:style="{ color: styleItem == 3?'#FEB814':'#363636' }">日式风</view>
-				<view class="buildingStyle" @click="styleItem = 4"
+				<view class="buildingStyle" @click="chooseStyle(4)"
 				:style="{ color: styleItem == 4?'#FEB814':'#363636' }">田园风</view>
 			</view>
-		</scroll-view>
-		
-		<!-- 瀑布流展示组件 -->
-		<scroll-view class="waterfallsFlowBox" scroll-y="true" >
-			<swiper class="waterfallsFlowBox" :indicator-dots="false" :autoplay="false" 
+			
+			<!-- 瀑布流展示组件 -->
+			<swiper class="waterfallsFlowBox" :autoplay="false"
 			:circular="true" :current="styleItem" @change="swiperChange">
 				<swiper-item>
 					<scroll-view class="waterfallsFlowBox" scroll-y="true" >
@@ -275,18 +279,19 @@
 			</swiper>
 		</scroll-view>
 		
+		
 	</view>
 </template>
 
 <script setup>
-	import { ref, reactive, watch, nextTick  } from "vue";
+	import { ref, reactive, nextTick  } from "vue";
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
 	
 	const m = () => {
 		console.log(styleItem.value)
 	}
 	//风格索引，默认第一个
-	const styleItem = ref(0);
+	let styleItem = ref(0);
 	const oldStyle = reactive({
 		styleItem: 0
 	});
@@ -295,11 +300,16 @@
 		console.log(e.detail.current);
 		// console.log(oldStyle.styleItem);
 	};
-	async function chooseStyle(num) {
-		styleItem.value = num
+	function chooseStyle(num) {
 		// console.log('先')
 		// console.log(styleItem.value)
-		// await nextTick()
+		if (styleItem.value == num) {
+			return false
+		} else {
+			nextTick(() => {
+				styleItem.value = num;
+			})
+		}
 		// styleItem.value = num
 		// console.log('后')
 		// console.log(styleItem.value)
@@ -373,10 +383,138 @@
 		}
 	}
 	
-	
 </script>
 
-<style>
-	@import url("./index.css");
+<style lang="scss">
 	@import url("../overall/system.css");
+	// 手机状态栏
+	.status-bar {
+		height: var(--status-bar-height);
+		width: 100%;
+	}
+	
+	/* 头部功能部分 */
+	.header {
+		width: 100%;
+		height: 100rpx;
+	    position: relative;
+	    display: flex;
+		justify-content: space-around;
+	    align-items: center;
+		margin-top: 10rpx;
+	}
+	
+	.profileView{
+		display: block;
+		margin: 10rpx 10rpx;
+		border-radius: 50rpx;
+	}
+	
+	.profileView > image {
+		width: 100rpx;
+		height: 100rpx;
+	}
+	
+	.imageView { 
+		margin: 0 20rpx;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.icon {
+		width: 60rpx;
+		height: 60rpx;
+	}
+	
+	.searchBox {
+		width: 100%;
+		margin: 0 0 0 20rpx;
+		padding: 10rpx 20rpx;
+		display: flex;
+		flex-direction: row;
+		justify-items: center;
+		align-items: center;
+		border-radius: 50rpx;
+		border: 0rpx;
+		background-color: rgba(0, 0, 0, 0.05);
+		
+	}
+	
+	.search {
+	    height: 100%;
+		width: 100%;
+	    font-size: 0.75rem;
+	    border: 0;
+		margin-left: 10rpx;
+		padding-top: 5rpx;
+	}
+	
+	.indexView {
+		height: calc(100vh - 90rpx - 110rpx);
+	}
+	
+	/* 风格选择栏部分 */
+	.styleChooseBox {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		flex-wrap: wrap;
+		padding: 20rpx 0;
+	}
+	
+	.buildingStyle{
+		display: flex;
+		align-items: center;
+		font-weight: 900;
+		height: 50rpx;
+	}
+	
+	.styleChooseView{
+		height: 90rpx;
+	}
+	
+	/* 瀑布流组件部分 */
+	.waterfallsFlowBox{
+		height: calc(100vh - var(--status-bar-height) - 110rpx - 90rpx - 110rpx);
+	}
+	
+	.descBox {
+		margin: 0 20rpx;
+	}
+	
+	.desc {
+		margin-top: 20rpx;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		text-overflow: '';
+		overflow: hidden;
+	}
+	
+	.userBox {
+		margin: 20rpx 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	
+	.user {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+	
+	.userName {
+		padding-left: 10rpx;
+	}
+	
+	.star {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
 </style>

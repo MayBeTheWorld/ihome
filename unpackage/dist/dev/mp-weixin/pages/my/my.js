@@ -12,6 +12,7 @@ const publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
 const _sfc_main = {
   __name: "my",
   setup(__props) {
+    const profile = common_vendor.ref("https://cdn.uviewui.com/uview/album/1.jpg");
     const functionList = common_vendor.reactive([{
       aim: "comment",
       word: "\u53D1\u5E03\u7684\u8BC4\u8BBA"
@@ -43,16 +44,16 @@ const _sfc_main = {
           activePage: 3
         }),
         b: common_vendor.p({
-          src: _ctx.src,
+          src: profile.value,
           shape: "circle",
           size: "150"
         }),
-        c: common_vendor.o((...args) => _ctx.test && _ctx.test(...args)),
-        d: common_vendor.f(functionList, (func, k0, i0) => {
+        c: common_vendor.f(functionList, (func, k0, i0) => {
           return {
-            a: common_vendor.t(func.word),
-            b: func.aim,
-            c: common_vendor.o(() => {
+            a: `../../static/my/${func.aim}.png`,
+            b: common_vendor.t(func.word),
+            c: func.aim,
+            d: common_vendor.o(() => {
             }, func.aim)
           };
         })

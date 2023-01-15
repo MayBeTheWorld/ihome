@@ -34,6 +34,10 @@
 	position: relative;
 	background-color: #FBFBFB;
 }
+.status-bar {
+  height: var(--status-bar-height);
+  width: 100%;
+}
 .pageBox {
   height: calc(100vh - 110rpx);
 }
@@ -43,7 +47,7 @@
   align-items: baseline;
   font-size: 40rpx;
   font-weight: 900;
-  margin: 30rpx 0;
+  padding: 30rpx 0;
 }
 .loginState .profileView {
   margin: 0 30rpx;
@@ -99,12 +103,13 @@
   font-size: 24rpx;
   margin-left: 20rpx;
   margin-bottom: 15rpx;
+  color: #8f8f8f;
 }
 .hot {
-  background: linear-gradient(to right top, #e9d5ff, #c084fc);
+  background: linear-gradient(to right top, #f5f6f8, #e5d7f0);
 }
 .new {
-  background-color: orange;
+  background: linear-gradient(to right top, #f4f6f9, #f9e6d6);
 }
 .gap {
   height: 20rpx;

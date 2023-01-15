@@ -10,6 +10,7 @@ const _sfc_main = {
   },
   setup(__props) {
     const props = __props;
+    common_vendor.index.hideTabBar();
     function gotoIndexMenu(aim) {
       if (aim != props.activePage) {
         switch (aim) {

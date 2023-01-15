@@ -1,4 +1,9 @@
 <template>
+	<!-- 去除手机状态栏变化 -->
+	<!-- #ifdef APP-PLUS -->
+	<view class="status-bar"></view>
+	<!-- #endif -->
+	
 	<view class="systemBox">
 		<scroll-view class="pageBox" scroll-y="true" >
 			<publicTabBar :activePage="3" />
@@ -103,7 +108,13 @@
 
 <style lang="scss">
 @import url("../overall/system.css");
-// 页面滑动基础
+// 手机状态栏
+.status-bar {
+		height: var(--status-bar-height);
+		width: 100%;
+	}
+	
+// 页面可滑动部分高度
 .pageBox {
 	height: calc(100vh - 110rpx);
 }
@@ -173,6 +184,7 @@
 		font-size: 24rpx;
 		margin-left: 20rpx;
 		margin-bottom: 15rpx;
+		color: #8f8f8f;
 	}
 }
 .hot {

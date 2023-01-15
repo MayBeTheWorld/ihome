@@ -16,10 +16,25 @@ const publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const styleItem = common_vendor.ref(0);
+    const m = () => {
+      console.log(styleItem.value);
+    };
+    let styleItem = common_vendor.ref(0);
+    common_vendor.reactive({
+      styleItem: 0
+    });
     function swiperChange(e) {
-      console.log(e.detail.current);
       styleItem.value = e.detail.current;
+      console.log(e.detail.current);
+    }
+    function chooseStyle(num) {
+      if (styleItem.value == num) {
+        return false;
+      } else {
+        common_vendor.nextTick(() => {
+          styleItem.value = num;
+        });
+      }
     }
     const data = common_vendor.reactive({
       list0: [{
@@ -87,17 +102,18 @@ const _sfc_main = {
           activePage: 0
         }),
         b: profile.value,
-        c: common_vendor.o(($event) => styleItem.value = 0),
-        d: styleItem.value == 0 ? "#FEB814" : "#363636",
-        e: common_vendor.o(($event) => styleItem.value = 1),
-        f: styleItem.value == 1 ? "#FEB814" : "#363636",
-        g: common_vendor.o(($event) => styleItem.value = 2),
-        h: styleItem.value == 2 ? "#FEB814" : "#363636",
-        i: common_vendor.o(($event) => styleItem.value = 3),
-        j: styleItem.value == 3 ? "#FEB814" : "#363636",
-        k: common_vendor.o(($event) => styleItem.value = 4),
-        l: styleItem.value == 4 ? "#FEB814" : "#363636",
-        m: common_vendor.f(data.list0, (item, index, i0) => {
+        c: common_vendor.o(m),
+        d: common_vendor.o(($event) => chooseStyle(0)),
+        e: common_vendor.unref(styleItem) == 0 ? "#FEB814" : "#363636",
+        f: common_vendor.o(($event) => chooseStyle(1)),
+        g: common_vendor.unref(styleItem) == 1 ? "#FEB814" : "#363636",
+        h: common_vendor.o(($event) => chooseStyle(2)),
+        i: common_vendor.unref(styleItem) == 2 ? "#FEB814" : "#363636",
+        j: common_vendor.o(($event) => chooseStyle(3)),
+        k: common_vendor.unref(styleItem) == 3 ? "#FEB814" : "#363636",
+        l: common_vendor.o(($event) => chooseStyle(4)),
+        m: common_vendor.unref(styleItem) == 4 ? "#FEB814" : "#363636",
+        n: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-2-" + i0 + ",40860e84-1",
@@ -111,20 +127,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        n: common_vendor.p({
+        o: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        o: common_vendor.sr(waterfallsFlowRef, "40860e84-1", {
+        p: common_vendor.sr(waterfallsFlowRef, "40860e84-1", {
           "k": "waterfallsFlowRef"
         }),
-        p: common_vendor.p({
+        q: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        q: common_vendor.f(data.list0, (item, index, i0) => {
+        r: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-5-" + i0 + ",40860e84-4",
@@ -138,20 +154,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        r: common_vendor.p({
+        s: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        s: common_vendor.sr(waterfallsFlowRef, "40860e84-4", {
+        t: common_vendor.sr(waterfallsFlowRef, "40860e84-4", {
           "k": "waterfallsFlowRef"
         }),
-        t: common_vendor.p({
+        v: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        v: common_vendor.f(data.list0, (item, index, i0) => {
+        w: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-8-" + i0 + ",40860e84-7",
@@ -165,20 +181,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        w: common_vendor.p({
+        x: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        x: common_vendor.sr(waterfallsFlowRef, "40860e84-7", {
+        y: common_vendor.sr(waterfallsFlowRef, "40860e84-7", {
           "k": "waterfallsFlowRef"
         }),
-        y: common_vendor.p({
+        z: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        z: common_vendor.f(data.list0, (item, index, i0) => {
+        A: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-11-" + i0 + ",40860e84-10",
@@ -192,20 +208,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        A: common_vendor.p({
+        B: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        B: common_vendor.sr(waterfallsFlowRef, "40860e84-10", {
+        C: common_vendor.sr(waterfallsFlowRef, "40860e84-10", {
           "k": "waterfallsFlowRef"
         }),
-        C: common_vendor.p({
+        D: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        D: common_vendor.f(data.list0, (item, index, i0) => {
+        E: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-14-" + i0 + ",40860e84-13",
@@ -219,21 +235,21 @@ const _sfc_main = {
             f: index
           };
         }),
-        E: common_vendor.p({
+        F: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        F: common_vendor.sr(waterfallsFlowRef, "40860e84-13", {
+        G: common_vendor.sr(waterfallsFlowRef, "40860e84-13", {
           "k": "waterfallsFlowRef"
         }),
-        G: common_vendor.p({
+        H: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        H: styleItem.value,
-        I: common_vendor.o(swiperChange)
+        I: common_vendor.unref(styleItem),
+        J: common_vendor.o(swiperChange)
       };
     };
   }
