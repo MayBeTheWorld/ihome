@@ -49,7 +49,7 @@
 	import { defineProps } from 'vue'
 	
 	uni.hideTabBar();
-	//取得父组件传值并结构
+	//取得父组件传值并解构
 	const props = defineProps({
 		activePage: {
 			type: Number,

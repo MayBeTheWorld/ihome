@@ -18,7 +18,7 @@
 				<image class="icon" src="../../static/index/search.png" mode="aspectFit"></image>
 			</view>
 			<view class="imageView">
-				<image class="icon" src="../../static/index/扫一扫.png" mode="aspectFit"></image>
+				<image class="icon" @click="openScan" src="../../static/index/扫一扫.png" mode="aspectFit"></image>
 			</view>
 		</view>
 		
@@ -279,17 +279,66 @@
 			</swiper>
 		</scroll-view>
 		
-		
+		<!-- 扫码组件 -->
+		<!-- #ifdef APP-PLUS -->
+			<view class="scan-box" :class="{active: isShowScan}">
+				<!-- <uni-nav-bar if="isShowScan" fixed :status-bar="true" title="扫一扫" @clickLeft="closeScan">
+				</uni-nav-bar> -->
+				<scan ref="scanRef" @success="getScanCode" @goBack="closeScan"/>
+			</view>
+		<!-- #endif -->
 	</view>
 </template>
 
 <script setup>
 	import { ref, reactive, nextTick  } from "vue";
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
+	// #ifdef APP-PLUS
+	import scan from "@/components/scan/scan.vue";
+	// #endif
 	
+	
+	// 扫一扫功能
+	const scanRef = ref();
+	const isShowScan = ref(false);
+	// #ifdef APP-PLUS
+	function openScan () {
+		scanRef.value.open();
+		isShowScan.value = true;
+		console.log('父组件触发打开');
+	};
+	// 隐藏扫描
+	function closeScan () {
+		scanRef.value.close();
+		isShowScan.value = false;
+		console.log('父组件触发关闭');
+	};
+	// 扫码成功
+	function getScanCode (val) {
+		console.log('父组件扫码成功')
+		closeScan();
+		uni.showToast({
+			icon: 'none',
+			title: '扫码成功',
+		});
+	};
+	// #endif
+	// #ifndef APP-PLUS
+	function openScan () {
+		uni.scanCode({
+			success:function(){
+				console.log('扫码成功')
+			}
+		})
+	}
+	// #endif
+	
+	
+	// 测试函数
 	const m = () => {
 		console.log(styleItem.value)
 	}
+	
 	//风格索引，默认第一个
 	let styleItem = ref(0);
 	const oldStyle = reactive({
@@ -298,11 +347,8 @@
 	function swiperChange(e) {
 		styleItem.value = e.detail.current;
 		console.log(e.detail.current);
-		// console.log(oldStyle.styleItem);
 	};
 	function chooseStyle(num) {
-		// console.log('先')
-		// console.log(styleItem.value)
 		if (styleItem.value == num) {
 			return false
 		} else {
@@ -310,9 +356,6 @@
 				styleItem.value = num;
 			})
 		}
-		// styleItem.value = num
-		// console.log('后')
-		// console.log(styleItem.value)
 	};
 	
 	
@@ -391,6 +434,21 @@
 	.status-bar {
 		height: var(--status-bar-height);
 		width: 100%;
+	}
+	
+	// 扫码控件
+	.scan-box{
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0,0,0,.8);
+		transform: translateX(100%);
+		transition: transform 0.05s;
+		&.active{
+			transform: translateX(0)
+		}
 	}
 	
 	/* 头部功能部分 */

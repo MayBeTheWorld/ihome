@@ -19,7 +19,7 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "",
+  "libVersion": "2.29.1",
   "appid": "wxbf5d3fb8be31f377",
   "projectname": "知佳装",
   "condition": {},

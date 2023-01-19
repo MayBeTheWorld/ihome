@@ -16,6 +16,15 @@ const publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.ref();
+    common_vendor.ref(false);
+    function openScan() {
+      common_vendor.index.scanCode({
+        success: function() {
+          console.log("\u626B\u7801\u6210\u529F");
+        }
+      });
+    }
     const m = () => {
       console.log(styleItem.value);
     };
@@ -103,17 +112,18 @@ const _sfc_main = {
         }),
         b: profile.value,
         c: common_vendor.o(m),
-        d: common_vendor.o(($event) => chooseStyle(0)),
-        e: common_vendor.unref(styleItem) == 0 ? "#FEB814" : "#363636",
-        f: common_vendor.o(($event) => chooseStyle(1)),
-        g: common_vendor.unref(styleItem) == 1 ? "#FEB814" : "#363636",
-        h: common_vendor.o(($event) => chooseStyle(2)),
-        i: common_vendor.unref(styleItem) == 2 ? "#FEB814" : "#363636",
-        j: common_vendor.o(($event) => chooseStyle(3)),
-        k: common_vendor.unref(styleItem) == 3 ? "#FEB814" : "#363636",
-        l: common_vendor.o(($event) => chooseStyle(4)),
-        m: common_vendor.unref(styleItem) == 4 ? "#FEB814" : "#363636",
-        n: common_vendor.f(data.list0, (item, index, i0) => {
+        d: common_vendor.o(openScan),
+        e: common_vendor.o(($event) => chooseStyle(0)),
+        f: common_vendor.unref(styleItem) == 0 ? "#FEB814" : "#363636",
+        g: common_vendor.o(($event) => chooseStyle(1)),
+        h: common_vendor.unref(styleItem) == 1 ? "#FEB814" : "#363636",
+        i: common_vendor.o(($event) => chooseStyle(2)),
+        j: common_vendor.unref(styleItem) == 2 ? "#FEB814" : "#363636",
+        k: common_vendor.o(($event) => chooseStyle(3)),
+        l: common_vendor.unref(styleItem) == 3 ? "#FEB814" : "#363636",
+        m: common_vendor.o(($event) => chooseStyle(4)),
+        n: common_vendor.unref(styleItem) == 4 ? "#FEB814" : "#363636",
+        o: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-2-" + i0 + ",40860e84-1",
@@ -127,20 +137,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        o: common_vendor.p({
+        p: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        p: common_vendor.sr(waterfallsFlowRef, "40860e84-1", {
+        q: common_vendor.sr(waterfallsFlowRef, "40860e84-1", {
           "k": "waterfallsFlowRef"
         }),
-        q: common_vendor.p({
+        r: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        r: common_vendor.f(data.list0, (item, index, i0) => {
+        s: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-5-" + i0 + ",40860e84-4",
@@ -154,20 +164,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        s: common_vendor.p({
+        t: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        t: common_vendor.sr(waterfallsFlowRef, "40860e84-4", {
+        v: common_vendor.sr(waterfallsFlowRef, "40860e84-4", {
           "k": "waterfallsFlowRef"
         }),
-        v: common_vendor.p({
+        w: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        w: common_vendor.f(data.list0, (item, index, i0) => {
+        x: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-8-" + i0 + ",40860e84-7",
@@ -181,20 +191,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        x: common_vendor.p({
+        y: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        y: common_vendor.sr(waterfallsFlowRef, "40860e84-7", {
+        z: common_vendor.sr(waterfallsFlowRef, "40860e84-7", {
           "k": "waterfallsFlowRef"
         }),
-        z: common_vendor.p({
+        A: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        A: common_vendor.f(data.list0, (item, index, i0) => {
+        B: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-11-" + i0 + ",40860e84-10",
@@ -208,20 +218,20 @@ const _sfc_main = {
             f: index
           };
         }),
-        B: common_vendor.p({
+        C: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        C: common_vendor.sr(waterfallsFlowRef, "40860e84-10", {
+        D: common_vendor.sr(waterfallsFlowRef, "40860e84-10", {
           "k": "waterfallsFlowRef"
         }),
-        D: common_vendor.p({
+        E: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        E: common_vendor.f(data.list0, (item, index, i0) => {
+        F: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
             b: "40860e84-14-" + i0 + ",40860e84-13",
@@ -235,21 +245,21 @@ const _sfc_main = {
             f: index
           };
         }),
-        F: common_vendor.p({
+        G: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        G: common_vendor.sr(waterfallsFlowRef, "40860e84-13", {
+        H: common_vendor.sr(waterfallsFlowRef, "40860e84-13", {
           "k": "waterfallsFlowRef"
         }),
-        H: common_vendor.p({
+        I: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        I: common_vendor.unref(styleItem),
-        J: common_vendor.o(swiperChange)
+        J: common_vendor.unref(styleItem),
+        K: common_vendor.o(swiperChange)
       };
     };
   }
