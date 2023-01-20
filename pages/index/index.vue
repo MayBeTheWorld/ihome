@@ -297,7 +297,6 @@
 	import scan from "@/components/scan/scan.vue";
 	// #endif
 	
-	
 	// 扫一扫功能
 	const scanRef = ref();
 	const isShowScan = ref(false);
@@ -411,7 +410,7 @@
 	}	//瀑布流组件初始化数据
 	const waterfallsFlowRef = ref(null);
 	//用户头像变量
-	const profile = ref('../../static/my/我的.png');
+	const profile = ref('../../static/main/我的.png');
 	// 文字作者头像变量
 	const src = ref('https://cdn.uviewui.com/uview/album/1.jpg')
 	// 收藏文章的id合集

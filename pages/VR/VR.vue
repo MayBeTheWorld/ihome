@@ -1,6 +1,6 @@
 <template>
 	<view class="systemBox">
-		<publicTabBar :activePage="2" />
+		<publicTabBar :activePage="1" />
 	</view>
 </template>
 

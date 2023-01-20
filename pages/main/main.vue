@@ -8,32 +8,45 @@
 		<scroll-view class="pageBox" scroll-y="true" >
 			<publicTabBar :activePage="3" />
 			
-			<view class="loginState">
-				<!-- #ifdef MP-WEIXIN -->
-					<view class="profileView">
-						<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
+			<view v-if="isLogin == true">
+				<view class="loginState">
+					<!-- #ifdef MP-WEIXIN -->
+						<view class="profileView">
+							<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
+						</view>
+					<!-- #endif -->
+					<!-- #ifndef MP-WEIXIN -->
+						<view class="profileView">
+							<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
+						</view>
+					<!-- #endif -->
+					<navigator url="/pages/login/testLogin">
+						{{ $store.state.userInfo.name }}{{ isLogin }}
+					</navigator>
+					<!-- <view class="">
+						{{ $store.state.userInfo.name }}
+					</view> -->
+				</view>
+				<view class="loginInfo">
+					<view class="Info">
+						关注：0
 					</view>
-				<!-- #endif -->
-				<!-- #ifndef MP-WEIXIN -->
-					<view class="profileView">
-						<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
+					<view class="Info">
+						粉丝：0
 					</view>
-				<!-- #endif -->
-				<view class="">
-					未登录
+					<view class="Info3">
+						被赞或收藏：0
+					</view>
 				</view>
 			</view>
-			<view class="loginInfo">
-				<view class="Info">
-					关注：0
-				</view>
-				<view class="Info">
-					粉丝：0
-				</view>
-				<view class="Info3">
-					被赞或收藏：0
-				</view>
+			<view v-if="isLogin == false" class="emptyUser">
+				<view>登录IhomeAPP</view>
+				<view>体验更多新奇功能，尽享高级家装服务</view>
+				<navigator class="btn" url="/pages/login/testLogin">
+					立即登录
+				</navigator>
 			</view>
+			
 			<view class="functionsBox">
 				<view class="functionsTitle">
 					<text>常用工具</text>
@@ -43,12 +56,12 @@
 						<!-- 微信无法使用本地图片，需要通过接口返回 -->
 						<!-- #ifdef MP -->
 						<image style="width: 100%;height: 100%;"
-							:src='`../../static/my/${func.aim}.png`' mode="aspectFit">
+							:src='`../../static/main/${func.aim}.png`' mode="aspectFit">
 						</image>
 						<!-- #endif -->
 						<!-- #ifndef MP -->
 						<image style="width: 100%;height: 100%;"
-							:src="`../../static/my/${func.aim}.png`" mode="aspectFit"></image>
+							:src="`../../static/main/${func.aim}.png`" mode="aspectFit"></image>
 						<!-- #endif -->
 						<view class="functionsText">
 							{{ func.word }}
@@ -75,9 +88,12 @@
 <script setup>
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
 	import { ref, reactive } from "vue";
+	import { useStore } from 'vuex'
 	
+	const store = useStore();
+	const isLogin = ref(store.state.userInfo.isLogin)
 	// 头像变量
-	const profile = ref('https://cdn.uviewui.com/uview/album/1.jpg')
+	const profile = ref('https://images.freeimages.com/365/images/previews/af5/funny-cat-vector-illustration-25725.jpg')
 	// 功能列表
 	const functionList = reactive([{
 		aim: 'comment',
@@ -113,10 +129,27 @@
 		height: var(--status-bar-height);
 		width: 100%;
 	}
-	
 // 页面可滑动部分高度
 .pageBox {
 	height: calc(100vh - 110rpx);
+}
+
+// 用户未登录时展示部分
+.emptyUser {
+	background: #fff;
+	padding-top: 40rpx;
+	text-align: center;
+	line-height: 50rpx;
+	.btn {
+		width: 710rpx;
+		height: 80rpx;
+		margin: 22rpx auto 0;
+		text-align: center;
+		line-height: 80rpx;
+		border: 2rpx solid #cdcdcd;
+		border-radius: 80rpx;
+		font-size: 32rpx;
+	}
 }
 // 用户信息部分
 .loginState {
