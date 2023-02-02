@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "我的",
+  "usingComponents": {
+    "u-avatar": "../../node-modules/uview-plus/components/u-avatar/u-avatar",
+    "public-tab-bar": "../../components/publicTabBar/publicTabBar"
+  }
+}

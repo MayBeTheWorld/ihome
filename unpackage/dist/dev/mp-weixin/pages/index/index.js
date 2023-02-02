@@ -93,7 +93,7 @@ const _sfc_main = {
       "box-shadow": "0px 0px 10px rgba(0, 0, 0, 0.1)"
     };
     const waterfallsFlowRef = common_vendor.ref(null);
-    const profile = common_vendor.ref("../../static/my/\u6211\u7684.png");
+    const profile = common_vendor.ref("../../static/main/\u6211\u7684.png");
     const src = common_vendor.ref("https://cdn.uviewui.com/uview/album/1.jpg");
     const collectIds = common_vendor.reactive([]);
     function saveArticle(item) {

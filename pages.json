@@ -15,24 +15,24 @@
 				}
 			}
 		},{
-            "path": "pages/decoration/decoration",
+            "path": "pages/VR/VR",
             "style": {
-                "navigationBarTitleText": "装修",
+                "navigationBarTitleText": "VR",
 				"app-plus": {
 					"titleNView": false
 				}
             }
-            
         },{
-            "path": "pages/community/community",
-            "style": {
-                "navigationBarTitleText": "社区",
-				"app-plus": {
-					"titleNView": false
-				}
-            } 
+            "path" : "pages/news/news",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "消息",
+                "app-plus": {
+                	"titleNView": false
+                }
+            }
         },{
-            "path" : "pages/my/my",
+            "path" : "pages/main/main",
             "style":{
                 "navigationBarTitleText": "我的",
 				"app-plus": {
@@ -41,10 +41,19 @@
             } 
         }
         ,{
-            "path" : "pages/login/testLogin",
+            "path" : "pages/subpages/login/testLogin",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "测试登录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/subpages/login/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "登录",
                 "enablePullDownRefresh": false
             }
             
@@ -58,14 +67,14 @@
 				"text": "首页",
 				"pagePath": "pages/index/index"
 			},{
-				"text": "装修",
-				"pagePath": "pages/decoration/decoration"
+				"text": "VR",
+				"pagePath": "pages/VR/VR"
 			},{
-				"text": "社区",
-				"pagePath": "pages/community/community"
+				"text": "消息",
+				"pagePath": "pages/news/news"
 			},{
 				"text": "我的",
-				"pagePath": "pages/my/my"
+				"pagePath": "pages/main/main"
 			}
 		]
 	},

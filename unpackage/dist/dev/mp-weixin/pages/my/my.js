@@ -12,7 +12,9 @@ const publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
 const _sfc_main = {
   __name: "my",
   setup(__props) {
-    const profile = common_vendor.ref("https://cdn.uviewui.com/uview/album/1.jpg");
+    const store = common_vendor.useStore();
+    const isLogin = common_vendor.ref(store.state.userInfo.isLogin);
+    const profile = common_vendor.ref("https://images.freeimages.com/365/images/previews/af5/funny-cat-vector-illustration-25725.jpg");
     const functionList = common_vendor.reactive([{
       aim: "comment",
       word: "\u53D1\u5E03\u7684\u8BC4\u8BBA"
@@ -39,16 +41,23 @@ const _sfc_main = {
       word: "\u6211\u7684\u8BA2\u5355"
     }]);
     return (_ctx, _cache) => {
-      return {
+      return common_vendor.e({
         a: common_vendor.p({
           activePage: 3
         }),
-        b: common_vendor.p({
+        b: isLogin.value == true
+      }, isLogin.value == true ? {
+        c: common_vendor.p({
           src: profile.value,
           shape: "circle",
           size: "150"
         }),
-        c: common_vendor.f(functionList, (func, k0, i0) => {
+        d: common_vendor.t(_ctx.$store.state.userInfo.name),
+        e: common_vendor.t(isLogin.value)
+      } : {}, {
+        f: isLogin.value == false
+      }, isLogin.value == false ? {} : {}, {
+        g: common_vendor.f(functionList, (func, k0, i0) => {
           return {
             a: `../../static/my/${func.aim}.png`,
             b: common_vendor.t(func.word),
@@ -57,7 +66,7 @@ const _sfc_main = {
             }, func.aim)
           };
         })
-      };
+      });
     };
   }
 };

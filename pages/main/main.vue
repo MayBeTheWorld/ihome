@@ -8,8 +8,9 @@
 		<scroll-view class="pageBox" scroll-y="true" >
 			<publicTabBar :activePage="3" />
 			
-			<view v-if="isLogin == true">
-				<view class="loginState">
+			<view v-if="isLogin" :key="isLogin">
+				<!-- 头像与用户名 -->
+				<view class="loginState" @click="login">
 					<!-- #ifdef MP-WEIXIN -->
 						<view class="profileView">
 							<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
@@ -20,12 +21,12 @@
 							<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
 						</view>
 					<!-- #endif -->
-					<navigator url="/pages/login/testLogin">
+					<!-- <navigator url="../subpages/login/testLogin.vue">
 						{{ $store.state.userInfo.name }}{{ isLogin }}
-					</navigator>
-					<!-- <view class="">
-						{{ $store.state.userInfo.name }}
-					</view> -->
+					</navigator> -->
+					<view class="">
+						{{ $store.state.userInfo.name }}{{ isLogin }}
+					</view>
 				</view>
 				<view class="loginInfo">
 					<view class="Info">
@@ -39,12 +40,12 @@
 					</view>
 				</view>
 			</view>
-			<view v-if="isLogin == false" class="emptyUser">
+			<view v-if="!isLogin" :key="isLogin" class="emptyUser">
 				<view>登录IhomeAPP</view>
 				<view>体验更多新奇功能，尽享高级家装服务</view>
-				<navigator class="btn" url="/pages/login/testLogin">
+				<view class="btn" @click="login">
 					立即登录
-				</navigator>
+				</view>
 			</view>
 			
 			<view class="functionsBox">
@@ -87,13 +88,25 @@
 
 <script setup>
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
-	import { ref, reactive } from "vue";
+	import { ref, reactive, onActivated, nextTick } from "vue";
 	import { useStore } from 'vuex'
 	
 	const store = useStore();
-	const isLogin = ref(store.state.userInfo.isLogin)
+	const isLogin = ref(store.state.userInfo.isLogin);
+	// onActivated(() => {
+	// 	// 此处isLogin.value为DOM更新前值，保存更新前旧值
+	// 	let oldLogin = isLogin.value;
+	// 	// console.log('isLogin',isLogin.value)
+	// 	// console.log('oldLogin',oldLogin)
+	// 	nextTick(() => {
+	// 		// 此处isLogin.value为DOM更新后值，如果isLogin前后值不同则触发更新
+	// 		isLogin.value = store.state.userInfo.isLogin;
+	// 		// console.log('isLogin',isLogin.value);
+	// 		// console.log('oldLogin',oldLogin)
+	// 	});
+	// });                                                               
 	// 头像变量
-	const profile = ref('https://images.freeimages.com/365/images/previews/af5/funny-cat-vector-illustration-25725.jpg')
+	const profile = ref('https://images.freeimages.com/365/images/previews/af5/funny-cat-vector-illustration-25725.jpg');	
 	// 功能列表
 	const functionList = reactive([{
 		aim: 'comment',
@@ -119,7 +132,16 @@
 	},{
 		aim: 'orders',
 		word: '我的订单'
-	}])
+	}]);
+	
+	function login () {
+		uni.navigateTo({
+			url: '/pages/subpages/login/login',
+			fail: (res) => {
+				console.log(res)
+			}
+		})
+	};
 </script>
 
 <style lang="scss">

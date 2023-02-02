@@ -1,0 +1,1 @@
+<view class="systemBox"><public-tab-bar wx:if="{{a}}" u-i="e9277744-0" bind:__l="__l" u-p="{{a}}"/></view>

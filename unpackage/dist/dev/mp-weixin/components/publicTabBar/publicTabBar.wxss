@@ -40,7 +40,7 @@ image {
 .textView {
 	width: 60rpx;
 	height: 32rpx;
-	color: #32B0B5;
+	color: #FEB814;
 	transform: translateY(-25%);
 	font-size: 24rpx;
 	text-align: center;

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "VR",
+  "usingComponents": {
+    "public-tab-bar": "../../components/publicTabBar/publicTabBar"
+  }
+}
