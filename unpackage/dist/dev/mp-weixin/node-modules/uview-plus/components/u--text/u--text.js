@@ -3,7 +3,7 @@ const common_vendor = require("../../../../common/vendor.js");
 const uvText = () => "../u-text/u-text.js";
 const _sfc_main = {
   name: "u--text",
-  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$3],
+  mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$7],
   components: {
     uvText
   }

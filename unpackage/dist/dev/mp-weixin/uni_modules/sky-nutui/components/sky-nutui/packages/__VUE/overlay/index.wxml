@@ -1,0 +1,1 @@
+<transition wx:if="{{f}}" u-s="{{['d']}}" u-i="adb2649a-0" bind:__l="__l" u-p="{{f}}"><view class="{{a}}" catchtouchmove="{{b}}" bindtap="{{c}}" style="{{d}}" hidden="{{!e}}"><slot></slot></view></transition>

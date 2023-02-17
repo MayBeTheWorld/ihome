@@ -3286,16 +3286,16 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     warn$1(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
   }
 }
-const createHook = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target);
-const onBeforeMount = createHook("bm");
-const onMounted = createHook("m");
-const onBeforeUpdate = createHook("bu");
-const onUpdated = createHook("u");
-const onBeforeUnmount = createHook("bum");
-const onUnmounted = createHook("um");
-const onServerPrefetch = createHook("sp");
-const onRenderTriggered = createHook("rtg");
-const onRenderTracked = createHook("rtc");
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target);
+const onBeforeMount = createHook$1("bm");
+const onMounted = createHook$1("m");
+const onBeforeUpdate = createHook$1("bu");
+const onUpdated = createHook$1("u");
+const onBeforeUnmount = createHook$1("bum");
+const onUnmounted = createHook$1("um");
+const onServerPrefetch = createHook$1("sp");
+const onRenderTriggered = createHook$1("rtg");
+const onRenderTracked = createHook$1("rtc");
 function onErrorCaptured(hook, target = currentInstance) {
   injectHook("ec", hook, target);
 }
@@ -10123,7 +10123,7 @@ const install2 = (Vue) => {
 const uviewPlus = {
   install: install2
 };
-const props$6 = {
+const props$b = {
   props: {
     src: {
       type: String,
@@ -10400,7 +10400,7 @@ const icons = {
   "uicon-zh": "\uE70A",
   "uicon-en": "\uE692"
 };
-const props$5 = {
+const props$a = {
   props: {
     name: {
       type: String,
@@ -10472,7 +10472,197 @@ const props$5 = {
     }
   }
 };
-const props$4 = {
+const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
+  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
+};
+const onPageScroll = /* @__PURE__ */ createHook(ON_PAGE_SCROLL);
+const props$9 = {
+  props: {
+    indicatorWidth: {
+      type: [String, Number],
+      default: defprops.scrollList.indicatorWidth
+    },
+    indicatorBarWidth: {
+      type: [String, Number],
+      default: defprops.scrollList.indicatorBarWidth
+    },
+    indicator: {
+      type: Boolean,
+      default: defprops.scrollList.indicator
+    },
+    indicatorColor: {
+      type: String,
+      default: defprops.scrollList.indicatorColor
+    },
+    indicatorActiveColor: {
+      type: String,
+      default: defprops.scrollList.indicatorActiveColor
+    },
+    indicatorStyle: {
+      type: [String, Object],
+      default: defprops.scrollList.indicatorStyle
+    }
+  }
+};
+const props$8 = {
+  props: {
+    anchor: {
+      type: [String, Number],
+      default: defprops.listItem.anchor
+    }
+  }
+};
+const props$7 = {
+  props: {
+    showScrollbar: {
+      type: Boolean,
+      default: defprops.list.showScrollbar
+    },
+    lowerThreshold: {
+      type: [String, Number],
+      default: defprops.list.lowerThreshold
+    },
+    upperThreshold: {
+      type: [String, Number],
+      default: defprops.list.upperThreshold
+    },
+    scrollTop: {
+      type: [String, Number],
+      default: defprops.list.scrollTop
+    },
+    offsetAccuracy: {
+      type: [String, Number],
+      default: defprops.list.offsetAccuracy
+    },
+    enableFlex: {
+      type: Boolean,
+      default: defprops.list.enableFlex
+    },
+    pagingEnabled: {
+      type: Boolean,
+      default: defprops.list.pagingEnabled
+    },
+    scrollable: {
+      type: Boolean,
+      default: defprops.list.scrollable
+    },
+    scrollIntoView: {
+      type: String,
+      default: defprops.list.scrollIntoView
+    },
+    scrollWithAnimation: {
+      type: Boolean,
+      default: defprops.list.scrollWithAnimation
+    },
+    enableBackToTop: {
+      type: Boolean,
+      default: defprops.list.enableBackToTop
+    },
+    height: {
+      type: [String, Number],
+      default: defprops.list.height
+    },
+    width: {
+      type: [String, Number],
+      default: defprops.list.width
+    },
+    preLoadScreen: {
+      type: [String, Number],
+      default: defprops.list.preLoadScreen
+    }
+  }
+};
+const props$6 = {
+  props: {
+    title: {
+      type: [String, Number],
+      default: defprops.cell.title
+    },
+    label: {
+      type: [String, Number],
+      default: defprops.cell.label
+    },
+    value: {
+      type: [String, Number],
+      default: defprops.cell.value
+    },
+    icon: {
+      type: String,
+      default: defprops.cell.icon
+    },
+    disabled: {
+      type: Boolean,
+      default: defprops.cell.disabled
+    },
+    border: {
+      type: Boolean,
+      default: defprops.cell.border
+    },
+    center: {
+      type: Boolean,
+      default: defprops.cell.center
+    },
+    url: {
+      type: String,
+      default: defprops.cell.url
+    },
+    linkType: {
+      type: String,
+      default: defprops.cell.linkType
+    },
+    clickable: {
+      type: Boolean,
+      default: defprops.cell.clickable
+    },
+    isLink: {
+      type: Boolean,
+      default: defprops.cell.isLink
+    },
+    required: {
+      type: Boolean,
+      default: defprops.cell.required
+    },
+    rightIcon: {
+      type: String,
+      default: defprops.cell.rightIcon
+    },
+    arrowDirection: {
+      type: String,
+      default: defprops.cell.arrowDirection
+    },
+    iconStyle: {
+      type: [Object, String],
+      default: () => {
+        return index$1.$u.props.cell.iconStyle;
+      }
+    },
+    rightIconStyle: {
+      type: [Object, String],
+      default: () => {
+        return index$1.$u.props.cell.rightIconStyle;
+      }
+    },
+    titleStyle: {
+      type: [Object, String],
+      default: () => {
+        return index$1.$u.props.cell.titleStyle;
+      }
+    },
+    size: {
+      type: String,
+      default: defprops.cell.size
+    },
+    stop: {
+      type: Boolean,
+      default: defprops.cell.stop
+    },
+    name: {
+      type: [Number, String],
+      default: defprops.cell.name
+    }
+  }
+};
+const props$5 = {
   props: {
     text: {
       type: [Array, String],
@@ -10528,7 +10718,7 @@ const props$4 = {
     }
   }
 };
-const props$3 = {
+const props$4 = {
   props: {
     type: {
       type: String,
@@ -10613,6 +10803,34 @@ const props$3 = {
     wordWrap: {
       type: String,
       default: defprops.text.wordWrap
+    }
+  }
+};
+const props$3 = {
+  props: {
+    color: {
+      type: String,
+      default: defprops.line.color
+    },
+    length: {
+      type: [String, Number],
+      default: defprops.line.length
+    },
+    direction: {
+      type: String,
+      default: defprops.line.direction
+    },
+    hairline: {
+      type: Boolean,
+      default: defprops.line.hairline
+    },
+    margin: {
+      type: [String, Number],
+      default: defprops.line.margin
+    },
+    dashed: {
+      type: Boolean,
+      default: defprops.line.dashed
     }
   }
 };
@@ -10846,19 +11064,32 @@ exports.f = f;
 exports.getCurrentInstance = getCurrentInstance;
 exports.icons = icons;
 exports.index = index$1;
+exports.inject = inject;
 exports.mixin = mixin;
 exports.mpMixin = mpMixin;
 exports.n = n;
 exports.o = o;
+exports.onActivated = onActivated;
+exports.onBeforeMount = onBeforeMount;
+exports.onBeforeUnmount = onBeforeUnmount;
+exports.onDeactivated = onDeactivated;
+exports.onMounted = onMounted;
+exports.onPageScroll = onPageScroll;
 exports.openType = openType;
 exports.p = p;
-exports.props = props$6;
-exports.props$1 = props$5;
-exports.props$2 = props$4;
-exports.props$3 = props$3;
-exports.props$4 = props$2;
-exports.props$5 = props$1;
-exports.props$6 = props;
+exports.props = props$b;
+exports.props$1 = props$a;
+exports.props$10 = props$1;
+exports.props$11 = props;
+exports.props$2 = props$9;
+exports.props$3 = props$8;
+exports.props$4 = props$7;
+exports.props$5 = props$6;
+exports.props$6 = props$5;
+exports.props$7 = props$4;
+exports.props$8 = props$3;
+exports.props$9 = props$2;
+exports.provide = provide;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
@@ -10869,3 +11100,4 @@ exports.toRefs = toRefs;
 exports.useStore = useStore;
 exports.uviewPlus = uviewPlus;
 exports.value = value;
+exports.watch = watch;

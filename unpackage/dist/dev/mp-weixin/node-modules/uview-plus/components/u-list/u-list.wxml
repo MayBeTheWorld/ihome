@@ -1,0 +1,1 @@
+<scroll-view class="u-list data-v-9ad03670" scroll-into-view="{{a}}" style="{{b}}" scroll-y scroll-top="{{c}}" lower-threshold="{{d}}" upper-threshold="{{e}}" show-scrollbar="{{f}}" enable-back-to-top="{{g}}" scroll-with-animation="{{h}}" bindscroll="{{i}}" bindscrolltolower="{{j}}" bindscrolltoupper="{{k}}"><view class="data-v-9ad03670"><slot/></view></scroll-view>

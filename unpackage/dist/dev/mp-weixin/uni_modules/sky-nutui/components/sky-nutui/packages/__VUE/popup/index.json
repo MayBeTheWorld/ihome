@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "nut-overlay": "../overlay/index",
+    "nut-icon": "../icon/index"
+  }
+}

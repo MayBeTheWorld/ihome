@@ -1,0 +1,1 @@
+<view ref="{{a}}" anchor="{{b}}" class="{{['u-list-item', 'data-v-32197ac9', c]}}"><slot/></view>
