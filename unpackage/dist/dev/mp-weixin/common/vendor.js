@@ -1181,14 +1181,14 @@ function initWrapper(protocols2) {
   };
 }
 const getLocale = () => {
-  const app = getApp({ allowDefault: true });
+  const app = isFunction(getApp) && getApp({ allowDefault: true });
   if (app && app.$vm) {
     return app.$vm.$locale;
   }
   return normalizeLocale(wx.getSystemInfoSync().language) || LOCALE_EN;
 };
 const setLocale = (locale) => {
-  const app = getApp();
+  const app = isFunction(getApp) && getApp();
   if (!app) {
     return false;
   }
@@ -1257,8 +1257,8 @@ function populateParameters(fromRes, toRes) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.6.15",
-    uniRuntimeVersion: "3.6.15",
+    uniCompileVersion: "3.6.17",
+    uniRuntimeVersion: "3.6.17",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -1442,7 +1442,7 @@ const baseApis = {
   offPushMessage,
   invokePushCallback
 };
-function initUni(api, protocols2) {
+function initUni(api, protocols2, platform2 = wx) {
   const wrapper = initWrapper(protocols2);
   const UniProxyHandlers = {
     get(target, key) {
@@ -1455,7 +1455,7 @@ function initUni(api, protocols2) {
       if (hasOwn(baseApis, key)) {
         return promisify(key, baseApis[key]);
       }
-      return promisify(key, wrapper(key, wx[key]));
+      return promisify(key, wrapper(key, platform2[key]));
     }
   };
   return new Proxy({}, UniProxyHandlers);
@@ -1479,6 +1479,29 @@ function initGetProvider(providers) {
     isFunction(complete) && complete(res);
   };
 }
+const objectKeys = [
+  "env",
+  "error",
+  "version",
+  "lanDebug",
+  "cloud",
+  "serviceMarket",
+  "router",
+  "worklet"
+];
+function initWx() {
+  const WxProxyHandlers = {
+    get(target, key) {
+      if (hasOwn(target, key)) {
+        return target[key];
+      }
+      if (objectKeys.indexOf(key) > -1 || isFunction(wx[key])) {
+        return wx[key];
+      }
+    }
+  };
+  return new Proxy({}, WxProxyHandlers);
+}
 const mocks$1 = ["__route__", "__wxExparserNodeId__", "__wxWebviewId__"];
 const getProvider = initGetProvider({
   oauth: ["weixin"],
@@ -1494,17 +1517,21 @@ function initComponentMocks(component) {
   return res;
 }
 function createSelectorQuery() {
-  const query = wx.createSelectorQuery();
+  const query = wx$2.createSelectorQuery();
   const oldIn = query.in;
   query.in = function newIn(component) {
     return oldIn.call(this, initComponentMocks(component));
   };
   return query;
 }
+const wx$2 = initWx();
+const host = wx$2.getAppBaseInfo().host;
+const shareVideoMessage = host && host.env === "SAAASDK" ? wx$2.miniapp.shareVideoMessage : wx$2.shareVideoMessage;
 var shims = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   getProvider,
-  createSelectorQuery
+  createSelectorQuery,
+  shareVideoMessage
 });
 var protocols = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -1518,7 +1545,8 @@ var protocols = /* @__PURE__ */ Object.freeze({
   getWindowInfo,
   getAppAuthorizeSetting
 });
-var index$1 = initUni(shims, protocols);
+const wx$1 = initWx();
+var index$1 = initUni(shims, protocols, wx$1);
 const _export_sfc = (sfc, props2) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props2) {
@@ -2388,35 +2416,6 @@ const shallowUnwrapHandlers = {
 function proxyRefs(objectWithRefs) {
   return isReactive(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 }
-function toRefs(object2) {
-  if (!isProxy(object2)) {
-    console.warn(`toRefs() expects a reactive object but received a plain one.`);
-  }
-  const ret = isArray$1(object2) ? new Array(object2.length) : {};
-  for (const key in object2) {
-    ret[key] = toRef(object2, key);
-  }
-  return ret;
-}
-class ObjectRefImpl {
-  constructor(_object, _key, _defaultValue) {
-    this._object = _object;
-    this._key = _key;
-    this._defaultValue = _defaultValue;
-    this.__v_isRef = true;
-  }
-  get value() {
-    const val = this._object[this._key];
-    return val === void 0 ? this._defaultValue : val;
-  }
-  set value(newVal) {
-    this._object[this._key] = newVal;
-  }
-}
-function toRef(object2, key, defaultValue) {
-  const val = object2[key];
-  return isRef(val) ? val : new ObjectRefImpl(object2, key, defaultValue);
-}
 var _a;
 class ComputedRefImpl {
   constructor(getter, _setter, isReadonly2, isSSR) {
@@ -3220,9 +3219,6 @@ function traverse(value2, seen) {
   }
   return value2;
 }
-function defineComponent(options) {
-  return isFunction(options) ? { setup: options, name: options.name } : options;
-}
 const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
 function onActivated(hook, target) {
   registerKeepAliveHook(hook, "a", target);
@@ -3286,16 +3282,16 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     warn$1(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
   }
 }
-const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target);
-const onBeforeMount = createHook$1("bm");
-const onMounted = createHook$1("m");
-const onBeforeUpdate = createHook$1("bu");
-const onUpdated = createHook$1("u");
-const onBeforeUnmount = createHook$1("bum");
-const onUnmounted = createHook$1("um");
-const onServerPrefetch = createHook$1("sp");
-const onRenderTriggered = createHook$1("rtg");
-const onRenderTracked = createHook$1("rtc");
+const createHook = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target);
+const onBeforeMount = createHook("bm");
+const onMounted = createHook("m");
+const onBeforeUpdate = createHook("bu");
+const onUpdated = createHook("u");
+const onBeforeUnmount = createHook("bum");
+const onUnmounted = createHook("um");
+const onServerPrefetch = createHook("sp");
+const onRenderTriggered = createHook("rtg");
+const onRenderTracked = createHook("rtc");
 function onErrorCaptured(hook, target = currentInstance) {
   injectHook("ec", hook, target);
 }
@@ -5721,7 +5717,7 @@ function initRuntimeHooks(mpOptions, runtimeHooks) {
 }
 const findMixinRuntimeHooks = /* @__PURE__ */ once(() => {
   const runtimeHooks = [];
-  const app = getApp({ allowDefault: true });
+  const app = isFunction(getApp) && getApp({ allowDefault: true });
   if (app && app.$vm && app.$vm.$) {
     const mixins = app.$vm.$.appContext.mixins;
     if (isArray$1(mixins)) {
@@ -5789,9 +5785,11 @@ function initCreateApp(parseAppOptions) {
 function initCreateSubpackageApp(parseAppOptions) {
   return function createApp2(vm) {
     const appOptions = parseApp(vm, parseAppOptions);
-    const app = getApp({
+    const app = isFunction(getApp) && getApp({
       allowDefault: true
     });
+    if (!app)
+      return;
     vm.$.ctx.$scope = app;
     const globalData = app.globalData;
     if (globalData) {
@@ -10123,7 +10121,7 @@ const install2 = (Vue) => {
 const uviewPlus = {
   install: install2
 };
-const props$b = {
+const props$6 = {
   props: {
     src: {
       type: String,
@@ -10400,7 +10398,7 @@ const icons = {
   "uicon-zh": "\uE70A",
   "uicon-en": "\uE692"
 };
-const props$a = {
+const props$5 = {
   props: {
     name: {
       type: String,
@@ -10472,197 +10470,7 @@ const props$a = {
     }
   }
 };
-const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
-  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
-};
-const onPageScroll = /* @__PURE__ */ createHook(ON_PAGE_SCROLL);
-const props$9 = {
-  props: {
-    indicatorWidth: {
-      type: [String, Number],
-      default: defprops.scrollList.indicatorWidth
-    },
-    indicatorBarWidth: {
-      type: [String, Number],
-      default: defprops.scrollList.indicatorBarWidth
-    },
-    indicator: {
-      type: Boolean,
-      default: defprops.scrollList.indicator
-    },
-    indicatorColor: {
-      type: String,
-      default: defprops.scrollList.indicatorColor
-    },
-    indicatorActiveColor: {
-      type: String,
-      default: defprops.scrollList.indicatorActiveColor
-    },
-    indicatorStyle: {
-      type: [String, Object],
-      default: defprops.scrollList.indicatorStyle
-    }
-  }
-};
-const props$8 = {
-  props: {
-    anchor: {
-      type: [String, Number],
-      default: defprops.listItem.anchor
-    }
-  }
-};
-const props$7 = {
-  props: {
-    showScrollbar: {
-      type: Boolean,
-      default: defprops.list.showScrollbar
-    },
-    lowerThreshold: {
-      type: [String, Number],
-      default: defprops.list.lowerThreshold
-    },
-    upperThreshold: {
-      type: [String, Number],
-      default: defprops.list.upperThreshold
-    },
-    scrollTop: {
-      type: [String, Number],
-      default: defprops.list.scrollTop
-    },
-    offsetAccuracy: {
-      type: [String, Number],
-      default: defprops.list.offsetAccuracy
-    },
-    enableFlex: {
-      type: Boolean,
-      default: defprops.list.enableFlex
-    },
-    pagingEnabled: {
-      type: Boolean,
-      default: defprops.list.pagingEnabled
-    },
-    scrollable: {
-      type: Boolean,
-      default: defprops.list.scrollable
-    },
-    scrollIntoView: {
-      type: String,
-      default: defprops.list.scrollIntoView
-    },
-    scrollWithAnimation: {
-      type: Boolean,
-      default: defprops.list.scrollWithAnimation
-    },
-    enableBackToTop: {
-      type: Boolean,
-      default: defprops.list.enableBackToTop
-    },
-    height: {
-      type: [String, Number],
-      default: defprops.list.height
-    },
-    width: {
-      type: [String, Number],
-      default: defprops.list.width
-    },
-    preLoadScreen: {
-      type: [String, Number],
-      default: defprops.list.preLoadScreen
-    }
-  }
-};
-const props$6 = {
-  props: {
-    title: {
-      type: [String, Number],
-      default: defprops.cell.title
-    },
-    label: {
-      type: [String, Number],
-      default: defprops.cell.label
-    },
-    value: {
-      type: [String, Number],
-      default: defprops.cell.value
-    },
-    icon: {
-      type: String,
-      default: defprops.cell.icon
-    },
-    disabled: {
-      type: Boolean,
-      default: defprops.cell.disabled
-    },
-    border: {
-      type: Boolean,
-      default: defprops.cell.border
-    },
-    center: {
-      type: Boolean,
-      default: defprops.cell.center
-    },
-    url: {
-      type: String,
-      default: defprops.cell.url
-    },
-    linkType: {
-      type: String,
-      default: defprops.cell.linkType
-    },
-    clickable: {
-      type: Boolean,
-      default: defprops.cell.clickable
-    },
-    isLink: {
-      type: Boolean,
-      default: defprops.cell.isLink
-    },
-    required: {
-      type: Boolean,
-      default: defprops.cell.required
-    },
-    rightIcon: {
-      type: String,
-      default: defprops.cell.rightIcon
-    },
-    arrowDirection: {
-      type: String,
-      default: defprops.cell.arrowDirection
-    },
-    iconStyle: {
-      type: [Object, String],
-      default: () => {
-        return index$1.$u.props.cell.iconStyle;
-      }
-    },
-    rightIconStyle: {
-      type: [Object, String],
-      default: () => {
-        return index$1.$u.props.cell.rightIconStyle;
-      }
-    },
-    titleStyle: {
-      type: [Object, String],
-      default: () => {
-        return index$1.$u.props.cell.titleStyle;
-      }
-    },
-    size: {
-      type: String,
-      default: defprops.cell.size
-    },
-    stop: {
-      type: Boolean,
-      default: defprops.cell.stop
-    },
-    name: {
-      type: [Number, String],
-      default: defprops.cell.name
-    }
-  }
-};
-const props$5 = {
+const props$4 = {
   props: {
     text: {
       type: [Array, String],
@@ -10718,7 +10526,7 @@ const props$5 = {
     }
   }
 };
-const props$4 = {
+const props$3 = {
   props: {
     type: {
       type: String,
@@ -10803,34 +10611,6 @@ const props$4 = {
     wordWrap: {
       type: String,
       default: defprops.text.wordWrap
-    }
-  }
-};
-const props$3 = {
-  props: {
-    color: {
-      type: String,
-      default: defprops.line.color
-    },
-    length: {
-      type: [String, Number],
-      default: defprops.line.length
-    },
-    direction: {
-      type: String,
-      default: defprops.line.direction
-    },
-    hairline: {
-      type: Boolean,
-      default: defprops.line.hairline
-    },
-    margin: {
-      type: [String, Number],
-      default: defprops.line.margin
-    },
-    dashed: {
-      type: Boolean,
-      default: defprops.line.dashed
     }
   }
 };
@@ -11054,50 +10834,34 @@ const props = {
 };
 exports._export_sfc = _export_sfc;
 exports.button = button;
-exports.computed$1 = computed$1;
 exports.createSSRApp = createSSRApp;
 exports.createStore = createStore;
 exports.d = d;
-exports.defineComponent = defineComponent;
 exports.e = e;
 exports.f = f;
-exports.getCurrentInstance = getCurrentInstance;
 exports.icons = icons;
 exports.index = index$1;
-exports.inject = inject;
 exports.mixin = mixin;
 exports.mpMixin = mpMixin;
 exports.n = n;
+exports.nextTick = nextTick;
 exports.o = o;
-exports.onActivated = onActivated;
-exports.onBeforeMount = onBeforeMount;
-exports.onBeforeUnmount = onBeforeUnmount;
-exports.onDeactivated = onDeactivated;
-exports.onMounted = onMounted;
-exports.onPageScroll = onPageScroll;
 exports.openType = openType;
 exports.p = p;
-exports.props = props$b;
-exports.props$1 = props$a;
-exports.props$10 = props$1;
-exports.props$11 = props;
-exports.props$2 = props$9;
-exports.props$3 = props$8;
-exports.props$4 = props$7;
-exports.props$5 = props$6;
-exports.props$6 = props$5;
-exports.props$7 = props$4;
-exports.props$8 = props$3;
-exports.props$9 = props$2;
-exports.provide = provide;
+exports.props = props$6;
+exports.props$1 = props$5;
+exports.props$2 = props$4;
+exports.props$3 = props$3;
+exports.props$4 = props$2;
+exports.props$5 = props$1;
+exports.props$6 = props;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.sr = sr;
 exports.t = t;
-exports.toRefs = toRefs;
+exports.unref = unref;
 exports.useStore = useStore;
 exports.uviewPlus = uviewPlus;
 exports.value = value;
-exports.watch = watch;

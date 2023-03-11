@@ -16,16 +16,40 @@ const publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const styleItem = common_vendor.ref(0);
+    common_vendor.ref();
+    common_vendor.ref(false);
+    function openScan() {
+      common_vendor.index.scanCode({
+        success: function() {
+          console.log("\u626B\u7801\u6210\u529F");
+        }
+      });
+    }
+    const m = () => {
+      console.log(styleItem.value);
+    };
+    let styleItem = common_vendor.ref(0);
+    common_vendor.reactive({
+      styleItem: 0
+    });
     function swiperChange(e) {
-      console.log(e.detail.current);
       styleItem.value = e.detail.current;
+      console.log(e.detail.current);
+    }
+    function chooseStyle(num) {
+      if (styleItem.value == num) {
+        return false;
+      } else {
+        common_vendor.nextTick(() => {
+          styleItem.value = num;
+        });
+      }
     }
     const data = common_vendor.reactive({
       list0: [{
         image: "https://p3.itc.cn/q_70/images03/20210228/77c2895860cd4b8a84d4a7047a48e92d.jpeg",
         title: "",
-        desc: "\u7B51\u4F4D\u4E8E\u90D1\u5DDE\u7684\u4E00\u4E2A\u4F11\u95F2\u4E2D\u5FC3\uFF0C\u4EE5\u5730\u52BF\u5730\u8C8C\u4E3A\u4F9D\u6258\uFF0C\u5C06\u5EFA\u7B51\u3001\u73AF\u5883\u3001\u4EBA\u6587\u6C47\u805A\u4E8E\u6B64\u3002\u867D\u7136\u6CA1\u6709\u4F7F\u7528\u5761\u5C4B\u9876\uFF0C\u4F46\u662F\u51FA\u6311\u7684\u5C4B\u6A90\uFF0C\u5EAD\u9662\u90FD\u6709\u4E2D\u56FD\u4F20\u7EDF\u5EFA\u7B51\u7684\u610F\u5473\u3002",
+        desc: "\u8BE5\u5EFA\u7B51\u4F4D\u4E8E\u90D1\u5DDE\u7684\u4E00\u4E2A\u4F11\u95F2\u4E2D\u5FC3\uFF0C\u4EE5\u5730\u52BF\u5730\u8C8C\u4E3A\u4F9D\u6258\uFF0C\u5C06\u5EFA\u7B51\u3001\u73AF\u5883\u3001\u4EBA\u6587\u6C47\u805A\u4E8E\u6B64\u3002\u867D\u7136\u6CA1\u6709\u4F7F\u7528\u5761\u5C4B\u9876\uFF0C\u4F46\u662F\u51FA\u6311\u7684\u5C4B\u6A90\uFF0C\u5EAD\u9662\u90FD\u6709\u4E2D\u56FD\u4F20\u7EDF\u5EFA\u7B51\u7684\u610F\u5473\u3002",
         id: 1001
       }, {
         image: "https://p0.itc.cn/q_70/images03/20210228/3bac3025b3664ccd85faa83503e5c50b.jpeg",
@@ -69,7 +93,7 @@ const _sfc_main = {
       "box-shadow": "0px 0px 10px rgba(0, 0, 0, 0.1)"
     };
     const waterfallsFlowRef = common_vendor.ref(null);
-    const profile = common_vendor.ref("../../static/my/\u6211\u7684.png");
+    const profile = common_vendor.ref("../../static/main/\u6211\u7684.png");
     const src = common_vendor.ref("https://cdn.uviewui.com/uview/album/1.jpg");
     const collectIds = common_vendor.reactive([]);
     function saveArticle(item) {
@@ -87,21 +111,23 @@ const _sfc_main = {
           activePage: 0
         }),
         b: profile.value,
-        c: common_vendor.o(($event) => styleItem.value = 0),
-        d: styleItem.value == 0 ? "#FEB814" : "#363636",
-        e: common_vendor.o(($event) => styleItem.value = 1),
-        f: styleItem.value == 1 ? "#FEB814" : "#363636",
-        g: common_vendor.o(($event) => styleItem.value = 2),
-        h: styleItem.value == 2 ? "#FEB814" : "#363636",
-        i: common_vendor.o(($event) => styleItem.value = 3),
-        j: styleItem.value == 3 ? "#FEB814" : "#363636",
-        k: common_vendor.o(($event) => styleItem.value = 4),
-        l: styleItem.value == 4 ? "#FEB814" : "#363636",
-        m: common_vendor.f(data.list0, (item, index, i0) => {
+        c: common_vendor.o(m),
+        d: common_vendor.o(openScan),
+        e: common_vendor.o(($event) => chooseStyle(0)),
+        f: common_vendor.unref(styleItem) == 0 ? "#FEB814" : "#363636",
+        g: common_vendor.o(($event) => chooseStyle(1)),
+        h: common_vendor.unref(styleItem) == 1 ? "#FEB814" : "#363636",
+        i: common_vendor.o(($event) => chooseStyle(2)),
+        j: common_vendor.unref(styleItem) == 2 ? "#FEB814" : "#363636",
+        k: common_vendor.o(($event) => chooseStyle(3)),
+        l: common_vendor.unref(styleItem) == 3 ? "#FEB814" : "#363636",
+        m: common_vendor.o(($event) => chooseStyle(4)),
+        n: common_vendor.unref(styleItem) == 4 ? "#FEB814" : "#363636",
+        o: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
-            b: "5a673f93-2-" + i0 + ",5a673f93-1",
-            c: "5a673f93-3-" + i0 + ",5a673f93-1",
+            b: "40860e84-2-" + i0 + ",40860e84-1",
+            c: "40860e84-3-" + i0 + ",40860e84-1",
             d: common_vendor.p({
               name: collectIds.includes(item.id) ? "star-fill" : "star",
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
@@ -110,106 +136,79 @@ const _sfc_main = {
             e: common_vendor.o(($event) => saveArticle(item), index),
             f: index
           };
-        }),
-        n: common_vendor.p({
-          src: src.value,
-          shape: "circle",
-          size: "40"
-        }),
-        o: common_vendor.sr(waterfallsFlowRef, "5a673f93-1", {
-          "k": "waterfallsFlowRef"
         }),
         p: common_vendor.p({
-          column: column.value,
-          listStyle,
-          value: data.list0
+          src: src.value,
+          shape: "circle",
+          size: "40"
         }),
-        q: common_vendor.f(data.list0, (item, index, i0) => {
-          return {
-            a: common_vendor.t(item.desc),
-            b: "5a673f93-5-" + i0 + ",5a673f93-4",
-            c: "5a673f93-6-" + i0 + ",5a673f93-4",
-            d: common_vendor.p({
-              name: collectIds.includes(item.id) ? "star-fill" : "star",
-              color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
-              size: "40"
-            }),
-            e: common_vendor.o(($event) => saveArticle(item), index),
-            f: index
-          };
+        q: common_vendor.sr(waterfallsFlowRef, "40860e84-1", {
+          "k": "waterfallsFlowRef"
         }),
         r: common_vendor.p({
-          src: src.value,
-          shape: "circle",
-          size: "40"
+          column: column.value,
+          listStyle,
+          value: data.list0
         }),
-        s: common_vendor.sr(waterfallsFlowRef, "5a673f93-4", {
-          "k": "waterfallsFlowRef"
+        s: common_vendor.f(data.list0, (item, index, i0) => {
+          return {
+            a: common_vendor.t(item.desc),
+            b: "40860e84-5-" + i0 + ",40860e84-4",
+            c: "40860e84-6-" + i0 + ",40860e84-4",
+            d: common_vendor.p({
+              name: collectIds.includes(item.id) ? "star-fill" : "star",
+              color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
+              size: "40"
+            }),
+            e: common_vendor.o(($event) => saveArticle(item), index),
+            f: index
+          };
         }),
         t: common_vendor.p({
-          column: column.value,
-          listStyle,
-          value: data.list0
+          src: src.value,
+          shape: "circle",
+          size: "40"
         }),
-        v: common_vendor.f(data.list0, (item, index, i0) => {
-          return {
-            a: common_vendor.t(item.desc),
-            b: "5a673f93-8-" + i0 + ",5a673f93-7",
-            c: "5a673f93-9-" + i0 + ",5a673f93-7",
-            d: common_vendor.p({
-              name: collectIds.includes(item.id) ? "star-fill" : "star",
-              color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
-              size: "40"
-            }),
-            e: common_vendor.o(($event) => saveArticle(item), index),
-            f: index
-          };
+        v: common_vendor.sr(waterfallsFlowRef, "40860e84-4", {
+          "k": "waterfallsFlowRef"
         }),
         w: common_vendor.p({
-          src: src.value,
-          shape: "circle",
-          size: "40"
+          column: column.value,
+          listStyle,
+          value: data.list0
         }),
-        x: common_vendor.sr(waterfallsFlowRef, "5a673f93-7", {
-          "k": "waterfallsFlowRef"
+        x: common_vendor.f(data.list0, (item, index, i0) => {
+          return {
+            a: common_vendor.t(item.desc),
+            b: "40860e84-8-" + i0 + ",40860e84-7",
+            c: "40860e84-9-" + i0 + ",40860e84-7",
+            d: common_vendor.p({
+              name: collectIds.includes(item.id) ? "star-fill" : "star",
+              color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
+              size: "40"
+            }),
+            e: common_vendor.o(($event) => saveArticle(item), index),
+            f: index
+          };
         }),
         y: common_vendor.p({
-          column: column.value,
-          listStyle,
-          value: data.list0
+          src: src.value,
+          shape: "circle",
+          size: "40"
         }),
-        z: common_vendor.f(data.list0, (item, index, i0) => {
-          return {
-            a: common_vendor.t(item.desc),
-            b: "5a673f93-11-" + i0 + ",5a673f93-10",
-            c: "5a673f93-12-" + i0 + ",5a673f93-10",
-            d: common_vendor.p({
-              name: collectIds.includes(item.id) ? "star-fill" : "star",
-              color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
-              size: "40"
-            }),
-            e: common_vendor.o(($event) => saveArticle(item), index),
-            f: index
-          };
+        z: common_vendor.sr(waterfallsFlowRef, "40860e84-7", {
+          "k": "waterfallsFlowRef"
         }),
         A: common_vendor.p({
-          src: src.value,
-          shape: "circle",
-          size: "40"
-        }),
-        B: common_vendor.sr(waterfallsFlowRef, "5a673f93-10", {
-          "k": "waterfallsFlowRef"
-        }),
-        C: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        D: common_vendor.f(data.list0, (item, index, i0) => {
+        B: common_vendor.f(data.list0, (item, index, i0) => {
           return {
             a: common_vendor.t(item.desc),
-            b: "5a673f93-14-" + i0 + ",5a673f93-13",
-            c: "5a673f93-15-" + i0 + ",5a673f93-13",
+            b: "40860e84-11-" + i0 + ",40860e84-10",
+            c: "40860e84-12-" + i0 + ",40860e84-10",
             d: common_vendor.p({
               name: collectIds.includes(item.id) ? "star-fill" : "star",
               color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
@@ -219,24 +218,51 @@ const _sfc_main = {
             f: index
           };
         }),
-        E: common_vendor.p({
+        C: common_vendor.p({
           src: src.value,
           shape: "circle",
           size: "40"
         }),
-        F: common_vendor.sr(waterfallsFlowRef, "5a673f93-13", {
+        D: common_vendor.sr(waterfallsFlowRef, "40860e84-10", {
           "k": "waterfallsFlowRef"
         }),
-        G: common_vendor.p({
+        E: common_vendor.p({
           column: column.value,
           listStyle,
           value: data.list0
         }),
-        H: styleItem.value,
-        I: common_vendor.o(swiperChange)
+        F: common_vendor.f(data.list0, (item, index, i0) => {
+          return {
+            a: common_vendor.t(item.desc),
+            b: "40860e84-14-" + i0 + ",40860e84-13",
+            c: "40860e84-15-" + i0 + ",40860e84-13",
+            d: common_vendor.p({
+              name: collectIds.includes(item.id) ? "star-fill" : "star",
+              color: collectIds.includes(item.id) ? "#FEB814" : "#363636",
+              size: "40"
+            }),
+            e: common_vendor.o(($event) => saveArticle(item), index),
+            f: index
+          };
+        }),
+        G: common_vendor.p({
+          src: src.value,
+          shape: "circle",
+          size: "40"
+        }),
+        H: common_vendor.sr(waterfallsFlowRef, "40860e84-13", {
+          "k": "waterfallsFlowRef"
+        }),
+        I: common_vendor.p({
+          column: column.value,
+          listStyle,
+          value: data.list0
+        }),
+        J: common_vendor.unref(styleItem),
+        K: common_vendor.o(swiperChange)
       };
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/desktop/ihome2/pages/index/index.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/Projects/\u7231\u4F73\u88C5/pages/index/index.vue"]]);
 wx.createPage(MiniProgramPage);

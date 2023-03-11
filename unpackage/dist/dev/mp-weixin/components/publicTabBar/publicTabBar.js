@@ -10,6 +10,7 @@ const _sfc_main = {
   },
   setup(__props) {
     const props = __props;
+    common_vendor.index.hideTabBar();
     function gotoIndexMenu(aim) {
       if (aim != props.activePage) {
         switch (aim) {
@@ -20,17 +21,17 @@ const _sfc_main = {
             break;
           case "1":
             common_vendor.index.switchTab({
-              url: "/pages/decoration/decoration"
+              url: "../../pages/VR/VR"
             });
             break;
           case "2":
             common_vendor.index.switchTab({
-              url: "../../pages/community/community"
+              url: "../../pages/news/news"
             });
             break;
           case "3":
             common_vendor.index.switchTab({
-              url: "../../pages/my/my"
+              url: "../../pages/main/main"
             });
             break;
         }

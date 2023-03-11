@@ -4,14 +4,26 @@ const common_vendor = require("./common/vendor.js");
 const store_index = require("./store/index.js");
 if (!Math) {
   "./pages/index/index.js";
-  "./pages/decoration/decoration.js";
-  "./pages/community/community.js";
-  "./pages/my/my.js";
+  "./pages/VR/VR.js";
+  "./pages/news/news.js";
+  "./pages/main/main.js";
   "./pages/login/testLogin.js";
 }
+common_vendor.useStore();
 const _sfc_main = {
   onLaunch: function() {
     common_vendor.index.hideTabBar();
+    common_vendor.index.getStorage({
+      key: "userInfo",
+      success: (res) => {
+        console.log(JSON.parse(res.data));
+        this.$store.commit("storeLogin", JSON.parse(res.data));
+      },
+      fail: (err) => {
+        console.log(err);
+        this.$store.commit("storeLogout");
+      }
+    });
     console.log("App Launch");
   },
   onShow: function() {

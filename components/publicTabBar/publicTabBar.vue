@@ -17,9 +17,9 @@
 			@click="gotoIndexMenu('1')">
 			<view class="tabBarContent">
 				<view class="imageView">
-					<image src="../../static/decoration/装修.png" mode="aspectFit"></image>
+					<image src="../../static/VR/vr.png" mode="aspectFit"></image>
 				</view>
-				<view class="textView">装修</view>
+				<view class="textView">VR</view>
 			</view>
 		</view>
 		<view class="tabBarView"
@@ -27,9 +27,9 @@
 			@click="gotoIndexMenu('2')">
 			<view class="tabBarContent">
 				<view class="imageView">
-					<image src="../../static/community/社区.png" mode="aspectFit"></image>
+					<image src="../../static/news/消息.png" mode="aspectFit"></image>
 				</view>
-				<view class="textView">社区</view>
+				<view class="textView">消息</view>
 			</view>
 		</view>
 		<view class="tabBarView"
@@ -37,7 +37,7 @@
 			@click="gotoIndexMenu('3')">
 			<view class="tabBarContent">
 				<view class="imageView">
-					<image src="../../static/my/我的.png" mode="aspectFit"></image>
+					<image src="../../static/main/我的.png" mode="aspectFit"></image>
 				</view>
 				<view class="textView">我的</view>
 			</view>
@@ -48,7 +48,8 @@
 <script setup name="publicTabBar">
 	import { defineProps } from 'vue'
 	
-	//取得父组件传值并结构
+	uni.hideTabBar();
+	//取得父组件传值并解构
 	const props = defineProps({
 		activePage: {
 			type: Number,
@@ -66,17 +67,17 @@
 					break;
 				case '1':
 					uni.switchTab({
-						url: '/pages/decoration/decoration',
+						url: '../../pages/VR/VR',
 					})
 					break;
 				case '2':
 					uni.switchTab({
-						url: '../../pages/community/community',
+						url: '../../pages/news/news',
 					});
 					break;
 				case '3':
 					uni.switchTab({
-						url: '../../pages/my/my',
+						url: '../../pages/main/main',
 					});
 					break;
 			}

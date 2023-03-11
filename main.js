@@ -7,6 +7,7 @@ import Vue from 'vue'
 Vue.prototype.$store = Store
 Vue.config.productionTip = false
 App.mpType = 'app'
+
 const app = new Vue({
     ...App
 })
