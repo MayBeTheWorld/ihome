@@ -13,6 +13,7 @@ const _sfc_main = {
   },
   emits: ["click"],
   methods: {
+    // 点击cell
     clickHandler(e) {
       if (this.disabled)
         return;
@@ -83,5 +84,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     z: common_vendor.o((...args) => $options.clickHandler && $options.clickHandler(...args))
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-b4243719"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-cell/u-cell.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-b4243719"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-cell/u-cell.vue"]]);
 wx.createComponent(Component);

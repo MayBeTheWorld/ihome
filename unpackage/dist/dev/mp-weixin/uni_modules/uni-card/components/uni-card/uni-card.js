@@ -37,10 +37,12 @@ const _sfc_main = {
       default: ""
     },
     isFull: {
+      // 内容区域是否通栏
       type: Boolean,
       default: false
     },
     isShadow: {
+      // 是否开启阴影
       type: Boolean,
       default: true
     },
@@ -92,5 +94,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     v: $props.isShadow ? $props.shadow : ""
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/uni_modules/uni-card/components/uni-card/uni-card.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/prgraming/myproject/ihome/uni_modules/uni-card/components/uni-card/uni-card.vue"]]);
 wx.createComponent(Component);

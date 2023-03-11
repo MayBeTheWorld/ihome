@@ -9,12 +9,14 @@ const _sfc_main = {
     };
   },
   methods: {
+    // 点击通告栏
     click(index) {
       this.$emit("click", index);
       if (this.url && this.linkType) {
         this.openPage();
       }
     },
+    // 点击关闭按钮
     close() {
       this.show = false;
       this.$emit("close");
@@ -71,5 +73,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     j: common_vendor.s(_ctx.$u.addStyle(_ctx.customStyle))
   }) : {});
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-63dbbc8e"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-notice-bar/u-notice-bar.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-63dbbc8e"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-notice-bar/u-notice-bar.vue"]]);
 wx.createComponent(Component);

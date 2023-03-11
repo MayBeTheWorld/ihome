@@ -112,5 +112,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     J: common_vendor.o((...args) => $options.clickHandler && $options.clickHandler(...args))
   }) : {});
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-5fec1d8b"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-text/u-text.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-5fec1d8b"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-text/u-text.vue"]]);
 wx.createComponent(Component);

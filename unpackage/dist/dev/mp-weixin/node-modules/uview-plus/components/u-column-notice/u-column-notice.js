@@ -7,18 +7,20 @@ const _sfc_main = {
       immediate: true,
       handler(newValue, oldValue) {
         if (!common_vendor.index.$u.test.array(newValue)) {
-          common_vendor.index.$u.error("noticebar\u7EC4\u4EF6direction\u4E3Acolumn\u65F6\uFF0C\u8981\u6C42text\u53C2\u6570\u4E3A\u6570\u7EC4\u5F62\u5F0F");
+          common_vendor.index.$u.error("noticebar组件direction为column时，要求text参数为数组形式");
         }
       }
     }
   },
   computed: {
+    // 文字内容的样式
     textStyle() {
       let style = {};
       style.color = this.color;
       style.fontSize = common_vendor.index.$u.addUnit(this.fontSize);
       return style;
     },
+    // 垂直或者水平滚动
     vertical() {
       if (this.mode == "horizontal")
         return false;
@@ -35,9 +37,11 @@ const _sfc_main = {
     noticeChange(e) {
       this.index = e.detail.current;
     },
+    // 点击通告栏
     clickHandler() {
       this.$emit("click", this.index);
     },
+    // 点击关闭按钮
     close() {
       this.$emit("close");
     }
@@ -94,5 +98,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     o: common_vendor.o((...args) => $options.clickHandler && $options.clickHandler(...args))
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-6c9dce4e"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-column-notice/u-column-notice.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-6c9dce4e"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-column-notice/u-column-notice.vue"]]);
 wx.createComponent(Component);

@@ -5,6 +5,7 @@ const _sfc_main = {
   mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props$3],
   data() {
     return {
+      // 节点信息
       rect: {},
       index: 0,
       show: true,
@@ -52,6 +53,7 @@ const _sfc_main = {
           this.show = false;
       });
     },
+    // 查询元素尺寸
     queryRect(el) {
       return new Promise((resolve) => {
         this.$uGetRect(`.${el}`).then((size) => {
@@ -68,5 +70,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     c: common_vendor.n(`u-list-item-${_ctx.anchor}`)
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-32197ac9"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-list-item/u-list-item.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-32197ac9"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-list-item/u-list-item.vue"]]);
 wx.createComponent(Component);

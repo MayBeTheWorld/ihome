@@ -6,6 +6,7 @@ const _sfc_main = {
   mixins: [common_vendor.mpMixin, common_vendor.mixin, common_vendor.props],
   data() {
     return {
+      // 如果配置randomBgColor参数为true，在图标或者文字的模式下，会随机从中取出一个颜色值当做背景色
       colors: [
         "#ffb34b",
         "#f2bba9",
@@ -33,6 +34,8 @@ const _sfc_main = {
     };
   },
   watch: {
+    // 监听头像src的变化，赋值给内部的avatarUrl变量，因为图片加载失败时，需要修改图片的src为默认值
+    // 而组件内部不能直接修改props的值，所以需要一个中间变量
     src: {
       immediate: true,
       handler(newVal) {
@@ -56,9 +59,11 @@ const _sfc_main = {
     init() {
       this.allowMp = true;
     },
+    // 判断传入的name属性，是否图片路径，只要带有"/"均认为是图片形式
     isImg() {
       return this.src.indexOf("/") !== -1;
     },
+    // 图片加载时失败时触发
     errorHandler() {
       this.avatarUrl = this.defaultUrl || base64Avatar;
     },
@@ -123,5 +128,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     p: common_vendor.o((...args) => $options.clickHandler && $options.clickHandler(...args))
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-14a988f2"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-avatar/u-avatar.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-14a988f2"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-avatar/u-avatar.vue"]]);
 wx.createComponent(Component);

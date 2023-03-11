@@ -33,10 +33,10 @@ const _sfc_main = create({
     const isImage = () => {
       return props.name ? props.name.indexOf("/") !== -1 : false;
     };
-    const classes = common_vendor.computed$1(() => {
+    const classes = common_vendor.computed(() => {
       return isImage() ? `${componentName}__img` : `${props.fontClassName} ${componentName} ${props.classPrefix}-${props.name} ${props.popClass} ${props.class}`;
     });
-    const getStyle = common_vendor.computed$1(() => {
+    const getStyle = common_vendor.computed(() => {
       const style = {
         color: props.color,
         fontSize: uni_modules_skyNutui_components_skyNutui_packages_utils_pxCheck.pxCheck(props.size),
@@ -69,5 +69,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.o((...args) => _ctx.handleClick && _ctx.handleClick(...args))
   } : {});
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/icon/index.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/icon/index.vue"]]);
 wx.createComponent(Component);

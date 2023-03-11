@@ -19,6 +19,7 @@ const _sfc_main = {
     };
   },
   computed: {
+    // 指示器为线型的样式
     barStyle() {
       const style = {};
       style.width = common_vendor.index.$u.addUnit(this.indicatorBarWidth);
@@ -39,9 +40,11 @@ const _sfc_main = {
     init() {
       this.getComponentWidth();
     },
+    //
     scrollEvent(status) {
       this.$emit(status);
     },
+    // 获取组件的宽度
     async getComponentWidth() {
       await common_vendor.index.$u.sleep(30);
       this.$uGetRect(".u-scroll-list").then((size) => {
@@ -64,5 +67,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 if (typeof block0 === "function")
   block0(_sfc_main);
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-fea2b4f4"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-scroll-list/u-scroll-list.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-fea2b4f4"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-scroll-list/u-scroll-list.vue"]]);
 wx.createComponent(Component);

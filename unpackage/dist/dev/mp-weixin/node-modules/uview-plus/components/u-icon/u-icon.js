@@ -21,12 +21,14 @@ const _sfc_main = {
         fontSize: common_vendor.index.$u.addUnit(this.size),
         lineHeight: common_vendor.index.$u.addUnit(this.size),
         fontWeight: this.bold ? "bold" : "normal",
+        // 某些特殊情况需要设置一个到顶部的距离，才能更好的垂直居中
         top: common_vendor.index.$u.addUnit(this.top)
       };
       if (this.color && !common_vendor.index.$u.config.type.includes(this.color))
         style.color = this.color;
       return style;
     },
+    // 判断传入的name属性，是否图片路径，只要带有"/"均认为是图片形式
     isImg() {
       return this.name.indexOf("/") !== -1;
     },
@@ -36,6 +38,7 @@ const _sfc_main = {
       style.height = this.height ? common_vendor.index.$u.addUnit(this.height) : common_vendor.index.$u.addUnit(this.size);
       return style;
     },
+    // 通过图标名，查找对应的图标
     icon() {
       return common_vendor.icons["uicon-" + this.name] || this.name;
     }
@@ -76,5 +79,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     t: common_vendor.n("u-icon--" + _ctx.labelPos)
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1c933a9a"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-icon/u-icon.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1c933a9a"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-icon/u-icon.vue"]]);
 wx.createComponent(Component);

@@ -96,8 +96,8 @@ const remove = (arr, el) => {
     arr.splice(i, 1);
   }
 };
-const hasOwnProperty = Object.prototype.hasOwnProperty;
-const hasOwn = (val, key) => hasOwnProperty.call(val, key);
+const hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+const hasOwn = (val, key) => hasOwnProperty$1.call(val, key);
 const isArray$1 = Array.isArray;
 const isMap = (val) => toTypeString(val) === "[object Map]";
 const isSet = (val) => toTypeString(val) === "[object Set]";
@@ -116,6 +116,7 @@ const toRawType = (value2) => {
 const isPlainObject$1 = (val) => toTypeString(val) === "[object Object]";
 const isIntegerKey = (key) => isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key;
 const isReservedProp = /* @__PURE__ */ makeMap(
+  // the leading comma is intentional so empty string "" is also included
   ",key,ref,ref_for,ref_key,onVnodeBeforeMount,onVnodeMounted,onVnodeBeforeUpdate,onVnodeUpdated,onVnodeBeforeUnmount,onVnodeUnmounted"
 );
 const isBuiltInDirective = /* @__PURE__ */ makeMap("bind,cloak,else-if,else,for,html,if,model,on,once,pre,show,slot,text,memo");
@@ -147,7 +148,7 @@ const def = (obj, key, value2) => {
     value: value2
   });
 };
-const toNumber = (val) => {
+const looseToNumber = (val) => {
   const n2 = parseFloat(val);
   return isNaN(n2) ? val : n2;
 };
@@ -620,19 +621,19 @@ const HOOK_FAIL = "fail";
 const HOOK_COMPLETE = "complete";
 const globalInterceptors = {};
 const scopedInterceptors = {};
-function wrapperHook(hook) {
+function wrapperHook(hook, params) {
   return function(data) {
-    return hook(data) || data;
+    return hook(data, params) || data;
   };
 }
-function queue$1(hooks, data) {
+function queue$1(hooks, data, params) {
   let promise2 = false;
   for (let i = 0; i < hooks.length; i++) {
     const hook = hooks[i];
     if (promise2) {
-      promise2 = Promise.resolve(wrapperHook(hook));
+      promise2 = Promise.resolve(wrapperHook(hook, params));
     } else {
-      const res = hook(data);
+      const res = hook(data, params);
       if (isPromise$1(res)) {
         promise2 = Promise.resolve(res);
       }
@@ -662,7 +663,7 @@ function wrapperOptions(interceptors2, options = {}) {
     }
     const oldCallback = options[name];
     options[name] = function callbackInterceptor(res) {
-      queue$1(hooks, res).then((res2) => {
+      queue$1(hooks, res, options).then((res2) => {
         return isFunction(oldCallback) && oldCallback(res2) || res2;
       });
     };
@@ -706,7 +707,7 @@ function invokeApi(method, api, options, params) {
     if (isArray$1(interceptor.invoke)) {
       const res = queue$1(interceptor.invoke, options);
       return res.then((options2) => {
-        return api(wrapperOptions(interceptor, options2), ...params);
+        return api(wrapperOptions(getApiInterceptorHooks(method), options2), ...params);
       });
     } else {
       return api(wrapperOptions(interceptor, options), ...params);
@@ -1123,7 +1124,7 @@ function initWrapper(protocols2) {
             keyOption = keyOption(fromArgs[key], fromArgs, toArgs);
           }
           if (!keyOption) {
-            console.warn(`\u5FAE\u4FE1\u5C0F\u7A0B\u5E8F ${methodName} \u6682\u4E0D\u652F\u6301 ${key}`);
+            console.warn(`微信小程序 ${methodName} 暂不支持 ${key}`);
           } else if (isString(keyOption)) {
             toArgs[keyOption] = fromArgs[key];
           } else if (isPlainObject$1(keyOption)) {
@@ -1159,7 +1160,7 @@ function initWrapper(protocols2) {
     const protocol = protocols2[methodName];
     if (!protocol) {
       return function() {
-        console.error(`\u5FAE\u4FE1\u5C0F\u7A0B\u5E8F \u6682\u4E0D\u652F\u6301${methodName}`);
+        console.error(`微信小程序 暂不支持${methodName}`);
       };
     }
     return function(arg1, arg2) {
@@ -1181,14 +1182,14 @@ function initWrapper(protocols2) {
   };
 }
 const getLocale = () => {
-  const app = getApp({ allowDefault: true });
+  const app = isFunction(getApp) && getApp({ allowDefault: true });
   if (app && app.$vm) {
     return app.$vm.$locale;
   }
   return normalizeLocale(wx.getSystemInfoSync().language) || LOCALE_EN;
 };
 const setLocale = (locale) => {
-  const app = getApp();
+  const app = isFunction(getApp) && getApp();
   if (!app) {
     return false;
   }
@@ -1253,12 +1254,12 @@ function populateParameters(fromRes, toRes) {
   const hostLanguage = language.replace(/_/g, "-");
   const parameters = {
     appId: "__UNI__EDB94E8",
-    appName: "\u77E5\u4F73\u88C5",
+    appName: "知佳装",
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.6.15",
-    uniRuntimeVersion: "3.6.15",
+    uniCompileVersion: "3.7.3",
+    uniRuntimeVersion: "3.7.3",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -1275,6 +1276,7 @@ function populateParameters(fromRes, toRes) {
     hostFontSizeSetting: fontSizeSetting,
     windowTop: 0,
     windowBottom: 0,
+    // TODO
     osLanguage: void 0,
     osTheme: void 0,
     ua: void 0,
@@ -1396,7 +1398,7 @@ const getAppBaseInfo = {
       hostSDKVersion: SDKVersion,
       hostTheme: theme,
       appId: "__UNI__EDB94E8",
-      appName: "\u77E5\u4F73\u88C5",
+      appName: "知佳装",
       appVersion: "1.0.0",
       appVersionCode: "100",
       appLanguage: getAppLanguage(hostLanguage)
@@ -1442,7 +1444,7 @@ const baseApis = {
   offPushMessage,
   invokePushCallback
 };
-function initUni(api, protocols2) {
+function initUni(api, protocols2, platform2 = wx) {
   const wrapper = initWrapper(protocols2);
   const UniProxyHandlers = {
     get(target, key) {
@@ -1455,7 +1457,7 @@ function initUni(api, protocols2) {
       if (hasOwn(baseApis, key)) {
         return promisify(key, baseApis[key]);
       }
-      return promisify(key, wrapper(key, wx[key]));
+      return promisify(key, wrapper(key, platform2[key]));
     }
   };
   return new Proxy({}, UniProxyHandlers);
@@ -1472,12 +1474,43 @@ function initGetProvider(providers) {
       isFunction(success) && success(res);
     } else {
       res = {
-        errMsg: "getProvider:fail:\u670D\u52A1[" + service + "]\u4E0D\u5B58\u5728"
+        errMsg: "getProvider:fail:服务[" + service + "]不存在"
       };
       isFunction(fail) && fail(res);
     }
     isFunction(complete) && complete(res);
   };
+}
+const objectKeys = [
+  "qy",
+  "env",
+  "error",
+  "version",
+  "lanDebug",
+  "cloud",
+  "serviceMarket",
+  "router",
+  "worklet"
+];
+const singlePageDisableKey = ["lanDebug", "router", "worklet"];
+const launchOption = wx.getLaunchOptionsSync ? wx.getLaunchOptionsSync() : null;
+function isWxKey(key) {
+  if (launchOption && launchOption.scene === 1154 && singlePageDisableKey.includes(key)) {
+    return false;
+  }
+  return objectKeys.indexOf(key) > -1 || typeof wx[key] === "function";
+}
+function initWx() {
+  const newWx = {};
+  for (const key in wx) {
+    if (isWxKey(key)) {
+      newWx[key] = wx[key];
+    }
+  }
+  if (typeof globalThis !== "undefined") {
+    globalThis.wx = newWx;
+  }
+  return newWx;
 }
 const mocks$1 = ["__route__", "__wxExparserNodeId__", "__wxWebviewId__"];
 const getProvider = initGetProvider({
@@ -1494,20 +1527,39 @@ function initComponentMocks(component) {
   return res;
 }
 function createSelectorQuery() {
-  const query = wx.createSelectorQuery();
+  const query = wx$2.createSelectorQuery();
   const oldIn = query.in;
   query.in = function newIn(component) {
     return oldIn.call(this, initComponentMocks(component));
   };
   return query;
 }
+const wx$2 = initWx();
+let baseInfo = wx$2.getAppBaseInfo && wx$2.getAppBaseInfo();
+if (!baseInfo) {
+  baseInfo = wx$2.getSystemInfoSync();
+}
+const host = baseInfo ? baseInfo.host : null;
+const shareVideoMessage = host && host.env === "SAAASDK" ? wx$2.miniapp.shareVideoMessage : wx$2.shareVideoMessage;
 var shims = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   getProvider,
-  createSelectorQuery
+  createSelectorQuery,
+  shareVideoMessage
 });
+const compressImage = {
+  args(fromArgs, toArgs) {
+    if (fromArgs.compressedHeight && !toArgs.compressHeight) {
+      toArgs.compressHeight = fromArgs.compressedHeight;
+    }
+    if (fromArgs.compressedWidth && !toArgs.compressWidth) {
+      toArgs.compressWidth = fromArgs.compressedWidth;
+    }
+  }
+};
 var protocols = /* @__PURE__ */ Object.freeze({
   __proto__: null,
+  compressImage,
   redirectTo,
   previewImage,
   getSystemInfo,
@@ -1518,7 +1570,8 @@ var protocols = /* @__PURE__ */ Object.freeze({
   getWindowInfo,
   getAppAuthorizeSetting
 });
-var index$1 = initUni(shims, protocols);
+const wx$1 = initWx();
+var index$1 = initUni(shims, protocols, wx$1);
 const _export_sfc = (sfc, props2) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props2) {
@@ -1526,14 +1579,14 @@ const _export_sfc = (sfc, props2) => {
   }
   return target;
 };
-function warn(msg, ...args) {
+function warn$1(msg, ...args) {
   console.warn(`[Vue warn] ${msg}`, ...args);
 }
 let activeEffectScope;
 class EffectScope {
   constructor(detached = false) {
     this.detached = detached;
-    this.active = true;
+    this._active = true;
     this.effects = [];
     this.cleanups = [];
     this.parent = activeEffectScope;
@@ -1541,8 +1594,11 @@ class EffectScope {
       this.index = (activeEffectScope.scopes || (activeEffectScope.scopes = [])).push(this) - 1;
     }
   }
+  get active() {
+    return this._active;
+  }
   run(fn) {
-    if (this.active) {
+    if (this._active) {
       const currentEffectScope = activeEffectScope;
       try {
         activeEffectScope = this;
@@ -1551,17 +1607,25 @@ class EffectScope {
         activeEffectScope = currentEffectScope;
       }
     } else {
-      warn(`cannot run an inactive effect scope.`);
+      warn$1(`cannot run an inactive effect scope.`);
     }
   }
+  /**
+   * This should only be called on non-detached scopes
+   * @internal
+   */
   on() {
     activeEffectScope = this;
   }
+  /**
+   * This should only be called on non-detached scopes
+   * @internal
+   */
   off() {
     activeEffectScope = this.parent;
   }
   stop(fromParent) {
-    if (this.active) {
+    if (this._active) {
       let i, l;
       for (i = 0, l = this.effects.length; i < l; i++) {
         this.effects[i].stop();
@@ -1582,7 +1646,7 @@ class EffectScope {
         }
       }
       this.parent = void 0;
-      this.active = false;
+      this._active = false;
     }
   }
 }
@@ -1593,6 +1657,9 @@ function recordEffectScope(effect, scope = activeEffectScope) {
   if (scope && scope.active) {
     scope.effects.push(effect);
   }
+}
+function getCurrentScope() {
+  return activeEffectScope;
 }
 const createDep = (effects) => {
   const dep = new Set(effects);
@@ -1750,7 +1817,7 @@ function trigger(target, type, key, newValue, oldValue, oldTarget) {
   if (type === "clear") {
     deps = [...depsMap.values()];
   } else if (key === "length" && isArray$1(target)) {
-    const newLength = toNumber(newValue);
+    const newLength = Number(newValue);
     depsMap.forEach((dep, key2) => {
       if (key2 === "length" || key2 >= newLength) {
         deps.push(dep);
@@ -1830,11 +1897,15 @@ function triggerEffect(effect, debuggerEventExtraInfo) {
     }
   }
 }
+function getDepFromReactive(object2, key) {
+  var _a2;
+  return (_a2 = targetMap.get(object2)) === null || _a2 === void 0 ? void 0 : _a2.get(key);
+}
 const isNonTrackableKeys = /* @__PURE__ */ makeMap(`__proto__,__v_isRef,__isVue`);
 const builtInSymbols = new Set(
   /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((key) => key !== "arguments" && key !== "caller").map((key) => Symbol[key]).filter(isSymbol)
 );
-const get = /* @__PURE__ */ createGetter();
+const get$1 = /* @__PURE__ */ createGetter();
 const shallowGet = /* @__PURE__ */ createGetter(false, true);
 const readonlyGet = /* @__PURE__ */ createGetter(true);
 const shallowReadonlyGet = /* @__PURE__ */ createGetter(true, true);
@@ -1865,6 +1936,11 @@ function createArrayInstrumentations() {
   });
   return instrumentations;
 }
+function hasOwnProperty(key) {
+  const obj = toRaw(this);
+  track(obj, "has", key);
+  return obj.hasOwnProperty(key);
+}
 function createGetter(isReadonly2 = false, shallow = false) {
   return function get3(target, key, receiver) {
     if (key === "__v_isReactive") {
@@ -1877,8 +1953,13 @@ function createGetter(isReadonly2 = false, shallow = false) {
       return target;
     }
     const targetIsArray = isArray$1(target);
-    if (!isReadonly2 && targetIsArray && hasOwn(arrayInstrumentations, key)) {
-      return Reflect.get(arrayInstrumentations, key, receiver);
+    if (!isReadonly2) {
+      if (targetIsArray && hasOwn(arrayInstrumentations, key)) {
+        return Reflect.get(arrayInstrumentations, key, receiver);
+      }
+      if (key === "hasOwnProperty") {
+        return hasOwnProperty;
+      }
     }
     const res = Reflect.get(target, key, receiver);
     if (isSymbol(key) ? builtInSymbols.has(key) : isNonTrackableKeys(key)) {
@@ -1938,7 +2019,7 @@ function deleteProperty(target, key) {
   }
   return result;
 }
-function has(target, key) {
+function has$1(target, key) {
   const result = Reflect.has(target, key);
   if (!isSymbol(key) || !builtInSymbols.has(key)) {
     track(target, "has", key);
@@ -1950,23 +2031,23 @@ function ownKeys(target) {
   return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
-  get,
+  get: get$1,
   set: set$1,
   deleteProperty,
-  has,
+  has: has$1,
   ownKeys
 };
 const readonlyHandlers = {
   get: readonlyGet,
   set(target, key) {
     {
-      warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
+      warn$1(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
     }
     return true;
   },
   deleteProperty(target, key) {
     {
-      warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
+      warn$1(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
     }
     return true;
   }
@@ -1980,8 +2061,11 @@ const shallowReadonlyHandlers = /* @__PURE__ */ extend({}, readonlyHandlers, {
 });
 const toShallow = (value2) => value2;
 const getProto = (v) => Reflect.getPrototypeOf(v);
-function get$1(target, key, isReadonly2 = false, isShallow2 = false) {
-  target = target["__v_raw"];
+function get(target, key, isReadonly2 = false, isShallow2 = false) {
+  target = target[
+    "__v_raw"
+    /* ReactiveFlags.RAW */
+  ];
   const rawTarget = toRaw(target);
   const rawKey = toRaw(key);
   if (!isReadonly2) {
@@ -2000,8 +2084,11 @@ function get$1(target, key, isReadonly2 = false, isShallow2 = false) {
     target.get(key);
   }
 }
-function has$1(key, isReadonly2 = false) {
-  const target = this["__v_raw"];
+function has(key, isReadonly2 = false) {
+  const target = this[
+    "__v_raw"
+    /* ReactiveFlags.RAW */
+  ];
   const rawTarget = toRaw(target);
   const rawKey = toRaw(key);
   if (!isReadonly2) {
@@ -2013,7 +2100,10 @@ function has$1(key, isReadonly2 = false) {
   return key === rawKey ? target.has(key) : target.has(key) || target.has(rawKey);
 }
 function size(target, isReadonly2 = false) {
-  target = target["__v_raw"];
+  target = target[
+    "__v_raw"
+    /* ReactiveFlags.RAW */
+  ];
   !isReadonly2 && track(toRaw(target), "iterate", ITERATE_KEY);
   return Reflect.get(target, "size", target);
 }
@@ -2028,7 +2118,7 @@ function add(value2) {
   }
   return this;
 }
-function set$1$1(key, value2) {
+function set$2(key, value2) {
   value2 = toRaw(value2);
   const target = toRaw(this);
   const { has: has2, get: get3 } = getProto(target);
@@ -2078,7 +2168,10 @@ function clear() {
 function createForEach(isReadonly2, isShallow2) {
   return function forEach3(callback, thisArg) {
     const observed = this;
-    const target = observed["__v_raw"];
+    const target = observed[
+      "__v_raw"
+      /* ReactiveFlags.RAW */
+    ];
     const rawTarget = toRaw(target);
     const wrap = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
     !isReadonly2 && track(rawTarget, "iterate", ITERATE_KEY);
@@ -2089,7 +2182,10 @@ function createForEach(isReadonly2, isShallow2) {
 }
 function createIterableMethod(method, isReadonly2, isShallow2) {
   return function(...args) {
-    const target = this["__v_raw"];
+    const target = this[
+      "__v_raw"
+      /* ReactiveFlags.RAW */
+    ];
     const rawTarget = toRaw(target);
     const targetIsMap = isMap(rawTarget);
     const isPair = method === "entries" || method === Symbol.iterator && targetIsMap;
@@ -2098,6 +2194,7 @@ function createIterableMethod(method, isReadonly2, isShallow2) {
     const wrap = isShallow2 ? toShallow : isReadonly2 ? toReadonly : toReactive;
     !isReadonly2 && track(rawTarget, "iterate", isKeyOnly ? MAP_KEY_ITERATE_KEY : ITERATE_KEY);
     return {
+      // iterator protocol
       next() {
         const { value: value2, done } = innerIterator.next();
         return done ? { value: value2, done } : {
@@ -2105,6 +2202,7 @@ function createIterableMethod(method, isReadonly2, isShallow2) {
           done
         };
       },
+      // iterable protocol
       [Symbol.iterator]() {
         return this;
       }
@@ -2123,62 +2221,86 @@ function createReadonlyMethod(type) {
 function createInstrumentations() {
   const mutableInstrumentations2 = {
     get(key) {
-      return get$1(this, key);
+      return get(this, key);
     },
     get size() {
       return size(this);
     },
-    has: has$1,
+    has,
     add,
-    set: set$1$1,
+    set: set$2,
     delete: deleteEntry,
     clear,
     forEach: createForEach(false, false)
   };
   const shallowInstrumentations2 = {
     get(key) {
-      return get$1(this, key, false, true);
+      return get(this, key, false, true);
     },
     get size() {
       return size(this);
     },
-    has: has$1,
+    has,
     add,
-    set: set$1$1,
+    set: set$2,
     delete: deleteEntry,
     clear,
     forEach: createForEach(false, true)
   };
   const readonlyInstrumentations2 = {
     get(key) {
-      return get$1(this, key, true);
+      return get(this, key, true);
     },
     get size() {
       return size(this, true);
     },
     has(key) {
-      return has$1.call(this, key, true);
+      return has.call(this, key, true);
     },
-    add: createReadonlyMethod("add"),
-    set: createReadonlyMethod("set"),
-    delete: createReadonlyMethod("delete"),
-    clear: createReadonlyMethod("clear"),
+    add: createReadonlyMethod(
+      "add"
+      /* TriggerOpTypes.ADD */
+    ),
+    set: createReadonlyMethod(
+      "set"
+      /* TriggerOpTypes.SET */
+    ),
+    delete: createReadonlyMethod(
+      "delete"
+      /* TriggerOpTypes.DELETE */
+    ),
+    clear: createReadonlyMethod(
+      "clear"
+      /* TriggerOpTypes.CLEAR */
+    ),
     forEach: createForEach(true, false)
   };
   const shallowReadonlyInstrumentations2 = {
     get(key) {
-      return get$1(this, key, true, true);
+      return get(this, key, true, true);
     },
     get size() {
       return size(this, true);
     },
     has(key) {
-      return has$1.call(this, key, true);
+      return has.call(this, key, true);
     },
-    add: createReadonlyMethod("add"),
-    set: createReadonlyMethod("set"),
-    delete: createReadonlyMethod("delete"),
-    clear: createReadonlyMethod("clear"),
+    add: createReadonlyMethod(
+      "add"
+      /* TriggerOpTypes.ADD */
+    ),
+    set: createReadonlyMethod(
+      "set"
+      /* TriggerOpTypes.SET */
+    ),
+    delete: createReadonlyMethod(
+      "delete"
+      /* TriggerOpTypes.DELETE */
+    ),
+    clear: createReadonlyMethod(
+      "clear"
+      /* TriggerOpTypes.CLEAR */
+    ),
     forEach: createForEach(true, true)
   };
   const iteratorMethods = ["keys", "values", "entries", Symbol.iterator];
@@ -2247,7 +2369,10 @@ function targetTypeMap(rawType) {
   }
 }
 function getTargetType(value2) {
-  return value2["__v_skip"] || !Object.isExtensible(value2) ? 0 : targetTypeMap(toRawType(value2));
+  return value2[
+    "__v_skip"
+    /* ReactiveFlags.SKIP */
+  ] || !Object.isExtensible(value2) ? 0 : targetTypeMap(toRawType(value2));
 }
 function reactive(target) {
   if (isReadonly(target)) {
@@ -2271,7 +2396,13 @@ function createReactiveObject(target, isReadonly2, baseHandlers, collectionHandl
     }
     return target;
   }
-  if (target["__v_raw"] && !(isReadonly2 && target["__v_isReactive"])) {
+  if (target[
+    "__v_raw"
+    /* ReactiveFlags.RAW */
+  ] && !(isReadonly2 && target[
+    "__v_isReactive"
+    /* ReactiveFlags.IS_REACTIVE */
+  ])) {
     return target;
   }
   const existingProxy = proxyMap.get(target);
@@ -2288,21 +2419,36 @@ function createReactiveObject(target, isReadonly2, baseHandlers, collectionHandl
 }
 function isReactive(value2) {
   if (isReadonly(value2)) {
-    return isReactive(value2["__v_raw"]);
+    return isReactive(value2[
+      "__v_raw"
+      /* ReactiveFlags.RAW */
+    ]);
   }
-  return !!(value2 && value2["__v_isReactive"]);
+  return !!(value2 && value2[
+    "__v_isReactive"
+    /* ReactiveFlags.IS_REACTIVE */
+  ]);
 }
 function isReadonly(value2) {
-  return !!(value2 && value2["__v_isReadonly"]);
+  return !!(value2 && value2[
+    "__v_isReadonly"
+    /* ReactiveFlags.IS_READONLY */
+  ]);
 }
 function isShallow(value2) {
-  return !!(value2 && value2["__v_isShallow"]);
+  return !!(value2 && value2[
+    "__v_isShallow"
+    /* ReactiveFlags.IS_SHALLOW */
+  ]);
 }
 function isProxy(value2) {
   return isReactive(value2) || isReadonly(value2);
 }
 function toRaw(observed) {
-  const raw = observed && observed["__v_raw"];
+  const raw = observed && observed[
+    "__v_raw"
+    /* ReactiveFlags.RAW */
+  ];
   return raw ? toRaw(raw) : observed;
 }
 function markRaw(value2) {
@@ -2325,9 +2471,10 @@ function trackRefValue(ref2) {
 }
 function triggerRefValue(ref2, newVal) {
   ref2 = toRaw(ref2);
-  if (ref2.dep) {
+  const dep = ref2.dep;
+  if (dep) {
     {
-      triggerEffects(ref2.dep, {
+      triggerEffects(dep, {
         target: ref2,
         type: "set",
         key: "value",
@@ -2412,6 +2559,9 @@ class ObjectRefImpl {
   set value(newVal) {
     this._object[this._key] = newVal;
   }
+  get dep() {
+    return getDepFromReactive(toRaw(this._object), this._key);
+  }
 }
 function toRef(object2, key, defaultValue) {
   const val = object2[key];
@@ -2433,7 +2583,10 @@ class ComputedRefImpl {
     });
     this.effect.computed = this;
     this.effect.active = this._cacheable = !isSSR;
-    this["__v_isReadonly"] = isReadonly2;
+    this[
+      "__v_isReadonly"
+      /* ReactiveFlags.IS_READONLY */
+    ] = isReadonly2;
   }
   get value() {
     const self = toRaw(this);
@@ -2449,7 +2602,7 @@ class ComputedRefImpl {
   }
 }
 _a = "__v_isReadonly";
-function computed(getterOrOptions, debugOptions, isSSR = false) {
+function computed$1(getterOrOptions, debugOptions, isSSR = false) {
   let getter;
   let setter;
   const onlyGetter = isFunction(getterOrOptions);
@@ -2476,7 +2629,7 @@ function pushWarningContext(vnode) {
 function popWarningContext() {
   stack.pop();
 }
-function warn$1(msg, ...args) {
+function warn(msg, ...args) {
   pauseTracking();
   const instance = stack.length ? stack[stack.length - 1].component : null;
   const appWarnHandler = instance && instance.appContext.config.warnHandler;
@@ -2490,7 +2643,8 @@ function warn$1(msg, ...args) {
     ]);
   } else {
     const warnArgs = [`[Vue warn]: ${msg}`, ...args];
-    if (trace.length && true) {
+    if (trace.length && // avoid spamming console during tests
+    true) {
       warnArgs.push(`
 `, ...formatTrace(trace));
     }
@@ -2562,35 +2716,122 @@ function formatProp(key, value2, raw) {
   }
 }
 const ErrorTypeStrings = {
-  ["sp"]: "serverPrefetch hook",
-  ["bc"]: "beforeCreate hook",
-  ["c"]: "created hook",
-  ["bm"]: "beforeMount hook",
-  ["m"]: "mounted hook",
-  ["bu"]: "beforeUpdate hook",
-  ["u"]: "updated",
-  ["bum"]: "beforeUnmount hook",
-  ["um"]: "unmounted hook",
-  ["a"]: "activated hook",
-  ["da"]: "deactivated hook",
-  ["ec"]: "errorCaptured hook",
-  ["rtc"]: "renderTracked hook",
-  ["rtg"]: "renderTriggered hook",
-  [0]: "setup function",
-  [1]: "render function",
-  [2]: "watcher getter",
-  [3]: "watcher callback",
-  [4]: "watcher cleanup function",
-  [5]: "native event handler",
-  [6]: "component event handler",
-  [7]: "vnode hook",
-  [8]: "directive hook",
-  [9]: "transition hook",
-  [10]: "app errorHandler",
-  [11]: "app warnHandler",
-  [12]: "ref function",
-  [13]: "async component loader",
-  [14]: "scheduler flush. This is likely a Vue internals bug. Please open an issue at https://new-issue.vuejs.org/?repo=vuejs/core"
+  [
+    "sp"
+    /* LifecycleHooks.SERVER_PREFETCH */
+  ]: "serverPrefetch hook",
+  [
+    "bc"
+    /* LifecycleHooks.BEFORE_CREATE */
+  ]: "beforeCreate hook",
+  [
+    "c"
+    /* LifecycleHooks.CREATED */
+  ]: "created hook",
+  [
+    "bm"
+    /* LifecycleHooks.BEFORE_MOUNT */
+  ]: "beforeMount hook",
+  [
+    "m"
+    /* LifecycleHooks.MOUNTED */
+  ]: "mounted hook",
+  [
+    "bu"
+    /* LifecycleHooks.BEFORE_UPDATE */
+  ]: "beforeUpdate hook",
+  [
+    "u"
+    /* LifecycleHooks.UPDATED */
+  ]: "updated",
+  [
+    "bum"
+    /* LifecycleHooks.BEFORE_UNMOUNT */
+  ]: "beforeUnmount hook",
+  [
+    "um"
+    /* LifecycleHooks.UNMOUNTED */
+  ]: "unmounted hook",
+  [
+    "a"
+    /* LifecycleHooks.ACTIVATED */
+  ]: "activated hook",
+  [
+    "da"
+    /* LifecycleHooks.DEACTIVATED */
+  ]: "deactivated hook",
+  [
+    "ec"
+    /* LifecycleHooks.ERROR_CAPTURED */
+  ]: "errorCaptured hook",
+  [
+    "rtc"
+    /* LifecycleHooks.RENDER_TRACKED */
+  ]: "renderTracked hook",
+  [
+    "rtg"
+    /* LifecycleHooks.RENDER_TRIGGERED */
+  ]: "renderTriggered hook",
+  [
+    0
+    /* ErrorCodes.SETUP_FUNCTION */
+  ]: "setup function",
+  [
+    1
+    /* ErrorCodes.RENDER_FUNCTION */
+  ]: "render function",
+  [
+    2
+    /* ErrorCodes.WATCH_GETTER */
+  ]: "watcher getter",
+  [
+    3
+    /* ErrorCodes.WATCH_CALLBACK */
+  ]: "watcher callback",
+  [
+    4
+    /* ErrorCodes.WATCH_CLEANUP */
+  ]: "watcher cleanup function",
+  [
+    5
+    /* ErrorCodes.NATIVE_EVENT_HANDLER */
+  ]: "native event handler",
+  [
+    6
+    /* ErrorCodes.COMPONENT_EVENT_HANDLER */
+  ]: "component event handler",
+  [
+    7
+    /* ErrorCodes.VNODE_HOOK */
+  ]: "vnode hook",
+  [
+    8
+    /* ErrorCodes.DIRECTIVE_HOOK */
+  ]: "directive hook",
+  [
+    9
+    /* ErrorCodes.TRANSITION_HOOK */
+  ]: "transition hook",
+  [
+    10
+    /* ErrorCodes.APP_ERROR_HANDLER */
+  ]: "app errorHandler",
+  [
+    11
+    /* ErrorCodes.APP_WARN_HANDLER */
+  ]: "app warnHandler",
+  [
+    12
+    /* ErrorCodes.FUNCTION_REF */
+  ]: "ref function",
+  [
+    13
+    /* ErrorCodes.ASYNC_COMPONENT_LOADER */
+  ]: "async component loader",
+  [
+    14
+    /* ErrorCodes.SCHEDULER */
+  ]: "scheduler flush. This is likely a Vue internals bug. Please open an issue at https://new-issue.vuejs.org/?repo=vuejs/core"
 };
 function callWithErrorHandling(fn, instance, type, args) {
   let res;
@@ -2648,7 +2889,7 @@ function logError(err, type, contextVNode, throwInDev = true) {
     if (contextVNode) {
       pushWarningContext(contextVNode);
     }
-    warn$1(`Unhandled error${info ? ` during execution of ${info}` : ``}`);
+    warn(`Unhandled error${info ? ` during execution of ${info}` : ``}`);
     if (contextVNode) {
       popWarningContext();
     }
@@ -2669,7 +2910,7 @@ let postFlushIndex = 0;
 const resolvedPromise = /* @__PURE__ */ Promise.resolve();
 let currentFlushPromise = null;
 const RECURSION_LIMIT = 100;
-function nextTick(fn) {
+function nextTick$1(fn) {
   const p2 = currentFlushPromise || resolvedPromise;
   return fn ? p2.then(this ? fn.bind(this) : fn) : p2;
 }
@@ -2783,7 +3024,12 @@ function flushJobs(seen) {
         if (check(job)) {
           continue;
         }
-        callWithErrorHandling(job, null, 14);
+        callWithErrorHandling(
+          job,
+          null,
+          14
+          /* ErrorCodes.SCHEDULER */
+        );
       }
     }
   } finally {
@@ -2805,7 +3051,7 @@ function checkRecursiveUpdates(seen, fn) {
     if (count > RECURSION_LIMIT) {
       const instance = fn.ownerInstance;
       const componentName = instance && getComponentName(instance.type);
-      warn$1(`Maximum recursive updates exceeded${componentName ? ` in component <${componentName}>` : ``}. This means you have a reactive effect that is mutating its own dependencies and thus recursively triggering itself. Possible sources include component template, render function, updated hook or watcher source function.`);
+      warn(`Maximum recursive updates exceeded${componentName ? ` in component <${componentName}>` : ``}. This means you have a reactive effect that is mutating its own dependencies and thus recursively triggering itself. Possible sources include component template, render function, updated hook or watcher source function.`);
       return true;
     } else {
       seen.set(fn, count + 1);
@@ -2815,7 +3061,7 @@ function checkRecursiveUpdates(seen, fn) {
 let devtools;
 let buffer = [];
 let devtoolsNotInstalled = false;
-function emit(event, ...args) {
+function emit$1(event, ...args) {
   if (devtools) {
     devtools.emit(event, ...args);
   } else if (!devtoolsNotInstalled) {
@@ -2829,7 +3075,16 @@ function setDevtoolsHook(hook, target) {
     devtools.enabled = true;
     buffer.forEach(({ event, args }) => devtools.emit(event, ...args));
     buffer = [];
-  } else if (typeof window !== "undefined" && window.HTMLElement && !((_b = (_a2 = window.navigator) === null || _a2 === void 0 ? void 0 : _a2.userAgent) === null || _b === void 0 ? void 0 : _b.includes("jsdom"))) {
+  } else if (
+    // handle late devtools injection - only do this if we are in an actual
+    // browser environment to avoid the timer handle stalling test runner exit
+    // (#4815)
+    typeof window !== "undefined" && // some envs mock window but not fully
+    // eslint-disable-next-line no-restricted-globals
+    window.HTMLElement && // also exclude jsdom
+    // eslint-disable-next-line no-restricted-globals
+    !((_b = (_a2 = window.navigator) === null || _a2 === void 0 ? void 0 : _a2.userAgent) === null || _b === void 0 ? void 0 : _b.includes("jsdom"))
+  ) {
     const replay = target.__VUE_DEVTOOLS_HOOK_REPLAY__ = target.__VUE_DEVTOOLS_HOOK_REPLAY__ || [];
     replay.push((newHook) => {
       setDevtoolsHook(newHook, target);
@@ -2847,43 +3102,61 @@ function setDevtoolsHook(hook, target) {
   }
 }
 function devtoolsInitApp(app, version2) {
-  emit("app:init", app, version2, {
+  emit$1("app:init", app, version2, {
     Fragment,
     Text,
     Comment,
     Static
   });
 }
-const devtoolsComponentAdded = /* @__PURE__ */ createDevtoolsComponentHook("component:added");
-const devtoolsComponentUpdated = /* @__PURE__ */ createDevtoolsComponentHook("component:updated");
-const _devtoolsComponentRemoved = /* @__PURE__ */ createDevtoolsComponentHook("component:removed");
+const devtoolsComponentAdded = /* @__PURE__ */ createDevtoolsComponentHook(
+  "component:added"
+  /* DevtoolsHooks.COMPONENT_ADDED */
+);
+const devtoolsComponentUpdated = /* @__PURE__ */ createDevtoolsComponentHook(
+  "component:updated"
+  /* DevtoolsHooks.COMPONENT_UPDATED */
+);
+const _devtoolsComponentRemoved = /* @__PURE__ */ createDevtoolsComponentHook(
+  "component:removed"
+  /* DevtoolsHooks.COMPONENT_REMOVED */
+);
 const devtoolsComponentRemoved = (component) => {
-  if (devtools && typeof devtools.cleanupBuffer === "function" && !devtools.cleanupBuffer(component)) {
+  if (devtools && typeof devtools.cleanupBuffer === "function" && // remove the component if it wasn't buffered
+  !devtools.cleanupBuffer(component)) {
     _devtoolsComponentRemoved(component);
   }
 };
 function createDevtoolsComponentHook(hook) {
   return (component) => {
-    emit(
+    emit$1(
       hook,
       component.appContext.app,
       component.uid,
+      // fixed by xxxxxx
+      // 为 0 是 App，无 parent 是 Page 指向 App
       component.uid === 0 ? void 0 : component.parent ? component.parent.uid : 0,
       component
     );
   };
 }
-const devtoolsPerfStart = /* @__PURE__ */ createDevtoolsPerformanceHook("perf:start");
-const devtoolsPerfEnd = /* @__PURE__ */ createDevtoolsPerformanceHook("perf:end");
+const devtoolsPerfStart = /* @__PURE__ */ createDevtoolsPerformanceHook(
+  "perf:start"
+  /* DevtoolsHooks.PERFORMANCE_START */
+);
+const devtoolsPerfEnd = /* @__PURE__ */ createDevtoolsPerformanceHook(
+  "perf:end"
+  /* DevtoolsHooks.PERFORMANCE_END */
+);
 function createDevtoolsPerformanceHook(hook) {
   return (component, type, time) => {
-    emit(hook, component.appContext.app, component.uid, component, type, time);
+    emit$1(hook, component.appContext.app, component.uid, component, type, time);
   };
 }
 function devtoolsComponentEmit(component, event, params) {
-  emit("component:emit", component.appContext.app, component, event, params);
+  emit$1("component:emit", component.appContext.app, component, event, params);
 }
-function emit$1(instance, event, ...rawArgs) {
+function emit(instance, event, ...rawArgs) {
   if (instance.isUnmounted)
     return;
   const props2 = instance.vnode.props || EMPTY_OBJ;
@@ -2892,14 +3165,14 @@ function emit$1(instance, event, ...rawArgs) {
     if (emitsOptions) {
       if (!(event in emitsOptions) && true) {
         if (!propsOptions || !(toHandlerKey(event) in propsOptions)) {
-          warn$1(`Component emitted event "${event}" but it is neither declared in the emits option nor as an "${toHandlerKey(event)}" prop.`);
+          warn(`Component emitted event "${event}" but it is neither declared in the emits option nor as an "${toHandlerKey(event)}" prop.`);
         }
       } else {
         const validator = emitsOptions[event];
         if (isFunction(validator)) {
           const isValid = validator(...rawArgs);
           if (!isValid) {
-            warn$1(`Invalid event arguments: event validation failed for event "${event}".`);
+            warn(`Invalid event arguments: event validation failed for event "${event}".`);
           }
         }
       }
@@ -2915,7 +3188,7 @@ function emit$1(instance, event, ...rawArgs) {
       args = rawArgs.map((a) => isString(a) ? a.trim() : a);
     }
     if (number2) {
-      args = rawArgs.map(toNumber);
+      args = rawArgs.map(looseToNumber);
     }
   }
   {
@@ -2924,11 +3197,12 @@ function emit$1(instance, event, ...rawArgs) {
   {
     const lowerCaseEvent = event.toLowerCase();
     if (lowerCaseEvent !== event && props2[toHandlerKey(lowerCaseEvent)]) {
-      warn$1(`Event "${lowerCaseEvent}" is emitted in component ${formatComponentName(instance, instance.type)} but the handler is registered for "${event}". Note that HTML attributes are case-insensitive and you cannot use v-on to listen to camelCase events when using in-DOM templates. You should probably use "${hyphenate(event)}" instead of "${event}".`);
+      warn(`Event "${lowerCaseEvent}" is emitted in component ${formatComponentName(instance, instance.type)} but the handler is registered for "${event}". Note that HTML attributes are case-insensitive and you cannot use v-on to listen to camelCase events when using in-DOM templates. You should probably use "${hyphenate(event)}" instead of "${event}".`);
     }
   }
   let handlerName;
-  let handler = props2[handlerName = toHandlerKey(event)] || props2[handlerName = toHandlerKey(camelize(event))];
+  let handler = props2[handlerName = toHandlerKey(event)] || // also try camelCase event handler (#2249)
+  props2[handlerName = toHandlerKey(camelize(event))];
   if (!handler && isModelListener2) {
     handler = props2[handlerName = toHandlerKey(hyphenate(event))];
   }
@@ -3006,7 +3280,7 @@ function setCurrentRenderingInstance(instance) {
 function provide(key, value2) {
   if (!currentInstance) {
     {
-      warn$1(`provide() can only be used inside setup().`);
+      warn(`provide() can only be used inside setup().`);
     }
   } else {
     let provides = currentInstance.provides;
@@ -3029,32 +3303,32 @@ function inject(key, defaultValue, treatDefaultAsFactory = false) {
     } else if (arguments.length > 1) {
       return treatDefaultAsFactory && isFunction(defaultValue) ? defaultValue.call(instance.proxy) : defaultValue;
     } else {
-      warn$1(`injection "${String(key)}" not found.`);
+      warn(`injection "${String(key)}" not found.`);
     }
   } else {
-    warn$1(`inject() can only be used inside setup() or functional components.`);
+    warn(`inject() can only be used inside setup() or functional components.`);
   }
 }
 const INITIAL_WATCHER_VALUE = {};
 function watch(source, cb, options) {
   if (!isFunction(cb)) {
-    warn$1(`\`watch(fn, options?)\` signature has been moved to a separate API. Use \`watchEffect(fn, options?)\` instead. \`watch\` now only supports \`watch(source, cb, options?) signature.`);
+    warn(`\`watch(fn, options?)\` signature has been moved to a separate API. Use \`watchEffect(fn, options?)\` instead. \`watch\` now only supports \`watch(source, cb, options?) signature.`);
   }
   return doWatch(source, cb, options);
 }
 function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EMPTY_OBJ) {
   if (!cb) {
     if (immediate !== void 0) {
-      warn$1(`watch() "immediate" option is only respected when using the watch(source, callback, options?) signature.`);
+      warn(`watch() "immediate" option is only respected when using the watch(source, callback, options?) signature.`);
     }
     if (deep !== void 0) {
-      warn$1(`watch() "deep" option is only respected when using the watch(source, callback, options?) signature.`);
+      warn(`watch() "deep" option is only respected when using the watch(source, callback, options?) signature.`);
     }
   }
   const warnInvalidSource = (s2) => {
-    warn$1(`Invalid watch source: `, s2, `A watch source can only be a getter/effect function, a ref, a reactive object, or an array of these types.`);
+    warn(`Invalid watch source: `, s2, `A watch source can only be a getter/effect function, a ref, a reactive object, or an array of these types.`);
   };
-  const instance = currentInstance;
+  const instance = getCurrentScope() === (currentInstance === null || currentInstance === void 0 ? void 0 : currentInstance.scope) ? currentInstance : null;
   let getter;
   let forceTrigger = false;
   let isMultiSource = false;
@@ -3073,14 +3347,24 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
       } else if (isReactive(s2)) {
         return traverse(s2);
       } else if (isFunction(s2)) {
-        return callWithErrorHandling(s2, instance, 2);
+        return callWithErrorHandling(
+          s2,
+          instance,
+          2
+          /* ErrorCodes.WATCH_GETTER */
+        );
       } else {
         warnInvalidSource(s2);
       }
     });
   } else if (isFunction(source)) {
     if (cb) {
-      getter = () => callWithErrorHandling(source, instance, 2);
+      getter = () => callWithErrorHandling(
+        source,
+        instance,
+        2
+        /* ErrorCodes.WATCH_GETTER */
+      );
     } else {
       getter = () => {
         if (instance && instance.isUnmounted) {
@@ -3103,7 +3387,12 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
   let cleanup;
   let onCleanup = (fn) => {
     cleanup = effect.onStop = () => {
-      callWithErrorHandling(fn, instance, 4);
+      callWithErrorHandling(
+        fn,
+        instance,
+        4
+        /* ErrorCodes.WATCH_CLEANUP */
+      );
     };
   };
   let oldValue = isMultiSource ? new Array(source.length).fill(INITIAL_WATCHER_VALUE) : INITIAL_WATCHER_VALUE;
@@ -3119,6 +3408,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
         }
         callWithAsyncErrorHandling(cb, instance, 3, [
           newValue,
+          // pass undefined as the old value when it's changed for the first time
           oldValue === INITIAL_WATCHER_VALUE ? void 0 : isMultiSource && oldValue[0] === INITIAL_WATCHER_VALUE ? [] : oldValue,
           onCleanup
         ]);
@@ -3133,7 +3423,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
   if (flush === "sync") {
     scheduler = job;
   } else if (flush === "post") {
-    scheduler = () => queuePostRenderEffect(job, instance && instance.suspense);
+    scheduler = () => queuePostRenderEffect$1(job, instance && instance.suspense);
   } else {
     job.pre = true;
     if (instance)
@@ -3152,7 +3442,7 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EM
       oldValue = effect.run();
     }
   } else if (flush === "post") {
-    queuePostRenderEffect(effect.run.bind(effect), instance && instance.suspense);
+    queuePostRenderEffect$1(effect.run.bind(effect), instance && instance.suspense);
   } else {
     effect.run();
   }
@@ -3195,7 +3485,10 @@ function createPathGetter(ctx, path) {
   };
 }
 function traverse(value2, seen) {
-  if (!isObject$2(value2) || value2["__v_skip"]) {
+  if (!isObject$2(value2) || value2[
+    "__v_skip"
+    /* ReactiveFlags.SKIP */
+  ]) {
     return value2;
   }
   seen = seen || /* @__PURE__ */ new Set();
@@ -3253,7 +3546,13 @@ function registerKeepAliveHook(hook, type, target = currentInstance) {
   }
 }
 function injectToKeepAliveRoot(hook, type, target, keepAliveRoot) {
-  const injected = injectHook(type, hook, keepAliveRoot, true);
+  const injected = injectHook(
+    type,
+    hook,
+    keepAliveRoot,
+    true
+    /* prepend */
+  );
   onUnmounted(() => {
     remove(keepAliveRoot[type], injected);
   }, target);
@@ -3283,25 +3582,55 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     return wrappedHook;
   } else {
     const apiName = toHandlerKey((ErrorTypeStrings[type] || type.replace(/^on/, "")).replace(/ hook$/, ""));
-    warn$1(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
+    warn(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
   }
 }
-const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target);
-const onBeforeMount = createHook$1("bm");
-const onMounted = createHook$1("m");
-const onBeforeUpdate = createHook$1("bu");
-const onUpdated = createHook$1("u");
-const onBeforeUnmount = createHook$1("bum");
-const onUnmounted = createHook$1("um");
-const onServerPrefetch = createHook$1("sp");
-const onRenderTriggered = createHook$1("rtg");
-const onRenderTracked = createHook$1("rtc");
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
+  // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
+  (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
+);
+const onBeforeMount = createHook$1(
+  "bm"
+  /* LifecycleHooks.BEFORE_MOUNT */
+);
+const onMounted = createHook$1(
+  "m"
+  /* LifecycleHooks.MOUNTED */
+);
+const onBeforeUpdate = createHook$1(
+  "bu"
+  /* LifecycleHooks.BEFORE_UPDATE */
+);
+const onUpdated = createHook$1(
+  "u"
+  /* LifecycleHooks.UPDATED */
+);
+const onBeforeUnmount = createHook$1(
+  "bum"
+  /* LifecycleHooks.BEFORE_UNMOUNT */
+);
+const onUnmounted = createHook$1(
+  "um"
+  /* LifecycleHooks.UNMOUNTED */
+);
+const onServerPrefetch = createHook$1(
+  "sp"
+  /* LifecycleHooks.SERVER_PREFETCH */
+);
+const onRenderTriggered = createHook$1(
+  "rtg"
+  /* LifecycleHooks.RENDER_TRIGGERED */
+);
+const onRenderTracked = createHook$1(
+  "rtc"
+  /* LifecycleHooks.RENDER_TRACKED */
+);
 function onErrorCaptured(hook, target = currentInstance) {
   injectHook("ec", hook, target);
 }
 function validateDirectiveName(name) {
   if (isBuiltInDirective(name)) {
-    warn$1("Do not use built-in directive ids as custom directive id: " + name);
+    warn("Do not use built-in directive ids as custom directive id: " + name);
   }
 }
 const COMPONENTS = "components";
@@ -3313,23 +3642,32 @@ function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false
   if (instance) {
     const Component2 = instance.type;
     if (type === COMPONENTS) {
-      const selfName = getComponentName(Component2, false);
+      const selfName = getComponentName(
+        Component2,
+        false
+        /* do not include inferred name to avoid breaking existing code */
+      );
       if (selfName && (selfName === name || selfName === camelize(name) || selfName === capitalize(camelize(name)))) {
         return Component2;
       }
     }
-    const res = resolve(instance[type] || Component2[type], name) || resolve(instance.appContext[type], name);
+    const res = (
+      // local registration
+      // check instance[type] first which is resolved for options API
+      resolve(instance[type] || Component2[type], name) || // global registration
+      resolve(instance.appContext[type], name)
+    );
     if (!res && maybeSelfReference) {
       return Component2;
     }
     if (warnMissing && !res) {
       const extra = type === COMPONENTS ? `
 If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement.` : ``;
-      warn$1(`Failed to resolve ${type.slice(0, -1)}: ${name}${extra}`);
+      warn(`Failed to resolve ${type.slice(0, -1)}: ${name}${extra}`);
     }
     return res;
   } else {
-    warn$1(`resolve${capitalize(type.slice(0, -1))} can only be used in render() or setup().`);
+    warn(`resolve${capitalize(type.slice(0, -1))} can only be used in render() or setup().`);
   }
 }
 function resolve(registry, name) {
@@ -3342,21 +3680,28 @@ const getPublicInstance = (i) => {
     return getExposeProxy(i) || i.proxy;
   return getPublicInstance(i.parent);
 };
-const publicPropertiesMap = /* @__PURE__ */ extend(/* @__PURE__ */ Object.create(null), {
-  $: (i) => i,
-  $el: (i) => i.__$el || (i.__$el = {}),
-  $data: (i) => i.data,
-  $props: (i) => shallowReadonly(i.props),
-  $attrs: (i) => shallowReadonly(i.attrs),
-  $slots: (i) => shallowReadonly(i.slots),
-  $refs: (i) => shallowReadonly(i.refs),
-  $parent: (i) => getPublicInstance(i.parent),
-  $root: (i) => getPublicInstance(i.root),
-  $emit: (i) => i.emit,
-  $options: (i) => resolveMergedOptions(i),
-  $forceUpdate: (i) => i.f || (i.f = () => queueJob(i.update)),
-  $watch: (i) => instanceWatch.bind(i)
-});
+const publicPropertiesMap = (
+  // Move PURE marker to new line to workaround compiler discarding it
+  // due to type annotation
+  /* @__PURE__ */ extend(/* @__PURE__ */ Object.create(null), {
+    $: (i) => i,
+    // fixed by xxxxxx vue-i18n 在 dev 模式，访问了 $el，故模拟一个假的
+    // $el: i => i.vnode.el,
+    $el: (i) => i.__$el || (i.__$el = {}),
+    $data: (i) => i.data,
+    $props: (i) => shallowReadonly(i.props),
+    $attrs: (i) => shallowReadonly(i.attrs),
+    $slots: (i) => shallowReadonly(i.slots),
+    $refs: (i) => shallowReadonly(i.refs),
+    $parent: (i) => getPublicInstance(i.parent),
+    $root: (i) => getPublicInstance(i.root),
+    $emit: (i) => i.emit,
+    $options: (i) => resolveMergedOptions(i),
+    $forceUpdate: (i) => i.f || (i.f = () => queueJob(i.update)),
+    // $nextTick: i => i.n || (i.n = nextTick.bind(i.proxy!)),// fixed by xxxxxx
+    $watch: (i) => instanceWatch.bind(i)
+  })
+);
 const isReservedPrefix = (key) => key === "_" || key === "$";
 const hasSetupBinding = (state, key) => state !== EMPTY_OBJ && !state.__isScriptSetup && hasOwn(state, key);
 const PublicInstanceProxyHandlers = {
@@ -3385,7 +3730,11 @@ const PublicInstanceProxyHandlers = {
       } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
         accessCache[key] = 2;
         return data[key];
-      } else if ((normalizedProps = instance.propsOptions[0]) && hasOwn(normalizedProps, key)) {
+      } else if (
+        // only cache other properties when instance has declared (thus stable)
+        // props
+        (normalizedProps = instance.propsOptions[0]) && hasOwn(normalizedProps, key)
+      ) {
         accessCache[key] = 3;
         return props2[key];
       } else if (ctx !== EMPTY_OBJ && hasOwn(ctx, key)) {
@@ -3402,20 +3751,28 @@ const PublicInstanceProxyHandlers = {
         track(instance, "get", key);
       }
       return publicGetter(instance);
-    } else if ((cssModule = type.__cssModules) && (cssModule = cssModule[key])) {
+    } else if (
+      // css module (injected by vue-loader)
+      (cssModule = type.__cssModules) && (cssModule = cssModule[key])
+    ) {
       return cssModule;
     } else if (ctx !== EMPTY_OBJ && hasOwn(ctx, key)) {
       accessCache[key] = 4;
       return ctx[key];
-    } else if (globalProperties = appContext.config.globalProperties, hasOwn(globalProperties, key)) {
+    } else if (
+      // global properties
+      globalProperties = appContext.config.globalProperties, hasOwn(globalProperties, key)
+    ) {
       {
         return globalProperties[key];
       }
-    } else if (currentRenderingInstance && (!isString(key) || key.indexOf("__v") !== 0)) {
+    } else if (currentRenderingInstance && (!isString(key) || // #1091 avoid internal isRef/isVNode checks on component instance leading
+    // to infinite warning loop
+    key.indexOf("__v") !== 0)) {
       if (data !== EMPTY_OBJ && isReservedPrefix(key[0]) && hasOwn(data, key)) {
-        warn$1(`Property ${JSON.stringify(key)} must be accessed via $data because it starts with a reserved character ("$" or "_") and is not proxied on the render context.`);
+        warn(`Property ${JSON.stringify(key)} must be accessed via $data because it starts with a reserved character ("$" or "_") and is not proxied on the render context.`);
       } else if (instance === currentRenderingInstance) {
-        warn$1(`Property ${JSON.stringify(key)} was accessed during render but is not defined on instance.`);
+        warn(`Property ${JSON.stringify(key)} was accessed during render but is not defined on instance.`);
       }
     }
   },
@@ -3425,17 +3782,17 @@ const PublicInstanceProxyHandlers = {
       setupState[key] = value2;
       return true;
     } else if (setupState.__isScriptSetup && hasOwn(setupState, key)) {
-      warn$1(`Cannot mutate <script setup> binding "${key}" from Options API.`);
+      warn(`Cannot mutate <script setup> binding "${key}" from Options API.`);
       return false;
     } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
       data[key] = value2;
       return true;
     } else if (hasOwn(instance.props, key)) {
-      warn$1(`Attempting to mutate prop "${key}". Props are readonly.`);
+      warn(`Attempting to mutate prop "${key}". Props are readonly.`);
       return false;
     }
     if (key[0] === "$" && key.slice(1) in instance) {
-      warn$1(`Attempting to mutate public property "${key}". Properties starting with $ are reserved and readonly.`);
+      warn(`Attempting to mutate public property "${key}". Properties starting with $ are reserved and readonly.`);
       return false;
     } else {
       if (key in instance.appContext.config.globalProperties) {
@@ -3465,7 +3822,7 @@ const PublicInstanceProxyHandlers = {
 };
 {
   PublicInstanceProxyHandlers.ownKeys = (target) => {
-    warn$1(`Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.`);
+    warn(`Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.`);
     return Reflect.ownKeys(target);
   };
 }
@@ -3481,6 +3838,8 @@ function createDevRenderContext(instance) {
       configurable: true,
       enumerable: false,
       get: () => publicPropertiesMap[key](instance),
+      // intercepted by the proxy so no need for implementation,
+      // but needed to prevent set errors
       set: NOOP
     });
   });
@@ -3504,7 +3863,7 @@ function exposeSetupStateOnRenderContext(instance) {
   Object.keys(toRaw(setupState)).forEach((key) => {
     if (!setupState.__isScriptSetup) {
       if (isReservedPrefix(key[0])) {
-        warn$1(`setup() return property ${JSON.stringify(key)} should not start with "$" or "_" which are reserved prefixes for Vue internals.`);
+        warn(`setup() return property ${JSON.stringify(key)} should not start with "$" or "_" which are reserved prefixes for Vue internals.`);
         return;
       }
       Object.defineProperty(ctx, key, {
@@ -3520,7 +3879,7 @@ function createDuplicateChecker() {
   const cache = /* @__PURE__ */ Object.create(null);
   return (type, key) => {
     if (cache[key]) {
-      warn$1(`${type} property "${key}" is already defined in ${cache[key]}.`);
+      warn(`${type} property "${key}" is already defined in ${cache[key]}.`);
     } else {
       cache[key] = type;
     }
@@ -3533,15 +3892,22 @@ function applyOptions$1(instance) {
   const ctx = instance.ctx;
   shouldCacheAccess = false;
   if (options.beforeCreate) {
-    callHook$1(options.beforeCreate, instance, "bc");
+    callHook$1(
+      options.beforeCreate,
+      instance,
+      "bc"
+      /* LifecycleHooks.BEFORE_CREATE */
+    );
   }
   const {
+    // state
     data: dataOptions,
     computed: computedOptions,
     methods,
     watch: watchOptions,
     provide: provideOptions,
     inject: injectOptions,
+    // lifecycle
     created,
     beforeMount,
     mounted,
@@ -3558,8 +3924,10 @@ function applyOptions$1(instance) {
     renderTriggered,
     errorCaptured,
     serverPrefetch,
+    // public API
     expose,
     inheritAttrs,
+    // assets
     components,
     directives,
     filters
@@ -3592,20 +3960,20 @@ function applyOptions$1(instance) {
           checkDuplicateProperties("Methods", key);
         }
       } else {
-        warn$1(`Method "${key}" has type "${typeof methodHandler}" in the component definition. Did you reference the function correctly?`);
+        warn(`Method "${key}" has type "${typeof methodHandler}" in the component definition. Did you reference the function correctly?`);
       }
     }
   }
   if (dataOptions) {
     if (!isFunction(dataOptions)) {
-      warn$1(`The data option must be a function. Plain object usage is no longer supported.`);
+      warn(`The data option must be a function. Plain object usage is no longer supported.`);
     }
     const data = dataOptions.call(publicThis, publicThis);
     if (isPromise$1(data)) {
-      warn$1(`data() returned a Promise - note data() cannot be async; If you intend to perform data fetching before component renders, use async setup() + <Suspense>.`);
+      warn(`data() returned a Promise - note data() cannot be async; If you intend to perform data fetching before component renders, use async setup() + <Suspense>.`);
     }
     if (!isObject$2(data)) {
-      warn$1(`data() should return an object.`);
+      warn(`data() should return an object.`);
     } else {
       instance.data = reactive(data);
       {
@@ -3629,12 +3997,12 @@ function applyOptions$1(instance) {
       const opt = computedOptions[key];
       const get3 = isFunction(opt) ? opt.bind(publicThis, publicThis) : isFunction(opt.get) ? opt.get.bind(publicThis, publicThis) : NOOP;
       if (get3 === NOOP) {
-        warn$1(`Computed property "${key}" has no getter.`);
+        warn(`Computed property "${key}" has no getter.`);
       }
       const set2 = !isFunction(opt) && isFunction(opt.set) ? opt.set.bind(publicThis) : () => {
-        warn$1(`Write operation failed: computed property "${key}" is readonly.`);
+        warn(`Write operation failed: computed property "${key}" is readonly.`);
       };
-      const c = computed$1({
+      const c = computed({
         get: get3,
         set: set2
       });
@@ -3664,7 +4032,12 @@ function applyOptions$1(instance) {
   }
   {
     if (created) {
-      callHook$1(created, instance, "c");
+      callHook$1(
+        created,
+        instance,
+        "c"
+        /* LifecycleHooks.CREATED */
+      );
     }
   }
   function registerLifecycleHook(register2, hook) {
@@ -3722,7 +4095,12 @@ function resolveInjections(injectOptions, ctx, checkDuplicateProperties = NOOP, 
     let injected;
     if (isObject$2(opt)) {
       if ("default" in opt) {
-        injected = inject(opt.from || key, opt.default, true);
+        injected = inject(
+          opt.from || key,
+          opt.default,
+          true
+          /* treat default function as factory */
+        );
       } else {
         injected = inject(opt.from || key);
       }
@@ -3739,7 +4117,7 @@ function resolveInjections(injectOptions, ctx, checkDuplicateProperties = NOOP, 
         });
       } else {
         {
-          warn$1(`injected property "${key}" is a ref and will be auto-unwrapped and no longer needs \`.value\` in the next minor release. To opt-in to the new behavior now, set \`app.config.unwrapInjectedRef = true\` (this config is temporary and will not be needed in the future.)`);
+          warn(`injected property "${key}" is a ref and will be auto-unwrapped and no longer needs \`.value\` in the next minor release. To opt-in to the new behavior now, set \`app.config.unwrapInjectedRef = true\` (this config is temporary and will not be needed in the future.)`);
         }
         ctx[key] = injected;
       }
@@ -3761,7 +4139,7 @@ function createWatcher(raw, ctx, publicThis, key) {
     if (isFunction(handler)) {
       watch(getter, handler);
     } else {
-      warn$1(`Invalid watch handler specified by key "${raw}"`, handler);
+      warn(`Invalid watch handler specified by key "${raw}"`, handler);
     }
   } else if (isFunction(raw)) {
     watch(getter, raw.bind(publicThis));
@@ -3773,11 +4151,11 @@ function createWatcher(raw, ctx, publicThis, key) {
       if (isFunction(handler)) {
         watch(getter, handler, raw);
       } else {
-        warn$1(`Invalid watch handler specified by key "${raw.handler}"`, handler);
+        warn(`Invalid watch handler specified by key "${raw.handler}"`, handler);
       }
     }
   } else {
-    warn$1(`Invalid watch option: "${key}"`, raw);
+    warn(`Invalid watch option: "${key}"`, raw);
   }
 }
 function resolveMergedOptions(instance) {
@@ -3814,7 +4192,7 @@ function mergeOptions(to, from, strats, asMixin = false) {
   }
   for (const key in from) {
     if (asMixin && key === "expose") {
-      warn$1(`"expose" option is ignored when declared in mixins or extends. It should only be declared in the base component itself.`);
+      warn(`"expose" option is ignored when declared in mixins or extends. It should only be declared in the base component itself.`);
     } else {
       const strat = internalOptionMergeStrats[key] || strats && strats[key];
       to[key] = strat ? strat(to[key], from[key]) : from[key];
@@ -3826,8 +4204,10 @@ const internalOptionMergeStrats = {
   data: mergeDataFn,
   props: mergeObjectOptions,
   emits: mergeObjectOptions,
+  // objects
   methods: mergeObjectOptions,
   computed: mergeObjectOptions,
+  // lifecycle
   beforeCreate: mergeAsArray$1,
   created: mergeAsArray$1,
   beforeMount: mergeAsArray$1,
@@ -3842,9 +4222,12 @@ const internalOptionMergeStrats = {
   deactivated: mergeAsArray$1,
   errorCaptured: mergeAsArray$1,
   serverPrefetch: mergeAsArray$1,
+  // assets
   components: mergeObjectOptions,
   directives: mergeObjectOptions,
+  // watch
   watch: mergeWatchOptions,
+  // provide / inject
   provide: mergeDataFn,
   inject: mergeInject
 };
@@ -3925,7 +4308,12 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
   const rawCurrentProps = toRaw(props2);
   const [options] = instance.propsOptions;
   let hasAttrsChanged = false;
-  if (!isInHmrContext(instance) && (optimized || patchFlag > 0) && !(patchFlag & 16)) {
+  if (
+    // always force full diff in dev
+    // - #1942 if hmr is enabled with sfc component
+    // - vite#872 non-sfc component used by sfc component
+    !isInHmrContext(instance) && (optimized || patchFlag > 0) && !(patchFlag & 16)
+  ) {
     if (patchFlag & 8) {
       const propsToUpdate = instance.vnode.dynamicProps;
       for (let i = 0; i < propsToUpdate.length; i++) {
@@ -3942,7 +4330,15 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
             }
           } else {
             const camelizedKey = camelize(key);
-            props2[camelizedKey] = resolvePropValue(options, rawCurrentProps, camelizedKey, value2, instance, false);
+            props2[camelizedKey] = resolvePropValue(
+              options,
+              rawCurrentProps,
+              camelizedKey,
+              value2,
+              instance,
+              false
+              /* isAbsent */
+            );
           }
         } else {
           if (value2 !== attrs[key]) {
@@ -3958,10 +4354,23 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
     }
     let kebabKey;
     for (const key in rawCurrentProps) {
-      if (!rawProps || !hasOwn(rawProps, key) && ((kebabKey = hyphenate(key)) === key || !hasOwn(rawProps, kebabKey))) {
+      if (!rawProps || // for camelCase
+      !hasOwn(rawProps, key) && // it's possible the original props was passed in as kebab-case
+      // and converted to camelCase (#955)
+      ((kebabKey = hyphenate(key)) === key || !hasOwn(rawProps, kebabKey))) {
         if (options) {
-          if (rawPrevProps && (rawPrevProps[key] !== void 0 || rawPrevProps[kebabKey] !== void 0)) {
-            props2[key] = resolvePropValue(options, rawCurrentProps, key, void 0, instance, true);
+          if (rawPrevProps && // for camelCase
+          (rawPrevProps[key] !== void 0 || // for kebab-case
+          rawPrevProps[kebabKey] !== void 0)) {
+            props2[key] = resolvePropValue(
+              options,
+              rawCurrentProps,
+              key,
+              void 0,
+              instance,
+              true
+              /* isAbsent */
+            );
           }
         } else {
           delete props2[key];
@@ -4038,10 +4447,16 @@ function resolvePropValue(options, props2, key, value2, instance, isAbsent) {
         value2 = defaultValue;
       }
     }
-    if (opt[0]) {
+    if (opt[
+      0
+      /* BooleanFlags.shouldCast */
+    ]) {
       if (isAbsent && !hasDefault) {
         value2 = false;
-      } else if (opt[1] && (value2 === "" || value2 === hyphenate(key))) {
+      } else if (opt[
+        1
+        /* BooleanFlags.shouldCastTrue */
+      ] && (value2 === "" || value2 === hyphenate(key))) {
         value2 = true;
       }
     }
@@ -4085,7 +4500,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
   if (isArray$1(raw)) {
     for (let i = 0; i < raw.length; i++) {
       if (!isString(raw[i])) {
-        warn$1(`props must be strings when using array syntax.`, raw[i]);
+        warn(`props must be strings when using array syntax.`, raw[i]);
       }
       const normalizedKey = camelize(raw[i]);
       if (validatePropName(normalizedKey)) {
@@ -4094,7 +4509,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
     }
   } else if (raw) {
     if (!isObject$2(raw)) {
-      warn$1(`invalid props options`, raw);
+      warn(`invalid props options`, raw);
     }
     for (const key in raw) {
       const normalizedKey = camelize(key);
@@ -4104,8 +4519,14 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
         if (prop) {
           const booleanIndex = getTypeIndex(Boolean, prop.type);
           const stringIndex = getTypeIndex(String, prop.type);
-          prop[0] = booleanIndex > -1;
-          prop[1] = stringIndex < 0 || booleanIndex < stringIndex;
+          prop[
+            0
+            /* BooleanFlags.shouldCast */
+          ] = booleanIndex > -1;
+          prop[
+            1
+            /* BooleanFlags.shouldCastTrue */
+          ] = stringIndex < 0 || booleanIndex < stringIndex;
           if (booleanIndex > -1 || hasOwn(prop, "default")) {
             needCastKeys.push(normalizedKey);
           }
@@ -4123,13 +4544,13 @@ function validatePropName(key) {
   if (key[0] !== "$") {
     return true;
   } else {
-    warn$1(`Invalid prop name: "${key}" is a reserved property.`);
+    warn(`Invalid prop name: "${key}" is a reserved property.`);
   }
   return false;
 }
 function getType(ctor) {
-  const match = ctor && ctor.toString().match(/^\s*function (\w+)/);
-  return match ? match[1] : ctor === null ? "null" : "";
+  const match = ctor && ctor.toString().match(/^\s*(function|class) (\w+)/);
+  return match ? match[2] : ctor === null ? "null" : "";
 }
 function isSameType(a, b) {
   return getType(a) === getType(b);
@@ -4155,7 +4576,7 @@ function validateProps(rawProps, props2, instance) {
 function validateProp(name, value2, prop, isAbsent) {
   const { type, required, validator } = prop;
   if (required && isAbsent) {
-    warn$1('Missing required prop: "' + name + '"');
+    warn('Missing required prop: "' + name + '"');
     return;
   }
   if (value2 == null && !prop.required) {
@@ -4171,12 +4592,12 @@ function validateProp(name, value2, prop, isAbsent) {
       isValid = valid;
     }
     if (!isValid) {
-      warn$1(getInvalidTypeMessage(name, value2, expectedTypes));
+      warn(getInvalidTypeMessage(name, value2, expectedTypes));
       return;
     }
   }
   if (validator && !validator(value2)) {
-    warn$1('Invalid prop: custom validator check failed for prop "' + name + '".');
+    warn('Invalid prop: custom validator check failed for prop "' + name + '".');
   }
 }
 const isSimpleType = /* @__PURE__ */ makeMap("String,Number,Boolean,Function,Symbol,BigInt");
@@ -4255,20 +4676,20 @@ function createAppContext() {
     emitsCache: /* @__PURE__ */ new WeakMap()
   };
 }
-let uid = 0;
+let uid$1 = 0;
 function createAppAPI(render, hydrate) {
   return function createApp2(rootComponent, rootProps = null) {
     if (!isFunction(rootComponent)) {
       rootComponent = Object.assign({}, rootComponent);
     }
     if (rootProps != null && !isObject$2(rootProps)) {
-      warn$1(`root props passed to app.mount() must be an object.`);
+      warn(`root props passed to app.mount() must be an object.`);
       rootProps = null;
     }
     const context = createAppContext();
     const installedPlugins = /* @__PURE__ */ new Set();
     const app = context.app = {
-      _uid: uid++,
+      _uid: uid$1++,
       _component: rootComponent,
       _props: rootProps,
       _container: null,
@@ -4280,12 +4701,12 @@ function createAppAPI(render, hydrate) {
       },
       set config(v) {
         {
-          warn$1(`app.config cannot be replaced. Modify individual options instead.`);
+          warn(`app.config cannot be replaced. Modify individual options instead.`);
         }
       },
       use(plugin2, ...options) {
         if (installedPlugins.has(plugin2)) {
-          warn$1(`Plugin has already been applied to target app.`);
+          warn(`Plugin has already been applied to target app.`);
         } else if (plugin2 && isFunction(plugin2.install)) {
           installedPlugins.add(plugin2);
           plugin2.install(app, ...options);
@@ -4293,7 +4714,7 @@ function createAppAPI(render, hydrate) {
           installedPlugins.add(plugin2);
           plugin2(app, ...options);
         } else {
-          warn$1(`A plugin must either be a function or an object with an "install" function.`);
+          warn(`A plugin must either be a function or an object with an "install" function.`);
         }
         return app;
       },
@@ -4302,7 +4723,7 @@ function createAppAPI(render, hydrate) {
           if (!context.mixins.includes(mixin2)) {
             context.mixins.push(mixin2);
           } else {
-            warn$1("Mixin has already been applied to target app" + (mixin2.name ? `: ${mixin2.name}` : ""));
+            warn("Mixin has already been applied to target app" + (mixin2.name ? `: ${mixin2.name}` : ""));
           }
         }
         return app;
@@ -4315,7 +4736,7 @@ function createAppAPI(render, hydrate) {
           return context.components[name];
         }
         if (context.components[name]) {
-          warn$1(`Component "${name}" has already been registered in target app.`);
+          warn(`Component "${name}" has already been registered in target app.`);
         }
         context.components[name] = component;
         return app;
@@ -4328,18 +4749,20 @@ function createAppAPI(render, hydrate) {
           return context.directives[name];
         }
         if (context.directives[name]) {
-          warn$1(`Directive "${name}" has already been registered in target app.`);
+          warn(`Directive "${name}" has already been registered in target app.`);
         }
         context.directives[name] = directive;
         return app;
       },
+      // fixed by xxxxxx
       mount() {
       },
+      // fixed by xxxxxx
       unmount() {
       },
       provide(key, value2) {
         if (key in context.provides) {
-          warn$1(`App already provides property with key "${String(key)}". It will be overwritten with the new value.`);
+          warn(`App already provides property with key "${String(key)}". It will be overwritten with the new value.`);
         }
         context.provides[key] = value2;
         return app;
@@ -4383,7 +4806,7 @@ function isSupported() {
   }
   return supported;
 }
-const queuePostRenderEffect = queuePostFlushCb;
+const queuePostRenderEffect$1 = queuePostFlushCb;
 const Fragment = Symbol("Fragment");
 const Text = Symbol("Text");
 const Comment = Symbol("Comment");
@@ -4398,12 +4821,12 @@ function guardReactiveProps(props2) {
   return isProxy(props2) || InternalObjectKey in props2 ? extend({}, props2) : props2;
 }
 const emptyAppContext = createAppContext();
-let uid$1 = 0;
+let uid = 0;
 function createComponentInstance(vnode, parent, suspense) {
   const type = vnode.type;
   const appContext = (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
   const instance = {
-    uid: uid$1++,
+    uid: uid++,
     vnode,
     type,
     parent,
@@ -4413,7 +4836,10 @@ function createComponentInstance(vnode, parent, suspense) {
     subTree: null,
     effect: null,
     update: null,
-    scope: new EffectScope(true),
+    scope: new EffectScope(
+      true
+      /* detached */
+    ),
     render: null,
     proxy: null,
     exposed: null,
@@ -4422,14 +4848,20 @@ function createComponentInstance(vnode, parent, suspense) {
     provides: parent ? parent.provides : Object.create(appContext.provides),
     accessCache: null,
     renderCache: [],
+    // local resolved assets
     components: null,
     directives: null,
+    // resolved props and emits options
     propsOptions: normalizePropsOptions(type, appContext),
     emitsOptions: normalizeEmitsOptions(type, appContext),
+    // emit
     emit: null,
     emitted: null,
+    // props default value
     propsDefaults: EMPTY_OBJ,
+    // inheritAttrs
     inheritAttrs: type.inheritAttrs,
+    // state
     ctx: EMPTY_OBJ,
     data: EMPTY_OBJ,
     props: EMPTY_OBJ,
@@ -4438,10 +4870,13 @@ function createComponentInstance(vnode, parent, suspense) {
     refs: EMPTY_OBJ,
     setupState: EMPTY_OBJ,
     setupContext: null,
+    // suspense related
     suspense,
     suspenseId: suspense ? suspense.pendingId : 0,
     asyncDep: null,
     asyncResolved: false,
+    // lifecycle hooks
+    // not using enums here because it results in computed properties
     isMounted: false,
     isUnmounted: false,
     isDeactivated: false,
@@ -4464,7 +4899,7 @@ function createComponentInstance(vnode, parent, suspense) {
     instance.ctx = createDevRenderContext(instance);
   }
   instance.root = parent ? parent.root : instance;
-  instance.emit = emit$1.bind(null, instance);
+  instance.emit = emit.bind(null, instance);
   if (vnode.ce) {
     vnode.ce(instance);
   }
@@ -4484,7 +4919,7 @@ const isBuiltInTag = /* @__PURE__ */ makeMap("slot,component");
 function validateComponentName(name, config2) {
   const appIsNativeTag = config2.isNativeTag || NO;
   if (isBuiltInTag(name) || appIsNativeTag(name)) {
-    warn$1("Do not use built-in or reserved HTML elements as component id: " + name);
+    warn("Do not use built-in or reserved HTML elements as component id: " + name);
   }
 }
 function isStatefulComponent(instance) {
@@ -4493,7 +4928,10 @@ function isStatefulComponent(instance) {
 let isInSSRComponentSetup = false;
 function setupComponent(instance, isSSR = false) {
   isInSSRComponentSetup = isSSR;
-  const { props: props2 } = instance.vnode;
+  const {
+    props: props2
+    /*, children*/
+  } = instance.vnode;
   const isStateful = isStatefulComponent(instance);
   initProps$1(instance, props2, isStateful, isSSR);
   const setupResult = isStateful ? setupStatefulComponent(instance, isSSR) : void 0;
@@ -4519,7 +4957,7 @@ function setupStatefulComponent(instance, isSSR) {
       }
     }
     if (Component2.compilerOptions && isRuntimeOnly()) {
-      warn$1(`"compilerOptions" is only supported when using a build of Vue that includes the runtime compiler. Since you are using a runtime-only build, the options should be passed via your build tool config instead.`);
+      warn(`"compilerOptions" is only supported when using a build of Vue that includes the runtime compiler. Since you are using a runtime-only build, the options should be passed via your build tool config instead.`);
     }
   }
   instance.accessCache = /* @__PURE__ */ Object.create(null);
@@ -4538,7 +4976,7 @@ function setupStatefulComponent(instance, isSSR) {
     if (isPromise$1(setupResult)) {
       setupResult.then(unsetCurrentInstance, unsetCurrentInstance);
       {
-        warn$1(`setup() returned a Promise, but the version of Vue you are using does not support it yet.`);
+        warn(`setup() returned a Promise, but the version of Vue you are using does not support it yet.`);
       }
     } else {
       handleSetupResult(instance, setupResult, isSSR);
@@ -4554,7 +4992,7 @@ function handleSetupResult(instance, setupResult, isSSR) {
     }
   } else if (isObject$2(setupResult)) {
     if (isVNode(setupResult)) {
-      warn$1(`setup() should not return VNodes directly - return a render function instead.`);
+      warn(`setup() should not return VNodes directly - return a render function instead.`);
     }
     {
       instance.devtoolsRawSetupState = setupResult;
@@ -4564,7 +5002,7 @@ function handleSetupResult(instance, setupResult, isSSR) {
       exposeSetupStateOnRenderContext(instance);
     }
   } else if (setupResult !== void 0) {
-    warn$1(`setup() should return an object. Received: ${setupResult === null ? "null" : typeof setupResult}`);
+    warn(`setup() should return an object. Received: ${setupResult === null ? "null" : typeof setupResult}`);
   }
   finishComponentSetup(instance, isSSR);
 }
@@ -4584,9 +5022,12 @@ function finishComponentSetup(instance, isSSR, skipOptions) {
   }
   if (!Component2.render && instance.render === NOOP && !isSSR) {
     if (Component2.template) {
-      warn$1(`Component provided template option but runtime compilation is not supported in this build of Vue. Configure your bundler to alias "vue" to "vue/dist/vue.esm-bundler.js".`);
+      warn(
+        `Component provided template option but runtime compilation is not supported in this build of Vue. Configure your bundler to alias "vue" to "vue/dist/vue.esm-bundler.js".`
+        /* should not happen */
+      );
     } else {
-      warn$1(`Component is missing template or render function.`);
+      warn(`Component is missing template or render function.`);
     }
   }
 }
@@ -4599,11 +5040,11 @@ function createAttrsProxy(instance) {
         return target[key];
       },
       set() {
-        warn$1(`setupContext.attrs is readonly.`);
+        warn(`setupContext.attrs is readonly.`);
         return false;
       },
       deleteProperty() {
-        warn$1(`setupContext.attrs is readonly.`);
+        warn(`setupContext.attrs is readonly.`);
         return false;
       }
     }
@@ -4611,8 +5052,23 @@ function createAttrsProxy(instance) {
 }
 function createSetupContext(instance) {
   const expose = (exposed) => {
-    if (instance.exposed) {
-      warn$1(`expose() should be called only once per setup().`);
+    {
+      if (instance.exposed) {
+        warn(`expose() should be called only once per setup().`);
+      }
+      if (exposed != null) {
+        let exposedType = typeof exposed;
+        if (exposedType === "object") {
+          if (isArray$1(exposed)) {
+            exposedType = "array";
+          } else if (isRef(exposed)) {
+            exposedType = "ref";
+          }
+        }
+        if (exposedType !== "object") {
+          warn(`expose() should be passed a plain object, received ${exposedType}.`);
+        }
+      }
     }
     instance.exposed = exposed || {};
   };
@@ -4672,10 +5128,10 @@ function formatComponentName(instance, Component2, isRoot = false) {
   }
   return name ? classify(name) : isRoot ? `App` : `Anonymous`;
 }
-const computed$1 = (getterOrOptions, debugOptions) => {
-  return computed(getterOrOptions, debugOptions, isInSSRComponentSetup);
+const computed = (getterOrOptions, debugOptions) => {
+  return computed$1(getterOrOptions, debugOptions, isInSSRComponentSetup);
 };
-const version$1 = "3.2.45";
+const version$1 = "3.2.47";
 function unwrapper(target) {
   return unref(target);
 }
@@ -4785,10 +5241,10 @@ function flushCallbacks(instance) {
     }
   }
 }
-function nextTick$1(instance, fn) {
+function nextTick(instance, fn) {
   const ctx = instance.ctx;
   if (!ctx.__next_tick_pending && !hasComponentEffect(instance)) {
-    return nextTick(fn && fn.bind(instance.proxy));
+    return nextTick$1(fn && fn.bind(instance.proxy));
   }
   let _resolve;
   if (!ctx.__next_tick_callbacks) {
@@ -4796,7 +5252,12 @@ function nextTick$1(instance, fn) {
   }
   ctx.__next_tick_callbacks.push(() => {
     if (fn) {
-      callWithErrorHandling(fn.bind(instance.proxy), instance, 14);
+      callWithErrorHandling(
+        fn.bind(instance.proxy),
+        instance,
+        14
+        /* ErrorCodes.SCHEDULER */
+      );
     } else if (_resolve) {
       _resolve(instance.proxy);
     }
@@ -4872,7 +5333,7 @@ function patch(instance, data, oldData) {
 }
 function initAppConfig(appConfig) {
   appConfig.globalProperties.$nextTick = function $nextTick(fn) {
-    return nextTick$1(this.$, fn);
+    return nextTick(this.$, fn);
   };
 }
 function onApplyOptions(options, instance, publicThis) {
@@ -4903,7 +5364,11 @@ function setRef$1(instance, isUnmount = false) {
   }
   const check = $mpPlatform === "mp-baidu" || $mpPlatform === "mp-toutiao";
   const doSetByRefs = (refs) => {
-    const mpComponents = ($scope.selectAllComponents(".r") || []).concat($scope.selectAllComponents(".r-i-f") || []);
+    const mpComponents = (
+      // 字节小程序 selectAllComponents 可能返回 null
+      // https://github.com/dcloudio/uni-app/issues/3954
+      ($scope.selectAllComponents(".r") || []).concat($scope.selectAllComponents(".r-i-f") || [])
+    );
     return refs.filter((templateRef) => {
       const refValue = findComponentPublicInstance(mpComponents, templateRef.i);
       if (check && refValue === null) {
@@ -4924,7 +5389,7 @@ function setRef$1(instance, isUnmount = false) {
   if ($scope._$setRef) {
     $scope._$setRef(doSet);
   } else {
-    nextTick$1(instance, doSet);
+    nextTick(instance, doSet);
   }
 }
 function toSkip(value2) {
@@ -4981,7 +5446,7 @@ function setTemplateRef({ r, f: f2 }, refValue, setupState) {
   }
 }
 function warnRef(ref2) {
-  warn$1("Invalid template ref type:", ref2, `(${typeof ref2})`);
+  warn("Invalid template ref type:", ref2, `(${typeof ref2})`);
 }
 var MPType;
 (function(MPType2) {
@@ -4989,7 +5454,7 @@ var MPType;
   MPType2["PAGE"] = "page";
   MPType2["COMPONENT"] = "component";
 })(MPType || (MPType = {}));
-const queuePostRenderEffect$1 = queuePostFlushCb;
+const queuePostRenderEffect = queuePostFlushCb;
 function mountComponent(initialVNode, options) {
   const instance = initialVNode.component = createComponentInstance(initialVNode, options.parentComponent, null);
   {
@@ -5050,10 +5515,19 @@ function renderComponentRoot(instance) {
     } else {
       fallthroughAttrs(inheritAttrs, props2, propsOptions, Component2.props ? attrs : getFunctionalFallthrough(attrs));
       const render2 = Component2;
-      result = render2.length > 1 ? render2(props2, { attrs, slots, emit: emit2 }) : render2(props2, null);
+      result = render2.length > 1 ? render2(props2, { attrs, slots, emit: emit2 }) : render2(
+        props2,
+        null
+        /* we know it doesn't need it */
+      );
     }
   } catch (err) {
-    handleError(err, instance, 1);
+    handleError(
+      err,
+      instance,
+      1
+      /* ErrorCodes.RENDER_FUNCTION */
+    );
     result = false;
   }
   setRef$1(instance);
@@ -5112,7 +5586,7 @@ function toggleRecurse({ effect, update: update3 }, allowed) {
 }
 function setupRenderEffect(instance) {
   const updateScopedSlots = componentUpdateScopedSlotsFn.bind(instance);
-  instance.$updateScopedSlots = () => nextTick(() => queueJob(updateScopedSlots));
+  instance.$updateScopedSlots = () => nextTick$1(() => queueJob(updateScopedSlots));
   const componentUpdateFn = () => {
     if (!instance.isMounted) {
       onBeforeUnmount(() => {
@@ -5147,7 +5621,7 @@ function setupRenderEffect(instance) {
         endMeasure(instance, `patch`);
       }
       if (u) {
-        queuePostRenderEffect$1(u);
+        queuePostRenderEffect(u);
       }
       {
         devtoolsComponentUpdated(instance);
@@ -5161,6 +5635,7 @@ function setupRenderEffect(instance) {
     componentUpdateFn,
     () => queueJob(instance.update),
     instance.scope
+    // track it in component's effect scope
   );
   const update3 = instance.update = effect.run.bind(effect);
   update3.id = instance.uid;
@@ -5182,9 +5657,9 @@ function unmountComponent(instance) {
     update3.active = false;
   }
   if (um) {
-    queuePostRenderEffect$1(um);
+    queuePostRenderEffect(um);
   }
-  queuePostRenderEffect$1(() => {
+  queuePostRenderEffect(() => {
     instance.isUnmounted = true;
   });
   {
@@ -5246,7 +5721,7 @@ function createVueApp(rootComponent, rootProps = null) {
     return instance;
   };
   app.unmount = function unmount() {
-    warn$1(`Cannot unmount an app.`);
+    warn(`Cannot unmount an app.`);
   };
   return app;
 }
@@ -5343,7 +5818,7 @@ function getCurrentUserInfo() {
   try {
     userInfo = JSON.parse(b64DecodeUnicode(tokenArr[1]));
   } catch (error2) {
-    throw new Error("\u83B7\u53D6\u5F53\u524D\u7528\u6237\u4FE1\u606F\u51FA\u9519\uFF0C\u8BE6\u7EC6\u9519\u8BEF\u4FE1\u606F\u4E3A\uFF1A" + error2.message);
+    throw new Error("获取当前用户信息出错，详细错误信息为：" + error2.message);
   }
   userInfo.tokenExpired = userInfo.exp * 1e3;
   delete userInfo.exp;
@@ -5469,6 +5944,11 @@ function createInvoker(initialValue, instance) {
   return invoker;
 }
 const bubbles = [
+  // touch事件暂不做延迟，否则在 Android 上会影响性能，比如一些拖拽跟手手势等
+  // 'touchstart',
+  // 'touchmove',
+  // 'touchcancel',
+  // 'touchend',
   "tap",
   "longpress",
   "longtap",
@@ -5519,7 +5999,7 @@ function vFor(source, renderItem) {
     }
   } else if (typeof source === "number") {
     if (!Number.isInteger(source)) {
-      warn$1(`The v-for range expect an integer value but got ${source}.`);
+      warn(`The v-for range expect an integer value but got ${source}.`);
       return [];
     }
     ret = new Array(source);
@@ -5674,6 +6154,10 @@ const PAGE_INIT_HOOKS = [
   ON_REACH_BOTTOM,
   ON_PULL_DOWN_REFRESH,
   ON_ADD_TO_FAVORITES
+  // 'onReady', // lifetimes.ready
+  // 'onPageScroll', // 影响性能，开发者手动注册
+  // 'onShareTimeline', // 右上角菜单，开发者手动注册
+  // 'onShareAppMessage' // 右上角菜单，开发者手动注册
 ];
 function findHooks(vueOptions, hooks = /* @__PURE__ */ new Set()) {
   if (vueOptions) {
@@ -5721,7 +6205,7 @@ function initRuntimeHooks(mpOptions, runtimeHooks) {
 }
 const findMixinRuntimeHooks = /* @__PURE__ */ once(() => {
   const runtimeHooks = [];
-  const app = getApp({ allowDefault: true });
+  const app = isFunction(getApp) && getApp({ allowDefault: true });
   if (app && app.$vm && app.$vm.$) {
     const mixins = app.$vm.$.appContext.mixins;
     if (isArray$1(mixins)) {
@@ -5789,9 +6273,11 @@ function initCreateApp(parseAppOptions) {
 function initCreateSubpackageApp(parseAppOptions) {
   return function createApp2(vm) {
     const appOptions = parseApp(vm, parseAppOptions);
-    const app = getApp({
+    const app = isFunction(getApp) && getApp({
       allowDefault: true
     });
+    if (!app)
+      return;
     vm.$.ctx.$scope = app;
     const globalData = app.globalData;
     if (globalData) {
@@ -5911,12 +6397,20 @@ function findVmByVueId(instance, vuePid) {
   }
 }
 const builtInProps = [
+  // 百度小程序,快手小程序自定义组件不支持绑定动态事件，动态dataset，故通过props传递事件信息
+  // event-opts
   "eO",
+  // 组件 ref
   "uR",
+  // 组件 ref-in-for
   "uRIF",
+  // 组件 id
   "uI",
+  // 组件类型 m: 小程序组件
   "uT",
+  // 组件 props
   "uP",
+  // 小程序不能直接定义 $slots 的 props，所以通过 vueSlots 转换到 $slots
   "uS"
 ];
 function initDefaultProps(options, isBehavior = false) {
@@ -6141,6 +6635,13 @@ function parseComponent(vueOptions, { parse: parse2, mocks: mocks2, isPage: isPa
     addGlobalClass: true,
     pureDataPattern: /^uP$/
   };
+  if (isArray$1(vueOptions.mixins)) {
+    vueOptions.mixins.forEach((item) => {
+      if (isObject$2(item.options)) {
+        extend(options, item.options);
+      }
+    });
+  }
   if (vueOptions.options) {
     extend(options, vueOptions.options);
   }
@@ -6149,10 +6650,6 @@ function parseComponent(vueOptions, { parse: parse2, mocks: mocks2, isPage: isPa
     lifetimes: initLifetimes2({ mocks: mocks2, isPage: isPage2, initRelation: initRelation2, vueOptions }),
     pageLifetimes: {
       show() {
-        {
-          devtoolsComponentRemoved(this.$vm.$);
-          devtoolsComponentAdded(this.$vm.$);
-        }
         this.$vm && this.$vm.$callHook("onPageShow");
       },
       hide() {
@@ -6421,7 +6918,7 @@ function resetStoreState(store, state, hot) {
   scope.run(function() {
     forEachValue(wrappedGetters, function(fn, key) {
       computedObj[key] = partial(fn, store);
-      computedCache[key] = computed$1(function() {
+      computedCache[key] = computed(function() {
         return computedObj[key]();
       });
       Object.defineProperty(store.getters, key, {
@@ -6429,6 +6926,7 @@ function resetStoreState(store, state, hot) {
           return computedCache[key].value;
         },
         enumerable: true
+        // for local getters
       });
     });
   });
@@ -6599,9 +7097,13 @@ function registerGetter(store, type, rawGetter, local) {
   store._wrappedGetters[type] = function wrappedGetter(store2) {
     return rawGetter(
       local.state,
+      // local state
       local.getters,
+      // local getters
       store2.state,
+      // root state
       store2.getters
+      // root getters
     );
   };
 }
@@ -7030,7 +7532,9 @@ Store.prototype._withCommit = function _withCommit(fn) {
 };
 Object.defineProperties(Store.prototype, prototypeAccessors);
 const mixin = {
+  // 定义每个组件都可能需要用到的外部样式以及类名
   props: {
+    // 每个组件都有的父组件传递的样式，可以为字符串或者对象形式
     customStyle: {
       type: [Object, String],
       default: () => ({})
@@ -7039,10 +7543,12 @@ const mixin = {
       type: String,
       default: ""
     },
+    // 跳转的页面路径
     url: {
       type: String,
       default: ""
     },
+    // 页面跳转的类型
     linkType: {
       type: String,
       default: "navigateTo"
@@ -7058,6 +7564,9 @@ const mixin = {
     this.$u.getRect = this.$uGetRect;
   },
   computed: {
+    // 在2.x版本中，将会把$u挂载到uni对象下，导致在模板中无法使用uni.$u.xxx形式
+    // 所以这里通过computed计算属性将其附加到this.$u上，就可以在模板或者js中使用uni.$u.xxx
+    // 只在nvue环境通过此方式引入完整的$u，其他平台会出现性能问题，非nvue则按需引入（主要原因是props过大）
     $u() {
       return index$1.$u.deepMerge(index$1.$u, {
         props: void 0,
@@ -7065,6 +7574,15 @@ const mixin = {
         mixin: void 0
       });
     },
+    /**
+     * 生成bem规则类名
+     * 由于微信小程序，H5，nvue之间绑定class的差异，无法通过:class="[bem()]"的形式进行同用
+     * 故采用如下折中做法，最后返回的是数组（一般平台）或字符串（支付宝和字节跳动平台），类似['a', 'b', 'c']或'a b c'的形式
+     * @param {String} name 组件名称
+     * @param {Array} fixed 一直会存在的类名
+     * @param {Array} change 会根据变量值为true或者false而出现或者隐藏的类名
+     * @returns {Array|string}
+     */
     bem() {
       return function(name, fixed, change) {
         const prefix = `u-${name}--`;
@@ -7084,6 +7602,7 @@ const mixin = {
     }
   },
   methods: {
+    // 跳转某一个页面
     openPage(urlKey = "url") {
       const url2 = this[urlKey];
       if (url2) {
@@ -7092,6 +7611,9 @@ const mixin = {
         });
       }
     },
+    // 查询节点信息
+    // 目前此方法在支付宝小程序中无法获取组件跟接点的尺寸，为支付宝的bug(2020-07-21)
+    // 解决办法为在组件根部再套一个没有任何作用的view元素
     $uGetRect(selector, all) {
       return new Promise((resolve2) => {
         index$1.createSelectorQuery().in(this)[all ? "selectAll" : "select"](selector).boundingClientRect((rect) => {
@@ -7117,9 +7639,11 @@ const mixin = {
         });
       }
     },
+    // 阻止事件冒泡
     preventEvent(e2) {
       e2 && typeof e2.stopPropagation === "function" && e2.stopPropagation();
     },
+    // 空操作
     noop(e2) {
       this.preventEvent(e2);
     }
@@ -7139,6 +7663,7 @@ const mixin = {
   }
 };
 const mpMixin = {
+  // 将自定义节点设置成虚拟的，更加接近Vue组件的表现，能更好的使用flex属性
   options: {
     virtualHost: true
   }
@@ -7591,10 +8116,24 @@ var clone = function() {
   return clone2;
 }();
 class Request {
+  /**
+  * @param {Object} arg - 全局配置
+  * @param {String} arg.baseURL - 全局根路径
+  * @param {Object} arg.header - 全局header
+  * @param {String} arg.method = [GET|POST|PUT|DELETE|CONNECT|HEAD|OPTIONS|TRACE] - 全局默认请求方式
+  * @param {String} arg.dataType = [json] - 全局默认的dataType
+  * @param {String} arg.responseType = [text|arraybuffer] - 全局默认的responseType。支付宝小程序不支持
+  * @param {Object} arg.custom - 全局默认的自定义参数
+  * @param {Number} arg.timeout - 全局默认的超时时间，单位 ms。默认60000。H5(HBuilderX 2.9.9+)、APP(HBuilderX 2.9.9+)、微信小程序（2.10.0）、支付宝小程序
+  * @param {Boolean} arg.sslVerify - 全局默认的是否验证 ssl 证书。默认true.仅App安卓端支持（HBuilderX 2.3.3+）
+  * @param {Boolean} arg.withCredentials - 全局默认的跨域请求时是否携带凭证（cookies）。默认false。仅H5支持（HBuilderX 2.6.15+）
+  * @param {Boolean} arg.firstIpv4 - 全DNS解析时优先使用ipv4。默认false。仅 App-Android 支持 (HBuilderX 2.8.0+)
+  * @param {Function(statusCode):Boolean} arg.validateStatus - 全局默认的自定义验证器。默认statusCode >= 200 && statusCode < 300
+  */
   constructor(arg = {}) {
     if (!isPlainObject(arg)) {
       arg = {};
-      console.warn("\u8BBE\u7F6E\u5168\u5C40\u53C2\u6570\u5FC5\u987B\u63A5\u6536\u4E00\u4E2AObject");
+      console.warn("设置全局参数必须接收一个Object");
     }
     this.config = clone({ ...defaults, ...arg });
     this.interceptors = {
@@ -7602,6 +8141,10 @@ class Request {
       response: new InterceptorManager()
     };
   }
+  /**
+  * @Function
+  * @param {Request~setConfigCallback} f - 设置全局默认配置
+  */
   setConfig(f2) {
     this.config = f2(this.config);
   }
@@ -7620,6 +8163,17 @@ class Request {
     }
     return promise2;
   }
+  /**
+  * @Function
+  * @param {Object} config - 请求配置项
+  * @prop {String} options.url - 请求路径
+  * @prop {Object} options.data - 请求参数
+  * @prop {Object} [options.responseType = config.responseType] [text|arraybuffer] - 响应的数据类型
+  * @prop {Object} [options.dataType = config.dataType] - 如果设为 json，会尝试对返回的数据做一次 JSON.parse
+  * @prop {Object} [options.header = config.header] - 请求header
+  * @prop {Object} [options.method = config.method] - 请求方法
+  * @returns {Promise<unknown>}
+  */
   request(config2 = {}) {
     return this.middleware(config2);
   }
@@ -7703,16 +8257,23 @@ class Router {
       type: "navigateTo",
       url: "",
       delta: 1,
+      // navigateBack页面后退时,回退的层数
       params: {},
+      // 传递的参数
       animationType: "pop-in",
+      // 窗口动画,只在APP有效
       animationDuration: 300,
+      // 窗口动画持续时间,单位毫秒,只在APP有效
       intercept: false
+      // 是否需要拦截
     };
     this.route = this.route.bind(this);
   }
+  // 判断url前面是否有"/"，如果没有则加上，否则无法跳转
   addRootPath(url2) {
     return url2[0] === "/" ? url2 : `/${url2}`;
   }
+  // 整合路由参数
   mixinParam(url2, params) {
     url2 = url2 && this.addRootPath(url2);
     let query = "";
@@ -7723,6 +8284,7 @@ class Router {
     query = index$1.$u.queryParams(params);
     return url2 += query;
   }
+  // 对外的方法名称
   async route(options = {}, params = {}) {
     let mergeConfig2 = {};
     if (typeof options === "string") {
@@ -7748,6 +8310,7 @@ class Router {
       this.openPage(mergeConfig2);
     }
   }
+  // 执行路由跳转
   openPage(config2) {
     const {
       url: url2,
@@ -8121,7 +8684,7 @@ function float2Fixed(num) {
 function checkBoundary(num) {
   {
     if (num > Number.MAX_SAFE_INTEGER || num < Number.MIN_SAFE_INTEGER) {
-      console.warn(`${num} \u8D85\u51FA\u4E86\u7CBE\u5EA6\u9650\u5236\uFF0C\u7ED3\u679C\u53EF\u80FD\u4E0D\u6B63\u786E`);
+      console.warn(`${num} 超出了精度限制，结果可能不正确`);
     }
   }
 }
@@ -8300,7 +8863,7 @@ function deepMerge(target = {}, source = {}) {
 }
 function error(err) {
   {
-    console.error(`uView\u63D0\u793A\uFF1A${err}`);
+    console.error(`uView提示：${err}`);
   }
 }
 function randomArray(array2 = []) {
@@ -8342,11 +8905,18 @@ function timeFormat(dateTime = null, formatStr = "yyyy-mm-dd") {
   }
   const timeSource = {
     "y": date2.getFullYear().toString(),
+    // 年
     "m": (date2.getMonth() + 1).toString().padStart(2, "0"),
+    // 月
     "d": date2.getDate().toString().padStart(2, "0"),
+    // 日
     "h": date2.getHours().toString().padStart(2, "0"),
+    // 时
     "M": date2.getMinutes().toString().padStart(2, "0"),
+    // 分
     "s": date2.getSeconds().toString().padStart(2, "0")
+    // 秒
+    // 有其他格式化字符需求可以继续添加，必须转化成字符串
   };
   for (const key in timeSource) {
     const [ret] = new RegExp(`${key}+`).exec(formatStr) || [];
@@ -8368,23 +8938,23 @@ function timeFrom(timestamp = null, format = "yyyy-mm-dd") {
   let tips = "";
   switch (true) {
     case timer < 300:
-      tips = "\u521A\u521A";
+      tips = "刚刚";
       break;
     case (timer >= 300 && timer < 3600):
-      tips = `${parseInt(timer / 60)}\u5206\u949F\u524D`;
+      tips = `${parseInt(timer / 60)}分钟前`;
       break;
     case (timer >= 3600 && timer < 86400):
-      tips = `${parseInt(timer / 3600)}\u5C0F\u65F6\u524D`;
+      tips = `${parseInt(timer / 3600)}小时前`;
       break;
     case (timer >= 86400 && timer < 2592e3):
-      tips = `${parseInt(timer / 86400)}\u5929\u524D`;
+      tips = `${parseInt(timer / 86400)}天前`;
       break;
     default:
       if (format === false) {
         if (timer >= 2592e3 && timer < 365 * 86400) {
-          tips = `${parseInt(timer / (86400 * 30))}\u4E2A\u6708\u524D`;
+          tips = `${parseInt(timer / (86400 * 30))}个月前`;
         } else {
-          tips = `${parseInt(timer / (86400 * 365))}\u5E74\u524D`;
+          tips = `${parseInt(timer / (86400 * 365))}年前`;
         }
       } else {
         tips = timeFormat(timestamp, format);
@@ -8638,6 +9208,7 @@ const version = "3.1.6";
 const config = {
   v: version,
   version,
+  // 主题名称
   type: [
     "primary",
     "success",
@@ -8645,6 +9216,7 @@ const config = {
     "error",
     "warning"
   ],
+  // 颜色部分，本来可以通过scss的:export导出供js使用，但是奈何nvue不支持
   color: {
     "u-primary": "#2979ff",
     "u-warning": "#ff9900",
@@ -8656,9 +9228,11 @@ const config = {
     "u-tips-color": "#909399",
     "u-light-color": "#c0c4cc"
   },
+  // 默认单位，可以通过配置为rpx，那么在用于传入组件大小参数为数值时，就默认为rpx
   unit: "px"
 };
 const actionSheet = {
+  // action-sheet组件
   actionSheet: {
     show: false,
     title: "",
@@ -8674,6 +9248,7 @@ const actionSheet = {
   }
 };
 const album = {
+  // album 组件
   album: {
     urls: () => [],
     keyName: "",
@@ -8689,6 +9264,7 @@ const album = {
   }
 };
 const alert = {
+  // alert警告组件
   alert: {
     title: "",
     type: "warning",
@@ -8701,6 +9277,7 @@ const alert = {
   }
 };
 const avatar = {
+  // avatar 组件
   avatar: {
     src: "",
     shape: "circle",
@@ -8719,6 +9296,7 @@ const avatar = {
   }
 };
 const avatarGroup = {
+  // avatarGroup 组件
   avatarGroup: {
     urls: () => [],
     maxCount: 5,
@@ -8732,6 +9310,7 @@ const avatarGroup = {
   }
 };
 const backtop = {
+  // backtop组件
   backtop: {
     mode: "circle",
     icon: "arrow-upward",
@@ -8749,6 +9328,7 @@ const backtop = {
   }
 };
 const badge = {
+  // 徽标数组件
   badge: {
     isDot: false,
     value: "",
@@ -8766,6 +9346,7 @@ const badge = {
   }
 };
 const button$1 = {
+  // button组件
   button: {
     hairline: false,
     type: "info",
@@ -8798,30 +9379,33 @@ const button$1 = {
   }
 };
 const calendar = {
+  // calendar 组件
   calendar: {
-    title: "\u65E5\u671F\u9009\u62E9",
+    title: "日期选择",
     showTitle: true,
     showSubtitle: true,
     mode: "single",
-    startText: "\u5F00\u59CB",
-    endText: "\u7ED3\u675F",
+    startText: "开始",
+    endText: "结束",
     customList: () => [],
     color: "#3c9cff",
     minDate: 0,
     maxDate: 0,
     defaultDate: null,
     maxCount: Number.MAX_SAFE_INTEGER,
+    // Infinity
     rowHeight: 56,
     formatter: null,
     showLunar: false,
     showMark: true,
-    confirmText: "\u786E\u5B9A",
-    confirmDisabledText: "\u786E\u5B9A",
+    confirmText: "确定",
+    confirmDisabledText: "确定",
     show: false,
     closeOnClickOverlay: false,
     readonly: false,
     showConfirm: true,
     maxRange: Number.MAX_SAFE_INTEGER,
+    // Infinity
     rangePrompt: "",
     showRangePrompt: true,
     allowSameDay: false,
@@ -8830,11 +9414,13 @@ const calendar = {
   }
 };
 const carKeyboard = {
+  // 车牌号键盘
   carKeyboard: {
     random: false
   }
 };
 const cell = {
+  // cell组件的props
   cell: {
     customClass: "",
     title: "",
@@ -8860,6 +9446,7 @@ const cell = {
   }
 };
 const cellGroup = {
+  // cell-group组件的props
   cellGroup: {
     title: "",
     border: true,
@@ -8867,6 +9454,7 @@ const cellGroup = {
   }
 };
 const checkbox = {
+  // checkbox组件
   checkbox: {
     name: "",
     shape: "",
@@ -8884,6 +9472,7 @@ const checkbox = {
   }
 };
 const checkboxGroup = {
+  // checkbox-group组件
   checkboxGroup: {
     name: "",
     value: () => [],
@@ -8903,21 +9492,24 @@ const checkboxGroup = {
   }
 };
 const circleProgress = {
+  // circleProgress 组件
   circleProgress: {
     percentage: 30
   }
 };
 const code = {
+  // code 组件
   code: {
     seconds: 60,
-    startText: "\u83B7\u53D6\u9A8C\u8BC1\u7801",
-    changeText: "X\u79D2\u91CD\u65B0\u83B7\u53D6",
-    endText: "\u91CD\u65B0\u83B7\u53D6",
+    startText: "获取验证码",
+    changeText: "X秒重新获取",
+    endText: "重新获取",
     keepRunning: false,
     uniqueKey: ""
   }
 };
 const codeInput = {
+  // codeInput 组件
   codeInput: {
     adjustPosition: true,
     maxlength: 6,
@@ -8937,6 +9529,7 @@ const codeInput = {
   }
 };
 const col = {
+  // col 组件
   col: {
     span: 12,
     offset: 0,
@@ -8946,6 +9539,7 @@ const col = {
   }
 };
 const collapse = {
+  // collapse 组件
   collapse: {
     value: null,
     accordion: false,
@@ -8953,6 +9547,7 @@ const collapse = {
   }
 };
 const collapseItem = {
+  // collapseItem 组件
   collapseItem: {
     title: "",
     value: "",
@@ -8968,6 +9563,7 @@ const collapseItem = {
   }
 };
 const columnNotice = {
+  // columnNotice 组件
   columnNotice: {
     text: "",
     icon: "volume",
@@ -8982,6 +9578,7 @@ const columnNotice = {
   }
 };
 const countDown = {
+  // u-count-down 计时器组件
   countDown: {
     time: 0,
     format: "HH:mm:ss",
@@ -8990,6 +9587,7 @@ const countDown = {
   }
 };
 const countTo = {
+  // countTo 组件
   countTo: {
     startVal: 0,
     endVal: 0,
@@ -9005,6 +9603,7 @@ const countTo = {
   }
 };
 const datetimePicker = {
+  // datetimePicker 组件
   datetimePicker: {
     show: false,
     showToolbar: true,
@@ -9021,8 +9620,8 @@ const datetimePicker = {
     formatter: null,
     loading: false,
     itemHeight: 44,
-    cancelText: "\u53D6\u6D88",
-    confirmText: "\u786E\u8BA4",
+    cancelText: "取消",
+    confirmText: "确认",
     cancelColor: "#909193",
     confirmColor: "#3c9cff",
     visibleItemCount: 5,
@@ -9031,6 +9630,7 @@ const datetimePicker = {
   }
 };
 const divider = {
+  // divider组件
   divider: {
     dashed: false,
     hairline: true,
@@ -9043,6 +9643,7 @@ const divider = {
   }
 };
 const empty = {
+  // empty组件
   empty: {
     icon: "",
     text: "",
@@ -9058,6 +9659,7 @@ const empty = {
   }
 };
 const form = {
+  // form 组件
   form: {
     model: () => ({}),
     rules: () => ({}),
@@ -9070,6 +9672,7 @@ const form = {
   }
 };
 const formItem = {
+  // formItem 组件
   formItem: {
     label: "",
     prop: "",
@@ -9082,6 +9685,7 @@ const formItem = {
   }
 };
 const gap = {
+  // gap组件
   gap: {
     bgColor: "transparent",
     height: 20,
@@ -9091,6 +9695,7 @@ const gap = {
   }
 };
 const grid = {
+  // grid组件
   grid: {
     col: 3,
     border: false,
@@ -9098,6 +9703,7 @@ const grid = {
   }
 };
 const gridItem = {
+  // grid-item组件
   gridItem: {
     name: null,
     bgColor: "transparent"
@@ -9107,6 +9713,7 @@ const {
   color: color$3
 } = config;
 const icon = {
+  // icon组件
   icon: {
     name: "",
     color: color$3["u-content-color"],
@@ -9128,6 +9735,7 @@ const icon = {
   }
 };
 const image = {
+  // image组件
   image: {
     src: "",
     mode: "aspectFill",
@@ -9148,6 +9756,7 @@ const image = {
   }
 };
 const indexAnchor = {
+  // indexAnchor 组件
   indexAnchor: {
     text: "",
     color: "#606266",
@@ -9157,6 +9766,7 @@ const indexAnchor = {
   }
 };
 const indexList = {
+  // indexList 组件
   indexList: {
     inactiveColor: "#606266",
     activeColor: "#5677fc",
@@ -9166,6 +9776,7 @@ const indexList = {
   }
 };
 const input = {
+  // index 组件
   input: {
     value: "",
     type: "text",
@@ -9204,6 +9815,7 @@ const input = {
   }
 };
 const keyboard = {
+  // 键盘组件
   keyboard: {
     mode: "number",
     dotDisabled: false,
@@ -9218,12 +9830,13 @@ const keyboard = {
     show: false,
     overlay: true,
     zIndex: 10075,
-    cancelText: "\u53D6\u6D88",
-    confirmText: "\u786E\u5B9A",
+    cancelText: "取消",
+    confirmText: "确定",
     autoChange: false
   }
 };
 const line = {
+  // line组件
   line: {
     color: "#d6d7d9",
     length: "100%",
@@ -9234,6 +9847,7 @@ const line = {
   }
 };
 const lineProgress = {
+  // lineProgress 组件
   lineProgress: {
     activeColor: "#19be6b",
     inactiveColor: "#ececec",
@@ -9246,17 +9860,19 @@ const {
   color: color$2
 } = config;
 const link = {
+  // link超链接组件props参数
   link: {
     color: color$2["u-primary"],
     fontSize: 15,
     underLine: false,
     href: "",
-    mpTips: "\u94FE\u63A5\u5DF2\u590D\u5236\uFF0C\u8BF7\u5728\u6D4F\u89C8\u5668\u6253\u5F00",
+    mpTips: "链接已复制，请在浏览器打开",
     lineColor: "",
     text: ""
   }
 };
 const list = {
+  // list 组件
   list: {
     showScrollbar: false,
     lowerThreshold: 50,
@@ -9275,6 +9891,7 @@ const list = {
   }
 };
 const listItem = {
+  // listItem 组件
   listItem: {
     anchor: ""
   }
@@ -9283,6 +9900,7 @@ const {
   color: color$1
 } = config;
 const loadingIcon = {
+  // loading-icon加载中图标组件
   loadingIcon: {
     show: true,
     color: color$1["u-tips-color"],
@@ -9298,8 +9916,9 @@ const loadingIcon = {
   }
 };
 const loadingPage = {
+  // loading-page组件
   loadingPage: {
-    loadingText: "\u6B63\u5728\u52A0\u8F7D",
+    loadingText: "正在加载",
     image: "",
     loadingMode: "circle",
     loading: false,
@@ -9311,6 +9930,7 @@ const loadingPage = {
   }
 };
 const loadmore = {
+  // loadmore 组件
   loadmore: {
     status: "loadmore",
     bgColor: "transparent",
@@ -9319,9 +9939,9 @@ const loadmore = {
     iconSize: 17,
     color: "#606266",
     loadingIcon: "spinner",
-    loadmoreText: "\u52A0\u8F7D\u66F4\u591A",
-    loadingText: "\u6B63\u5728\u52A0\u8F7D...",
-    nomoreText: "\u6CA1\u6709\u66F4\u591A\u4E86",
+    loadmoreText: "加载更多",
+    loadingText: "正在加载...",
+    nomoreText: "没有更多了",
     isDot: false,
     iconColor: "#b7b7b7",
     marginTop: 10,
@@ -9333,12 +9953,13 @@ const loadmore = {
   }
 };
 const modal = {
+  // modal 组件
   modal: {
     show: false,
     title: "",
     content: "",
-    confirmText: "\u786E\u8BA4",
-    cancelText: "\u53D6\u6D88",
+    confirmText: "确认",
+    cancelText: "取消",
     showConfirmButton: true,
     showCancelButton: false,
     confirmColor: "#2979ff",
@@ -9366,6 +9987,7 @@ const color = {
   borderColor: "#e4e7ed"
 };
 const navbar = {
+  // navbar 组件
   navbar: {
     safeAreaInsetTop: true,
     placeholder: false,
@@ -9386,13 +10008,15 @@ const navbar = {
   }
 };
 const noNetwork = {
+  // noNetwork
   noNetwork: {
-    tips: "\u54CE\u5440\uFF0C\u7F51\u7EDC\u4FE1\u53F7\u4E22\u5931",
+    tips: "哎呀，网络信号丢失",
     zIndex: "",
     image: "data:image/png;base64,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"
   }
 };
 const noticeBar = {
+  // noticeBar
   noticeBar: {
     text: () => [],
     direction: "row",
@@ -9410,6 +10034,7 @@ const noticeBar = {
   }
 };
 const notify = {
+  // notify组件
   notify: {
     top: 0,
     type: "primary",
@@ -9422,6 +10047,7 @@ const notify = {
   }
 };
 const numberBox = {
+  // 步进器组件
   numberBox: {
     name: "",
     value: 0,
@@ -9447,6 +10073,7 @@ const numberBox = {
   }
 };
 const numberKeyboard = {
+  // 数字键盘
   numberKeyboard: {
     mode: "number",
     dotDisabled: false,
@@ -9454,6 +10081,7 @@ const numberKeyboard = {
   }
 };
 const overlay = {
+  // overlay组件
   overlay: {
     show: false,
     zIndex: 10070,
@@ -9462,6 +10090,7 @@ const overlay = {
   }
 };
 const parse = {
+  // parse
   parse: {
     copyLink: true,
     errorImg: "",
@@ -9474,6 +10103,7 @@ const parse = {
   }
 };
 const picker = {
+  // picker
   picker: {
     show: false,
     showToolbar: true,
@@ -9481,8 +10111,8 @@ const picker = {
     columns: () => [],
     loading: false,
     itemHeight: 44,
-    cancelText: "\u53D6\u6D88",
-    confirmText: "\u786E\u5B9A",
+    cancelText: "取消",
+    confirmText: "确定",
     cancelColor: "#909193",
     confirmColor: "#3c9cff",
     visibleItemCount: 5,
@@ -9493,6 +10123,7 @@ const picker = {
   }
 };
 const popup = {
+  // popup组件
   popup: {
     show: false,
     overlay: true,
@@ -9513,6 +10144,7 @@ const popup = {
   }
 };
 const radio = {
+  // radio组件
   radio: {
     name: "",
     shape: "",
@@ -9530,6 +10162,7 @@ const radio = {
   }
 };
 const radioGroup = {
+  // radio-group组件
   radioGroup: {
     value: "",
     disabled: false,
@@ -9550,6 +10183,7 @@ const radioGroup = {
   }
 };
 const rate = {
+  // rate组件
   rate: {
     value: 1,
     count: 5,
@@ -9566,11 +10200,12 @@ const rate = {
   }
 };
 const readMore = {
+  // readMore
   readMore: {
     showHeight: 400,
     toggle: false,
-    closeText: "\u5C55\u5F00\u9605\u8BFB\u5168\u6587",
-    openText: "\u6536\u8D77",
+    closeText: "展开阅读全文",
+    openText: "收起",
     color: "#2979ff",
     fontSize: 14,
     textIndent: "2em",
@@ -9578,6 +10213,7 @@ const readMore = {
   }
 };
 const row = {
+  // row
   row: {
     gutter: 0,
     justify: "start",
@@ -9585,6 +10221,7 @@ const row = {
   }
 };
 const rowNotice = {
+  // rowNotice
   rowNotice: {
     text: "",
     icon: "volume",
@@ -9596,6 +10233,7 @@ const rowNotice = {
   }
 };
 const scrollList = {
+  // scrollList
   scrollList: {
     indicatorWidth: 50,
     indicatorBarWidth: 20,
@@ -9606,15 +10244,16 @@ const scrollList = {
   }
 };
 const search = {
+  // search
   search: {
     shape: "round",
     bgColor: "#f2f2f2",
-    placeholder: "\u8BF7\u8F93\u5165\u5173\u952E\u5B57",
+    placeholder: "请输入关键字",
     clearabled: true,
     focus: false,
     showAction: true,
     actionStyle: () => ({}),
-    actionText: "\u641C\u7D22",
+    actionText: "搜索",
     inputAlign: "left",
     inputStyle: () => ({}),
     disabled: false,
@@ -9633,9 +10272,10 @@ const search = {
   }
 };
 const section = {
+  // u-section组件
   section: {
     title: "",
-    subTitle: "\u66F4\u591A",
+    subTitle: "更多",
     right: true,
     fontSize: 15,
     bold: true,
@@ -9647,6 +10287,7 @@ const section = {
   }
 };
 const skeleton = {
+  // skeleton
   skeleton: {
     loading: true,
     animate: true,
@@ -9662,6 +10303,7 @@ const skeleton = {
   }
 };
 const slider = {
+  // slider组件
   slider: {
     value: 0,
     blockSize: 18,
@@ -9678,11 +10320,13 @@ const slider = {
   }
 };
 const statusBar = {
+  // statusBar
   statusBar: {
     bgColor: "transparent"
   }
 };
 const steps = {
+  // steps组件
   steps: {
     direction: "row",
     current: 0,
@@ -9694,6 +10338,7 @@ const steps = {
   }
 };
 const stepsItem = {
+  // steps-item组件
   stepsItem: {
     title: "",
     desc: "",
@@ -9702,6 +10347,7 @@ const stepsItem = {
   }
 };
 const sticky = {
+  // sticky组件
   sticky: {
     offsetTop: 0,
     customNavHeight: 0,
@@ -9712,6 +10358,7 @@ const sticky = {
   }
 };
 const subsection = {
+  // subsection组件
   subsection: {
     list: [],
     current: 0,
@@ -9725,11 +10372,13 @@ const subsection = {
   }
 };
 const swipeAction = {
+  // swipe-action组件
   swipeAction: {
     autoClose: true
   }
 };
 const swipeActionItem = {
+  // swipeActionItem 组件
   swipeActionItem: {
     show: false,
     name: "",
@@ -9741,6 +10390,7 @@ const swipeActionItem = {
   }
 };
 const swiper = {
+  // swiper 组件
   swiper: {
     list: () => [],
     indicator: false,
@@ -9769,6 +10419,7 @@ const swiper = {
   }
 };
 const swipterIndicator = {
+  // swiperIndicator 组件
   swiperIndicator: {
     length: 0,
     current: 0,
@@ -9778,6 +10429,7 @@ const swipterIndicator = {
   }
 };
 const _switch = {
+  // switch
   switch: {
     loading: false,
     disabled: false,
@@ -9792,6 +10444,7 @@ const _switch = {
   }
 };
 const tabbar = {
+  // tabbar
   tabbar: {
     value: null,
     safeAreaInsetBottom: true,
@@ -9804,6 +10457,7 @@ const tabbar = {
   }
 };
 const tabbarItem = {
+  //
   tabbarItem: {
     name: null,
     icon: "",
@@ -9814,6 +10468,7 @@ const tabbarItem = {
   }
 };
 const tabs = {
+  //
   tabs: {
     duration: 300,
     list: () => [],
@@ -9836,6 +10491,7 @@ const tabs = {
   }
 };
 const tag = {
+  // tag 组件
   tag: {
     type: "primary",
     disabled: false,
@@ -9855,6 +10511,7 @@ const tag = {
   }
 };
 const text = {
+  // text 组件
   text: {
     type: "",
     show: true,
@@ -9882,6 +10539,7 @@ const text = {
   }
 };
 const textarea = {
+  // textarea 组件
   textarea: {
     value: "",
     placeholder: "",
@@ -9908,6 +10566,7 @@ const textarea = {
   }
 };
 const toast = {
+  // toast组件
   toast: {
     zIndex: 10090,
     loading: false,
@@ -9928,16 +10587,18 @@ const toast = {
   }
 };
 const toolbar = {
+  // toolbar 组件
   toolbar: {
     show: true,
-    cancelText: "\u53D6\u6D88",
-    confirmText: "\u786E\u8BA4",
+    cancelText: "取消",
+    confirmText: "确认",
     cancelColor: "#909193",
     confirmColor: "#3c9cff",
     title: ""
   }
 };
 const tooltip = {
+  // tooltip 组件
   tooltip: {
     text: "",
     copyText: "",
@@ -9953,6 +10614,7 @@ const tooltip = {
   }
 };
 const transition = {
+  // transition动画组件的props
   transition: {
     show: false,
     mode: "fade",
@@ -9961,6 +10623,7 @@ const transition = {
   }
 };
 const upload = {
+  // upload组件
   upload: {
     accept: "image",
     capture: () => ["album", "camera"],
@@ -10079,6 +10742,7 @@ const defprops = {
 const zIndex = {
   toast: 10090,
   noNetwork: 10080,
+  // popup包含popup，actionsheet，keyboard，picker的值
   popup: 10075,
   mask: 10070,
   navbar: 980,
@@ -10094,6 +10758,7 @@ const platform$1 = platform;
 const $u = {
   route,
   date: index.timeFormat,
+  // 另名date
   colorGradient: colorGradient$1.colorGradient,
   hexToRgb: colorGradient$1.hexToRgb,
   rgbToHex: colorGradient$1.rgbToHex,
@@ -10102,6 +10767,7 @@ const $u = {
   type: ["primary", "success", "error", "warning", "info"],
   http: new Request(),
   config,
+  // uView配置信息相关，比如版本号
   zIndex,
   debounce,
   throttle,
@@ -10125,61 +10791,76 @@ const uviewPlus = {
 };
 const props$b = {
   props: {
+    // 头像图片路径(不能为相对路径)
     src: {
       type: String,
       default: defprops.avatar.src
     },
+    // 头像形状，circle-圆形，square-方形
     shape: {
       type: String,
       default: defprops.avatar.shape
     },
+    // 头像尺寸
     size: {
       type: [String, Number],
       default: defprops.avatar.size
     },
+    // 裁剪模式
     mode: {
       type: String,
       default: defprops.avatar.mode
     },
+    // 显示的文字
     text: {
       type: String,
       default: defprops.avatar.text
     },
+    // 背景色
     bgColor: {
       type: String,
       default: defprops.avatar.bgColor
     },
+    // 文字颜色
     color: {
       type: String,
       default: defprops.avatar.color
     },
+    // 文字大小
     fontSize: {
       type: [String, Number],
       default: defprops.avatar.fontSize
     },
+    // 显示的图标
     icon: {
       type: String,
       default: defprops.avatar.icon
     },
+    // 显示小程序头像，只对百度，微信，QQ小程序有效
     mpAvatar: {
       type: Boolean,
       default: defprops.avatar.mpAvatar
     },
+    // 是否使用随机背景色
     randomBgColor: {
       type: Boolean,
       default: defprops.avatar.randomBgColor
     },
+    // 加载失败的默认头像(组件有内置默认图片)
     defaultUrl: {
       type: String,
       default: defprops.avatar.defaultUrl
     },
+    // 如果配置了randomBgColor为true，且配置了此值，则从默认的背景色数组中取出对应索引的颜色值，取值0-19之间
     colorIndex: {
       type: [String, Number],
+      // 校验参数规则，索引在0-19之间
       validator(n2) {
         return index$1.$u.test.range(n2, [0, 19]) || n2 === "";
       },
       default: defprops.avatar.colorIndex
     },
+    // 组件标识符
     name: {
       type: String,
       default: defprops.avatar.name
@@ -10187,285 +10868,302 @@ const props$b = {
   }
 };
 const icons = {
-  "uicon-level": "\uE693",
-  "uicon-column-line": "\uE68E",
-  "uicon-checkbox-mark": "\uE807",
-  "uicon-folder": "\uE7F5",
-  "uicon-movie": "\uE7F6",
-  "uicon-star-fill": "\uE669",
-  "uicon-star": "\uE65F",
-  "uicon-phone-fill": "\uE64F",
-  "uicon-phone": "\uE622",
-  "uicon-apple-fill": "\uE881",
-  "uicon-chrome-circle-fill": "\uE885",
-  "uicon-backspace": "\uE67B",
-  "uicon-attach": "\uE632",
-  "uicon-cut": "\uE948",
-  "uicon-empty-car": "\uE602",
-  "uicon-empty-coupon": "\uE682",
-  "uicon-empty-address": "\uE646",
-  "uicon-empty-favor": "\uE67C",
-  "uicon-empty-permission": "\uE686",
-  "uicon-empty-news": "\uE687",
-  "uicon-empty-search": "\uE664",
-  "uicon-github-circle-fill": "\uE887",
-  "uicon-rmb": "\uE608",
-  "uicon-person-delete-fill": "\uE66A",
-  "uicon-reload": "\uE788",
-  "uicon-order": "\uE68F",
-  "uicon-server-man": "\uE6BC",
-  "uicon-search": "\uE62A",
-  "uicon-fingerprint": "\uE955",
-  "uicon-more-dot-fill": "\uE630",
-  "uicon-scan": "\uE662",
-  "uicon-share-square": "\uE60B",
-  "uicon-map": "\uE61D",
-  "uicon-map-fill": "\uE64E",
-  "uicon-tags": "\uE629",
-  "uicon-tags-fill": "\uE651",
-  "uicon-bookmark-fill": "\uE63B",
-  "uicon-bookmark": "\uE60A",
-  "uicon-eye": "\uE613",
-  "uicon-eye-fill": "\uE641",
-  "uicon-mic": "\uE64A",
-  "uicon-mic-off": "\uE649",
-  "uicon-calendar": "\uE66E",
-  "uicon-calendar-fill": "\uE634",
-  "uicon-trash": "\uE623",
-  "uicon-trash-fill": "\uE658",
-  "uicon-play-left": "\uE66D",
-  "uicon-play-right": "\uE610",
-  "uicon-minus": "\uE618",
-  "uicon-plus": "\uE62D",
-  "uicon-info": "\uE653",
-  "uicon-info-circle": "\uE7D2",
-  "uicon-info-circle-fill": "\uE64B",
-  "uicon-question": "\uE715",
-  "uicon-error": "\uE6D3",
-  "uicon-close": "\uE685",
-  "uicon-checkmark": "\uE6A8",
-  "uicon-android-circle-fill": "\uE67E",
-  "uicon-android-fill": "\uE67D",
-  "uicon-ie": "\uE87B",
-  "uicon-IE-circle-fill": "\uE889",
-  "uicon-google": "\uE87A",
-  "uicon-google-circle-fill": "\uE88A",
-  "uicon-setting-fill": "\uE872",
-  "uicon-setting": "\uE61F",
-  "uicon-minus-square-fill": "\uE855",
-  "uicon-plus-square-fill": "\uE856",
-  "uicon-heart": "\uE7DF",
-  "uicon-heart-fill": "\uE851",
-  "uicon-camera": "\uE7D7",
-  "uicon-camera-fill": "\uE870",
-  "uicon-more-circle": "\uE63E",
-  "uicon-more-circle-fill": "\uE645",
-  "uicon-chat": "\uE620",
-  "uicon-chat-fill": "\uE61E",
-  "uicon-bag-fill": "\uE617",
-  "uicon-bag": "\uE619",
-  "uicon-error-circle-fill": "\uE62C",
-  "uicon-error-circle": "\uE624",
-  "uicon-close-circle": "\uE63F",
-  "uicon-close-circle-fill": "\uE637",
-  "uicon-checkmark-circle": "\uE63D",
-  "uicon-checkmark-circle-fill": "\uE635",
-  "uicon-question-circle-fill": "\uE666",
-  "uicon-question-circle": "\uE625",
-  "uicon-share": "\uE631",
-  "uicon-share-fill": "\uE65E",
-  "uicon-shopping-cart": "\uE621",
-  "uicon-shopping-cart-fill": "\uE65D",
-  "uicon-bell": "\uE609",
-  "uicon-bell-fill": "\uE640",
-  "uicon-list": "\uE650",
-  "uicon-list-dot": "\uE616",
-  "uicon-zhihu": "\uE6BA",
-  "uicon-zhihu-circle-fill": "\uE709",
-  "uicon-zhifubao": "\uE6B9",
-  "uicon-zhifubao-circle-fill": "\uE6B8",
-  "uicon-weixin-circle-fill": "\uE6B1",
-  "uicon-weixin-fill": "\uE6B2",
-  "uicon-twitter-circle-fill": "\uE6AB",
-  "uicon-twitter": "\uE6AA",
-  "uicon-taobao-circle-fill": "\uE6A7",
-  "uicon-taobao": "\uE6A6",
-  "uicon-weibo-circle-fill": "\uE6A5",
-  "uicon-weibo": "\uE6A4",
-  "uicon-qq-fill": "\uE6A1",
-  "uicon-qq-circle-fill": "\uE6A0",
-  "uicon-moments-circel-fill": "\uE69A",
-  "uicon-moments": "\uE69B",
-  "uicon-qzone": "\uE695",
-  "uicon-qzone-circle-fill": "\uE696",
-  "uicon-baidu-circle-fill": "\uE680",
-  "uicon-baidu": "\uE681",
-  "uicon-facebook-circle-fill": "\uE68A",
-  "uicon-facebook": "\uE689",
-  "uicon-car": "\uE60C",
-  "uicon-car-fill": "\uE636",
-  "uicon-warning-fill": "\uE64D",
-  "uicon-warning": "\uE694",
-  "uicon-clock-fill": "\uE638",
-  "uicon-clock": "\uE60F",
-  "uicon-edit-pen": "\uE612",
-  "uicon-edit-pen-fill": "\uE66B",
-  "uicon-email": "\uE611",
-  "uicon-email-fill": "\uE642",
-  "uicon-minus-circle": "\uE61B",
-  "uicon-minus-circle-fill": "\uE652",
-  "uicon-plus-circle": "\uE62E",
-  "uicon-plus-circle-fill": "\uE661",
-  "uicon-file-text": "\uE663",
-  "uicon-file-text-fill": "\uE665",
-  "uicon-pushpin": "\uE7E3",
-  "uicon-pushpin-fill": "\uE86E",
-  "uicon-grid": "\uE673",
-  "uicon-grid-fill": "\uE678",
-  "uicon-play-circle": "\uE647",
-  "uicon-play-circle-fill": "\uE655",
-  "uicon-pause-circle-fill": "\uE654",
-  "uicon-pause": "\uE8FA",
-  "uicon-pause-circle": "\uE643",
-  "uicon-eye-off": "\uE648",
-  "uicon-eye-off-outline": "\uE62B",
-  "uicon-gift-fill": "\uE65C",
-  "uicon-gift": "\uE65B",
-  "uicon-rmb-circle-fill": "\uE657",
-  "uicon-rmb-circle": "\uE677",
-  "uicon-kefu-ermai": "\uE656",
-  "uicon-server-fill": "\uE751",
-  "uicon-coupon-fill": "\uE8C4",
-  "uicon-coupon": "\uE8AE",
-  "uicon-integral": "\uE704",
-  "uicon-integral-fill": "\uE703",
-  "uicon-home-fill": "\uE964",
-  "uicon-home": "\uE965",
-  "uicon-hourglass-half-fill": "\uE966",
-  "uicon-hourglass": "\uE967",
-  "uicon-account": "\uE628",
-  "uicon-plus-people-fill": "\uE626",
-  "uicon-minus-people-fill": "\uE615",
-  "uicon-account-fill": "\uE614",
-  "uicon-thumb-down-fill": "\uE726",
-  "uicon-thumb-down": "\uE727",
-  "uicon-thumb-up": "\uE733",
-  "uicon-thumb-up-fill": "\uE72F",
-  "uicon-lock-fill": "\uE979",
-  "uicon-lock-open": "\uE973",
-  "uicon-lock-opened-fill": "\uE974",
-  "uicon-lock": "\uE97A",
-  "uicon-red-packet-fill": "\uE690",
-  "uicon-photo-fill": "\uE98B",
-  "uicon-photo": "\uE98D",
-  "uicon-volume-off-fill": "\uE659",
-  "uicon-volume-off": "\uE644",
-  "uicon-volume-fill": "\uE670",
-  "uicon-volume": "\uE633",
-  "uicon-red-packet": "\uE691",
-  "uicon-download": "\uE63C",
-  "uicon-arrow-up-fill": "\uE6B0",
-  "uicon-arrow-down-fill": "\uE600",
-  "uicon-play-left-fill": "\uE675",
-  "uicon-play-right-fill": "\uE676",
-  "uicon-rewind-left-fill": "\uE679",
-  "uicon-rewind-right-fill": "\uE67A",
-  "uicon-arrow-downward": "\uE604",
-  "uicon-arrow-leftward": "\uE601",
-  "uicon-arrow-rightward": "\uE603",
-  "uicon-arrow-upward": "\uE607",
-  "uicon-arrow-down": "\uE60D",
-  "uicon-arrow-right": "\uE605",
-  "uicon-arrow-left": "\uE60E",
-  "uicon-arrow-up": "\uE606",
-  "uicon-skip-back-left": "\uE674",
-  "uicon-skip-forward-right": "\uE672",
-  "uicon-rewind-right": "\uE66F",
-  "uicon-rewind-left": "\uE671",
-  "uicon-arrow-right-double": "\uE68D",
-  "uicon-arrow-left-double": "\uE68C",
-  "uicon-wifi-off": "\uE668",
-  "uicon-wifi": "\uE667",
-  "uicon-empty-data": "\uE62F",
-  "uicon-empty-history": "\uE684",
-  "uicon-empty-list": "\uE68B",
-  "uicon-empty-page": "\uE627",
-  "uicon-empty-order": "\uE639",
-  "uicon-man": "\uE697",
-  "uicon-woman": "\uE69C",
-  "uicon-man-add": "\uE61C",
-  "uicon-man-add-fill": "\uE64C",
-  "uicon-man-delete": "\uE61A",
-  "uicon-man-delete-fill": "\uE66A",
-  "uicon-zh": "\uE70A",
-  "uicon-en": "\uE692"
+  "uicon-level": "",
+  "uicon-column-line": "",
+  "uicon-checkbox-mark": "",
+  "uicon-folder": "",
+  "uicon-movie": "",
+  "uicon-star-fill": "",
+  "uicon-star": "",
+  "uicon-phone-fill": "",
+  "uicon-phone": "",
+  "uicon-apple-fill": "",
+  "uicon-chrome-circle-fill": "",
+  "uicon-backspace": "",
+  "uicon-attach": "",
+  "uicon-cut": "",
+  "uicon-empty-car": "",
+  "uicon-empty-coupon": "",
+  "uicon-empty-address": "",
+  "uicon-empty-favor": "",
+  "uicon-empty-permission": "",
+  "uicon-empty-news": "",
+  "uicon-empty-search": "",
+  "uicon-github-circle-fill": "",
+  "uicon-rmb": "",
+  "uicon-person-delete-fill": "",
+  "uicon-reload": "",
+  "uicon-order": "",
+  "uicon-server-man": "",
+  "uicon-search": "",
+  "uicon-fingerprint": "",
+  "uicon-more-dot-fill": "",
+  "uicon-scan": "",
+  "uicon-share-square": "",
+  "uicon-map": "",
+  "uicon-map-fill": "",
+  "uicon-tags": "",
+  "uicon-tags-fill": "",
+  "uicon-bookmark-fill": "",
+  "uicon-bookmark": "",
+  "uicon-eye": "",
+  "uicon-eye-fill": "",
+  "uicon-mic": "",
+  "uicon-mic-off": "",
+  "uicon-calendar": "",
+  "uicon-calendar-fill": "",
+  "uicon-trash": "",
+  "uicon-trash-fill": "",
+  "uicon-play-left": "",
+  "uicon-play-right": "",
+  "uicon-minus": "",
+  "uicon-plus": "",
+  "uicon-info": "",
+  "uicon-info-circle": "",
+  "uicon-info-circle-fill": "",
+  "uicon-question": "",
+  "uicon-error": "",
+  "uicon-close": "",
+  "uicon-checkmark": "",
+  "uicon-android-circle-fill": "",
+  "uicon-android-fill": "",
+  "uicon-ie": "",
+  "uicon-IE-circle-fill": "",
+  "uicon-google": "",
+  "uicon-google-circle-fill": "",
+  "uicon-setting-fill": "",
+  "uicon-setting": "",
+  "uicon-minus-square-fill": "",
+  "uicon-plus-square-fill": "",
+  "uicon-heart": "",
+  "uicon-heart-fill": "",
+  "uicon-camera": "",
+  "uicon-camera-fill": "",
+  "uicon-more-circle": "",
+  "uicon-more-circle-fill": "",
+  "uicon-chat": "",
+  "uicon-chat-fill": "",
+  "uicon-bag-fill": "",
+  "uicon-bag": "",
+  "uicon-error-circle-fill": "",
+  "uicon-error-circle": "",
+  "uicon-close-circle": "",
+  "uicon-close-circle-fill": "",
+  "uicon-checkmark-circle": "",
+  "uicon-checkmark-circle-fill": "",
+  "uicon-question-circle-fill": "",
+  "uicon-question-circle": "",
+  "uicon-share": "",
+  "uicon-share-fill": "",
+  "uicon-shopping-cart": "",
+  "uicon-shopping-cart-fill": "",
+  "uicon-bell": "",
+  "uicon-bell-fill": "",
+  "uicon-list": "",
+  "uicon-list-dot": "",
+  "uicon-zhihu": "",
+  "uicon-zhihu-circle-fill": "",
+  "uicon-zhifubao": "",
+  "uicon-zhifubao-circle-fill": "",
+  "uicon-weixin-circle-fill": "",
+  "uicon-weixin-fill": "",
+  "uicon-twitter-circle-fill": "",
+  "uicon-twitter": "",
+  "uicon-taobao-circle-fill": "",
+  "uicon-taobao": "",
+  "uicon-weibo-circle-fill": "",
+  "uicon-weibo": "",
+  "uicon-qq-fill": "",
+  "uicon-qq-circle-fill": "",
+  "uicon-moments-circel-fill": "",
+  "uicon-moments": "",
+  "uicon-qzone": "",
+  "uicon-qzone-circle-fill": "",
+  "uicon-baidu-circle-fill": "",
+  "uicon-baidu": "",
+  "uicon-facebook-circle-fill": "",
+  "uicon-facebook": "",
+  "uicon-car": "",
+  "uicon-car-fill": "",
+  "uicon-warning-fill": "",
+  "uicon-warning": "",
+  "uicon-clock-fill": "",
+  "uicon-clock": "",
+  "uicon-edit-pen": "",
+  "uicon-edit-pen-fill": "",
+  "uicon-email": "",
+  "uicon-email-fill": "",
+  "uicon-minus-circle": "",
+  "uicon-minus-circle-fill": "",
+  "uicon-plus-circle": "",
+  "uicon-plus-circle-fill": "",
+  "uicon-file-text": "",
+  "uicon-file-text-fill": "",
+  "uicon-pushpin": "",
+  "uicon-pushpin-fill": "",
+  "uicon-grid": "",
+  "uicon-grid-fill": "",
+  "uicon-play-circle": "",
+  "uicon-play-circle-fill": "",
+  "uicon-pause-circle-fill": "",
+  "uicon-pause": "",
+  "uicon-pause-circle": "",
+  "uicon-eye-off": "",
+  "uicon-eye-off-outline": "",
+  "uicon-gift-fill": "",
+  "uicon-gift": "",
+  "uicon-rmb-circle-fill": "",
+  "uicon-rmb-circle": "",
+  "uicon-kefu-ermai": "",
+  "uicon-server-fill": "",
+  "uicon-coupon-fill": "",
+  "uicon-coupon": "",
+  "uicon-integral": "",
+  "uicon-integral-fill": "",
+  "uicon-home-fill": "",
+  "uicon-home": "",
+  "uicon-hourglass-half-fill": "",
+  "uicon-hourglass": "",
+  "uicon-account": "",
+  "uicon-plus-people-fill": "",
+  "uicon-minus-people-fill": "",
+  "uicon-account-fill": "",
+  "uicon-thumb-down-fill": "",
+  "uicon-thumb-down": "",
+  "uicon-thumb-up": "",
+  "uicon-thumb-up-fill": "",
+  "uicon-lock-fill": "",
+  "uicon-lock-open": "",
+  "uicon-lock-opened-fill": "",
+  "uicon-lock": "",
+  "uicon-red-packet-fill": "",
+  "uicon-photo-fill": "",
+  "uicon-photo": "",
+  "uicon-volume-off-fill": "",
+  "uicon-volume-off": "",
+  "uicon-volume-fill": "",
+  "uicon-volume": "",
+  "uicon-red-packet": "",
+  "uicon-download": "",
+  "uicon-arrow-up-fill": "",
+  "uicon-arrow-down-fill": "",
+  "uicon-play-left-fill": "",
+  "uicon-play-right-fill": "",
+  "uicon-rewind-left-fill": "",
+  "uicon-rewind-right-fill": "",
+  "uicon-arrow-downward": "",
+  "uicon-arrow-leftward": "",
+  "uicon-arrow-rightward": "",
+  "uicon-arrow-upward": "",
+  "uicon-arrow-down": "",
+  "uicon-arrow-right": "",
+  "uicon-arrow-left": "",
+  "uicon-arrow-up": "",
+  "uicon-skip-back-left": "",
+  "uicon-skip-forward-right": "",
+  "uicon-rewind-right": "",
+  "uicon-rewind-left": "",
+  "uicon-arrow-right-double": "",
+  "uicon-arrow-left-double": "",
+  "uicon-wifi-off": "",
+  "uicon-wifi": "",
+  "uicon-empty-data": "",
+  "uicon-empty-history": "",
+  "uicon-empty-list": "",
+  "uicon-empty-page": "",
+  "uicon-empty-order": "",
+  "uicon-man": "",
+  "uicon-woman": "",
+  "uicon-man-add": "",
+  "uicon-man-add-fill": "",
+  "uicon-man-delete": "",
+  "uicon-man-delete-fill": "",
+  "uicon-zh": "",
+  "uicon-en": ""
 };
 const props$a = {
   props: {
+    // 图标类名
     name: {
       type: String,
       default: defprops.icon.name
     },
+    // 图标颜色，可接受主题色
     color: {
       type: String,
       default: defprops.icon.color
     },
+    // 字体大小，单位px
     size: {
       type: [String, Number],
       default: defprops.icon.size
     },
+    // 是否显示粗体
     bold: {
       type: Boolean,
       default: defprops.icon.bold
     },
+    // 点击图标的时候传递事件出去的index（用于区分点击了哪一个）
     index: {
       type: [String, Number],
       default: defprops.icon.index
     },
+    // 触摸图标时的类名
     hoverClass: {
       type: String,
       default: defprops.icon.hoverClass
     },
+    // 自定义扩展前缀，方便用户扩展自己的图标库
     customPrefix: {
       type: String,
       default: defprops.icon.customPrefix
     },
+    // 图标右边或者下面的文字
     label: {
       type: [String, Number],
       default: defprops.icon.label
     },
+    // label的位置，只能右边或者下边
     labelPos: {
       type: String,
       default: defprops.icon.labelPos
     },
+    // label的大小
     labelSize: {
       type: [String, Number],
       default: defprops.icon.labelSize
     },
+    // label的颜色
     labelColor: {
       type: String,
       default: defprops.icon.labelColor
     },
+    // label与图标的距离
     space: {
       type: [String, Number],
       default: defprops.icon.space
     },
+    // 图片的mode
     imgMode: {
       type: String,
       default: defprops.icon.imgMode
     },
+    // 用于显示图片小图标时，图片的宽度
     width: {
       type: [String, Number],
       default: defprops.icon.width
     },
+    // 用于显示图片小图标时，图片的高度
     height: {
       type: [String, Number],
       default: defprops.icon.height
     },
+    // 用于解决某些情况下，让图标垂直居中的用途
     top: {
       type: [String, Number],
       default: defprops.icon.top
     },
+    // 是否阻止事件传播
     stop: {
       type: Boolean,
       default: defprops.icon.stop
@@ -10478,26 +11176,32 @@ const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
 const onPageScroll = /* @__PURE__ */ createHook(ON_PAGE_SCROLL);
 const props$9 = {
   props: {
+    // 指示器的整体宽度
     indicatorWidth: {
       type: [String, Number],
       default: defprops.scrollList.indicatorWidth
     },
+    // 滑块的宽度
     indicatorBarWidth: {
       type: [String, Number],
       default: defprops.scrollList.indicatorBarWidth
     },
+    // 是否显示面板指示器
     indicator: {
       type: Boolean,
       default: defprops.scrollList.indicator
     },
+    // 指示器非激活颜色
     indicatorColor: {
       type: String,
       default: defprops.scrollList.indicatorColor
     },
+    // 指示器的激活颜色
     indicatorActiveColor: {
       type: String,
       default: defprops.scrollList.indicatorActiveColor
     },
+    // 指示器样式，可通过bottom，left，right进行定位
     indicatorStyle: {
       type: [String, Object],
       default: defprops.scrollList.indicatorStyle
@@ -10506,6 +11210,7 @@ const props$9 = {
 };
 const props$8 = {
   props: {
+    // 用于滚动到指定item
     anchor: {
       type: [String, Number],
       default: defprops.listItem.anchor
@@ -10514,148 +11219,183 @@ const props$8 = {
 };
 const props$7 = {
   props: {
+    // 控制是否出现滚动条，仅nvue有效
     showScrollbar: {
       type: Boolean,
       default: defprops.list.showScrollbar
     },
+    // 距底部多少时触发scrolltolower事件
     lowerThreshold: {
       type: [String, Number],
       default: defprops.list.lowerThreshold
     },
+    // 距顶部多少时触发scrolltoupper事件，非nvue有效
     upperThreshold: {
       type: [String, Number],
       default: defprops.list.upperThreshold
     },
+    // 设置竖向滚动条位置
     scrollTop: {
       type: [String, Number],
       default: defprops.list.scrollTop
     },
+    // 控制 onscroll 事件触发的频率，仅nvue有效
     offsetAccuracy: {
       type: [String, Number],
       default: defprops.list.offsetAccuracy
     },
+    // 启用 flexbox 布局。开启后，当前节点声明了display: flex就会成为flex container，并作用于其孩子节点，仅微信小程序有效
     enableFlex: {
       type: Boolean,
       default: defprops.list.enableFlex
     },
+    // 是否按分页模式显示List，默认值false
     pagingEnabled: {
       type: Boolean,
       default: defprops.list.pagingEnabled
     },
+    // 是否允许List滚动
     scrollable: {
       type: Boolean,
       default: defprops.list.scrollable
     },
+    // 值应为某子元素id（id不能以数字开头）
     scrollIntoView: {
       type: String,
       default: defprops.list.scrollIntoView
     },
+    // 在设置滚动条位置时使用动画过渡
     scrollWithAnimation: {
       type: Boolean,
       default: defprops.list.scrollWithAnimation
     },
+    // iOS点击顶部状态栏、安卓双击标题栏时，滚动条返回顶部，只对微信小程序有效
     enableBackToTop: {
       type: Boolean,
       default: defprops.list.enableBackToTop
     },
+    // 列表的高度
     height: {
       type: [String, Number],
       default: defprops.list.height
     },
+    // 列表宽度
     width: {
       type: [String, Number],
       default: defprops.list.width
     },
+    // 列表前后预渲染的屏数，1代表一个屏幕的高度，1.5代表1个半屏幕高度
     preLoadScreen: {
       type: [String, Number],
       default: defprops.list.preLoadScreen
     }
+    // vue下，是否开启虚拟列表
   }
 };
 const props$6 = {
   props: {
+    // 标题
     title: {
       type: [String, Number],
       default: defprops.cell.title
     },
+    // 标题下方的描述信息
     label: {
       type: [String, Number],
       default: defprops.cell.label
     },
+    // 右侧的内容
     value: {
       type: [String, Number],
       default: defprops.cell.value
     },
+    // 左侧图标名称，或者图片链接(本地文件建议使用绝对地址)
     icon: {
       type: String,
       default: defprops.cell.icon
     },
+    // 是否禁用cell
     disabled: {
       type: Boolean,
       default: defprops.cell.disabled
     },
+    // 是否显示下边框
     border: {
       type: Boolean,
       default: defprops.cell.border
     },
+    // 内容是否垂直居中(主要是针对右侧的value部分)
     center: {
       type: Boolean,
       default: defprops.cell.center
     },
+    // 点击后跳转的URL地址
     url: {
       type: String,
       default: defprops.cell.url
     },
+    // 链接跳转的方式，内部使用的是uView封装的route方法，可能会进行拦截操作
     linkType: {
       type: String,
       default: defprops.cell.linkType
     },
+    // 是否开启点击反馈(表现为点击时加上灰色背景)
     clickable: {
       type: Boolean,
       default: defprops.cell.clickable
     },
+    // 是否展示右侧箭头并开启点击反馈
     isLink: {
       type: Boolean,
       default: defprops.cell.isLink
     },
+    // 是否显示表单状态下的必填星号(此组件可能会内嵌入input组件)
     required: {
       type: Boolean,
       default: defprops.cell.required
     },
+    // 右侧的图标箭头
     rightIcon: {
       type: String,
       default: defprops.cell.rightIcon
     },
+    // 右侧箭头的方向，可选值为：left，up，down
     arrowDirection: {
       type: String,
       default: defprops.cell.arrowDirection
     },
+    // 左侧图标样式
     iconStyle: {
       type: [Object, String],
       default: () => {
         return index$1.$u.props.cell.iconStyle;
       }
     },
+    // 右侧箭头图标的样式
     rightIconStyle: {
       type: [Object, String],
       default: () => {
         return index$1.$u.props.cell.rightIconStyle;
       }
     },
+    // 标题的样式
     titleStyle: {
       type: [Object, String],
       default: () => {
         return index$1.$u.props.cell.titleStyle;
       }
     },
+    // 单位元的大小，可选值为large
     size: {
       type: String,
       default: defprops.cell.size
     },
+    // 点击cell是否阻止事件传播
     stop: {
       type: Boolean,
       default: defprops.cell.stop
     },
+    // 标识符，cell被点击时返回
     name: {
       type: [Number, String],
       default: defprops.cell.name
@@ -10664,54 +11404,68 @@ const props$6 = {
 };
 const props$5 = {
   props: {
+    // 显示的内容，数组
     text: {
       type: [Array, String],
       default: defprops.noticeBar.text
     },
+    // 通告滚动模式，row-横向滚动，column-竖向滚动
     direction: {
       type: String,
       default: defprops.noticeBar.direction
     },
+    // direction = row时，是否使用步进形式滚动
     step: {
       type: Boolean,
       default: defprops.noticeBar.step
     },
+    // 是否显示左侧的音量图标
     icon: {
       type: String,
       default: defprops.noticeBar.icon
     },
+    // 通告模式，link-显示右箭头，closable-显示右侧关闭图标
     mode: {
       type: String,
       default: defprops.noticeBar.mode
     },
+    // 文字颜色，各图标也会使用文字颜色
     color: {
       type: String,
       default: defprops.noticeBar.color
     },
+    // 背景颜色
     bgColor: {
       type: String,
       default: defprops.noticeBar.bgColor
     },
+    // 水平滚动时的滚动速度，即每秒滚动多少px(px)，这有利于控制文字无论多少时，都能有一个恒定的速度
     speed: {
       type: [String, Number],
       default: defprops.noticeBar.speed
     },
+    // 字体大小
     fontSize: {
       type: [String, Number],
       default: defprops.noticeBar.fontSize
     },
+    // 滚动一个周期的时间长，单位ms
     duration: {
       type: [String, Number],
       default: defprops.noticeBar.duration
     },
+    // 是否禁止用手滑动切换
+    // 目前HX2.6.11，只支持App 2.5.5+、H5 2.5.5+、支付宝小程序、字节跳动小程序
     disableTouch: {
       type: Boolean,
       default: defprops.noticeBar.disableTouch
     },
+    // 跳转的页面路径
     url: {
       type: String,
       default: defprops.noticeBar.url
     },
+    // 页面跳转的类型
     linkType: {
       type: String,
       default: defprops.noticeBar.linkType
@@ -10720,86 +11474,108 @@ const props$5 = {
 };
 const props$4 = {
   props: {
+    // 主题颜色
     type: {
       type: String,
       default: defprops.text.type
     },
+    // 是否显示
     show: {
       type: Boolean,
       default: defprops.text.show
     },
+    // 显示的值
     text: {
       type: [String, Number],
       default: defprops.text.text
     },
+    // 前置图标
     prefixIcon: {
       type: String,
       default: defprops.text.prefixIcon
     },
+    // 后置图标
     suffixIcon: {
       type: String,
       default: defprops.text.suffixIcon
     },
+    // 文本处理的匹配模式
+    // text-普通文本，price-价格，phone-手机号，name-姓名，date-日期，link-超链接
     mode: {
       type: String,
       default: defprops.text.mode
     },
+    // mode=link下，配置的链接
     href: {
       type: String,
       default: defprops.text.href
     },
+    // 格式化规则
     format: {
       type: [String, Function],
       default: defprops.text.format
     },
+    // mode=phone时，点击文本是否拨打电话
     call: {
       type: Boolean,
       default: defprops.text.call
     },
+    // 小程序的打开方式
     openType: {
       type: String,
       default: defprops.text.openType
     },
+    // 是否粗体，默认normal
     bold: {
       type: Boolean,
       default: defprops.text.bold
     },
+    // 是否块状
     block: {
       type: Boolean,
       default: defprops.text.block
     },
+    // 文本显示的行数，如果设置，超出此行数，将会显示省略号
     lines: {
       type: [String, Number],
       default: defprops.text.lines
     },
+    // 文本颜色
     color: {
       type: String,
       default: defprops.text.color
     },
+    // 字体大小
     size: {
       type: [String, Number],
       default: defprops.text.size
     },
+    // 图标的样式
     iconStyle: {
       type: [Object, String],
       default: defprops.text.iconStyle
     },
+    // 文字装饰，下划线，中划线等，可选值 none|underline|line-through
     decoration: {
       tepe: String,
       default: defprops.text.decoration
     },
+    // 外边距，对象、字符串，数值形式均可
     margin: {
       type: [Object, String, Number],
       default: defprops.text.margin
     },
+    // 文本行高
     lineHeight: {
       type: [String, Number],
       default: defprops.text.lineHeight
     },
+    // 文本对齐方式，可选值left|center|right
     align: {
       type: String,
       default: defprops.text.align
     },
+    // 文字换行，可选值break-word|normal|anywhere
     wordWrap: {
       type: String,
       default: defprops.text.wordWrap
@@ -10812,22 +11588,27 @@ const props$3 = {
       type: String,
       default: defprops.line.color
     },
+    // 长度，竖向时表现为高度，横向时表现为长度，可以为百分比，带px单位的值等
     length: {
       type: [String, Number],
       default: defprops.line.length
     },
+    // 线条方向，col-竖向，row-横向
     direction: {
       type: String,
       default: defprops.line.direction
     },
+    // 是否显示细边框
     hairline: {
       type: Boolean,
       default: defprops.line.hairline
     },
+    // 线条与上下左右元素的间距，字符串形式，如"30px"、"20px 30px"
     margin: {
       type: [String, Number],
       default: defprops.line.margin
     },
+    // 是否虚线，true-虚线，false-实线
     dashed: {
       type: Boolean,
       default: defprops.line.dashed
@@ -10836,42 +11617,53 @@ const props$3 = {
 };
 const props$2 = {
   props: {
+    // 显示的内容，字符串
     text: {
       type: [Array],
       default: defprops.columnNotice.text
     },
+    // 是否显示左侧的音量图标
     icon: {
       type: String,
       default: defprops.columnNotice.icon
     },
+    // 通告模式，link-显示右箭头，closable-显示右侧关闭图标
     mode: {
       type: String,
       default: defprops.columnNotice.mode
     },
+    // 文字颜色，各图标也会使用文字颜色
     color: {
       type: String,
       default: defprops.columnNotice.color
     },
+    // 背景颜色
     bgColor: {
       type: String,
       default: defprops.columnNotice.bgColor
     },
+    // 字体大小，单位px
     fontSize: {
       type: [String, Number],
       default: defprops.columnNotice.fontSize
     },
+    // 水平滚动时的滚动速度，即每秒滚动多少px(px)，这有利于控制文字无论多少时，都能有一个恒定的速度
     speed: {
       type: [String, Number],
       default: defprops.columnNotice.speed
     },
+    // direction = row时，是否使用步进形式滚动
     step: {
       type: Boolean,
       default: defprops.columnNotice.step
     },
+    // 滚动一个周期的时间长，单位ms
     duration: {
       type: [String, Number],
       default: defprops.columnNotice.duration
     },
+    // 是否禁止用手滑动切换
+    // 目前HX2.6.11，只支持App 2.5.5+、H5 2.5.5+、支付宝小程序、字节跳动小程序
     disableTouch: {
       type: Boolean,
       default: defprops.columnNotice.disableTouch
@@ -10880,30 +11672,37 @@ const props$2 = {
 };
 const props$1 = {
   props: {
+    // 显示的内容，字符串
     text: {
       type: String,
       default: defprops.rowNotice.text
     },
+    // 是否显示左侧的音量图标
     icon: {
       type: String,
       default: defprops.rowNotice.icon
     },
+    // 通告模式，link-显示右箭头，closable-显示右侧关闭图标
     mode: {
       type: String,
       default: defprops.rowNotice.mode
     },
+    // 文字颜色，各图标也会使用文字颜色
     color: {
       type: String,
       default: defprops.rowNotice.color
     },
+    // 背景颜色
     bgColor: {
       type: String,
       default: defprops.rowNotice.bgColor
     },
+    // 字体大小，单位px
     fontSize: {
       type: [String, Number],
       default: defprops.rowNotice.fontSize
     },
+    // 水平滚动时的滚动速度，即每秒滚动多少px(rpx)，这有利于控制文字无论多少时，都能有一个恒定的速度
     speed: {
       type: [String, Number],
       default: defprops.rowNotice.speed
@@ -10912,6 +11711,7 @@ const props$1 = {
 };
 const value = {
   computed: {
+    // 经处理后需要显示的值
     value() {
       const {
         text: text2,
@@ -10921,7 +11721,7 @@ const value = {
       } = this;
       if (mode === "price") {
         if (!/^\d+(\.\d+)?$/.test(text2)) {
-          index$1.$u.error("\u91D1\u989D\u6A21\u5F0F\u4E0B\uFF0Ctext\u53C2\u6570\u9700\u8981\u4E3A\u91D1\u989D\u683C\u5F0F");
+          index$1.$u.error("金额模式下，text参数需要为金额格式");
         }
         if (index$1.$u.test.func(format)) {
           return format(text2);
@@ -10929,7 +11729,7 @@ const value = {
         return index$1.$u.priceFormat(text2, 2);
       }
       if (mode === "date") {
-        !index$1.$u.test.date(text2) && index$1.$u.error("\u65E5\u671F\u6A21\u5F0F\u4E0B\uFF0Ctext\u53C2\u6570\u9700\u8981\u4E3A\u65E5\u671F\u6216\u65F6\u95F4\u6233\u683C\u5F0F");
+        !index$1.$u.test.date(text2) && index$1.$u.error("日期模式下，text参数需要为日期或时间戳格式");
         if (index$1.$u.test.func(format)) {
           return format(text2);
         }
@@ -10948,7 +11748,7 @@ const value = {
         return text2;
       }
       if (mode === "name") {
-        !(typeof text2 === "string") && index$1.$u.error("\u59D3\u540D\u6A21\u5F0F\u4E0B\uFF0Ctext\u53C2\u6570\u9700\u8981\u4E3A\u5B57\u7B26\u4E32\u683C\u5F0F");
+        !(typeof text2 === "string") && index$1.$u.error("姓名模式下，text参数需要为字符串格式");
         if (index$1.$u.test.func(format)) {
           return format(text2);
         }
@@ -10958,13 +11758,14 @@ const value = {
         return text2;
       }
       if (mode === "link") {
-        !index$1.$u.test.url(href) && index$1.$u.error("\u8D85\u94FE\u63A5\u6A21\u5F0F\u4E0B\uFF0Chref\u53C2\u6570\u9700\u8981\u4E3AURL\u683C\u5F0F");
+        !index$1.$u.test.url(href) && index$1.$u.error("超链接模式下，href参数需要为URL格式");
         return text2;
       }
       return text2;
     }
   },
   methods: {
+    // 默认的姓名脱敏规则
     formatName(name) {
       let value2 = "";
       if (name.length === 2) {
@@ -11022,30 +11823,37 @@ const openType = {
 };
 const props = {
   props: {
+    // 文字颜色
     color: {
       type: String,
       default: defprops.link.color
     },
+    // 字体大小，单位px
     fontSize: {
       type: [String, Number],
       default: defprops.link.fontSize
     },
+    // 是否显示下划线
     underLine: {
       type: Boolean,
       default: defprops.link.underLine
     },
+    // 要跳转的链接
     href: {
       type: String,
       default: defprops.link.href
     },
+    // 小程序中复制到粘贴板的提示语
     mpTips: {
       type: String,
       default: defprops.link.mpTips
     },
+    // 下划线颜色
     lineColor: {
       type: String,
       default: defprops.link.lineColor
     },
+    // 超链接的问题，不使用slot形式传入，是因为nvue下无法修改颜色
     text: {
       type: String,
       default: defprops.link.text
@@ -11054,7 +11862,7 @@ const props = {
 };
 exports._export_sfc = _export_sfc;
 exports.button = button;
-exports.computed$1 = computed$1;
+exports.computed = computed;
 exports.createSSRApp = createSSRApp;
 exports.createStore = createStore;
 exports.d = d;
@@ -11068,6 +11876,7 @@ exports.inject = inject;
 exports.mixin = mixin;
 exports.mpMixin = mpMixin;
 exports.n = n;
+exports.nextTick$1 = nextTick$1;
 exports.o = o;
 exports.onActivated = onActivated;
 exports.onBeforeMount = onBeforeMount;
@@ -11097,6 +11906,7 @@ exports.s = s;
 exports.sr = sr;
 exports.t = t;
 exports.toRefs = toRefs;
+exports.unref = unref;
 exports.useStore = useStore;
 exports.uviewPlus = uviewPlus;
 exports.value = value;

@@ -1,17 +1,30 @@
 "use strict";
-Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const common_vendor = require("./common/vendor.js");
 const store_index = require("./store/index.js");
 if (!Math) {
   "./pages/index/index.js";
-  "./pages/decoration/decoration.js";
-  "./pages/community/community.js";
-  "./pages/my/my.js";
-  "./pages/login/testLogin.js";
+  "./pages/VR/VR.js";
+  "./pages/news/news.js";
+  "./pages/main/main.js";
+  "./pages/subpages/login/testLogin.js";
+  "./pages/subpages/login/login.js";
 }
+common_vendor.useStore();
 const _sfc_main = {
   onLaunch: function() {
     common_vendor.index.hideTabBar();
+    common_vendor.index.getStorage({
+      key: "userInfo",
+      success: (res) => {
+        console.log(JSON.parse(res.data));
+        this.$store.commit("storeLogin", JSON.parse(res.data));
+      },
+      fail: (err) => {
+        console.log(err);
+        this.$store.commit("storeLogout");
+      }
+    });
     console.log("App Launch");
   },
   onShow: function() {
@@ -21,7 +34,7 @@ const _sfc_main = {
     console.log("App Hide");
   }
 };
-const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/desktop/ihome2/App.vue"]]);
+const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/prgraming/myproject/ihome/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(store_index.store);

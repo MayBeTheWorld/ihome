@@ -94,8 +94,8 @@ const _sfc_main = create({
       };
     };
     const { children, linkChildren } = useChildren();
-    const opened = common_vendor.computed$1(() => children.some((item) => item.state.showWrapper));
-    const classes = common_vendor.computed$1(() => {
+    const opened = common_vendor.computed(() => children.some((item) => item.state.showWrapper));
+    const classes = common_vendor.computed(() => {
       const prefixCls = componentName;
       return {
         [prefixCls]: true,
@@ -148,7 +148,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.f(_ctx.children, (item, index, i0) => {
       return {
         a: common_vendor.t(item.renderTitle()),
-        b: "5c443072-0-" + i0,
+        b: "bc61cc96-0-" + i0,
         c: common_vendor.p({
           name: item.titleIcon || (_ctx.direction === "up" ? "arrow-up" : "down-arrow"),
           size: "10"
@@ -165,5 +165,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     c: common_vendor.n(_ctx.classes)
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menu/index.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menu/index.vue"]]);
 wx.createComponent(Component);

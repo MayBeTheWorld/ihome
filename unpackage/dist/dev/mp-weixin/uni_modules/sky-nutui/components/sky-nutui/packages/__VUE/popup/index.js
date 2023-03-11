@@ -93,7 +93,7 @@ const _sfc_main = create({
     });
     const visibleLocal = common_vendor.ref(false);
     const [lockScroll, unlockScroll] = uni_modules_skyNutui_components_skyNutui_packages___VUE_popup_useLockScroll.useLockScroll(() => props.lockScroll);
-    const classes = common_vendor.computed$1(() => {
+    const classes = common_vendor.computed(() => {
       const prefixCls = componentName;
       return {
         [prefixCls]: true,
@@ -105,7 +105,7 @@ const _sfc_main = create({
         [`${state.slideTransitionName}Out`]: !visibleLocal.value
       };
     });
-    const popStyle = common_vendor.computed$1(() => {
+    const popStyle = common_vendor.computed(() => {
       return {
         zIndex: state.zIndex,
         animationDuration: props.duration ? `${props.duration}s` : "initial",
@@ -300,5 +300,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }));
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/popup/index.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/popup/index.vue"]]);
 wx.createComponent(Component);

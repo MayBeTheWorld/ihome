@@ -4,30 +4,37 @@ const _sfc_main = {
   props: {
     value: Array,
     column: {
+      // 列的数量 
       type: [String, Number],
       default: 2
     },
     maxColumn: {
+      // 最大列数 
       type: [String, Number],
       default: 5
     },
     columnSpace: {
+      // 列之间的间距 百分比
       type: [String, Number],
       default: 2
     },
     imageKey: {
+      // 图片key
       type: [String],
       default: "image"
     },
     hideImageKey: {
+      // 隐藏图片key
       type: [String],
       default: "hide"
     },
     seat: {
+      // 文本的位置，1图片之上 2图片之下
       type: [String, Number],
       default: 2
     },
     listStyle: {
+      // 单个展示项的样式：eg:{'background':'red'}
       type: Object
     }
   },
@@ -47,6 +54,7 @@ const _sfc_main = {
         "background-color": "#fff"
       },
       adds: [],
+      //预置数据
       isLoaded: true,
       curIndex: 0,
       isRefresh: true,
@@ -55,14 +63,17 @@ const _sfc_main = {
     };
   },
   computed: {
+    // 计算列宽
     w() {
       const column_rate = `${100 / this.data.column - +this.data.columnSpace}%`;
       return column_rate;
     },
+    // 计算margin
     m() {
       const column_margin = `${(100 - (100 / this.data.column - +this.data.columnSpace).toFixed(5) * this.data.column) / (this.data.column - 1)}%`;
       return column_margin;
     },
+    // list样式
     s1() {
       return { ...this.listInitStyle, ...this.listStyle };
     }
@@ -71,6 +82,7 @@ const _sfc_main = {
     this.refresh();
   },
   methods: {
+    // 预加载图片
     loadImages(idx = 0) {
       let count = 0;
       const newList = this.data.list.filter((item, index) => index >= idx);
@@ -85,6 +97,7 @@ const _sfc_main = {
         });
       }
     },
+    // 刷新
     refresh() {
       if (!this.isLoaded) {
         this.refreshDatas = this.value;
@@ -135,6 +148,7 @@ const _sfc_main = {
       mo = a.filter((i2) => i2[s] == m);
       return mo[0];
     },
+    // 计算每列的高度
     getMinColumnHeight() {
       return new Promise((resolve) => {
         const heightArr = [];
@@ -163,12 +177,14 @@ const _sfc_main = {
       c.push({ ...this.data.list[i], cIndex: c.length, index: i, o: 0 });
       this.msg++;
     },
+    // 图片加载完成
     imgLoad(item, c) {
       const i = item.index;
       item.o = 1;
       this.$set(this.data[`column_${c}_values`], item.cIndex, JSON.parse(JSON.stringify(item)));
       this.initValue(i + 1);
     },
+    // 图片加载失败
     imgError(item, c) {
       const i = item.index;
       item.o = 1;
@@ -176,6 +192,7 @@ const _sfc_main = {
       this.$set(this.data[`column_${c}_values`], item.cIndex, JSON.parse(JSON.stringify(item)));
       this.initValue(i + 1);
     },
+    // 渲染结束
     loaded() {
       if (this.refreshDatas.length) {
         this.isLoaded = true;
@@ -194,9 +211,11 @@ const _sfc_main = {
         this.isRefresh = false;
       }
     },
+    // 单项点击事件
     wapperClick(item) {
       this.$emit("wapperClick", item);
     },
+    // 图片点击事件
     imageClick(item) {
       this.$emit("imageClick", item);
     }
@@ -268,5 +287,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: $options.w
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-6aaf0fae"], ["__file", "D:/desktop/ihome2/uni_modules/custom-waterfalls-flow/components/custom-waterfalls-flow/custom-waterfalls-flow.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-6aaf0fae"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/custom-waterfalls-flow/components/custom-waterfalls-flow/custom-waterfalls-flow.vue"]]);
 wx.createComponent(Component);

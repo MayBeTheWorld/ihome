@@ -10,7 +10,9 @@ const _sfc_main = {
   },
   data() {
     return {
+      // 记录内部滚动的距离
       innerScrollTop: 0,
+      // vue下，scroll-view在上拉加载时的偏移值
       offset: 0,
       sys: common_vendor.index.$u.sys()
     };
@@ -51,11 +53,13 @@ const _sfc_main = {
     },
     scrollIntoViewById(id) {
     },
+    // 滚动到底部触发事件
     scrolltolower(e) {
       common_vendor.index.$u.sleep(30).then(() => {
         this.$emit("scrolltolower");
       });
     },
+    // 滚动到底部时触发，非nvue有效
     scrolltoupper(e) {
       common_vendor.index.$u.sleep(30).then(() => {
         this.$emit("scrolltoupper");
@@ -79,5 +83,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     k: common_vendor.o((...args) => $options.scrolltoupper && $options.scrolltoupper(...args))
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-9ad03670"], ["__file", "D:/desktop/ihome2/node_modules/uview-plus/components/u-list/u-list.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-9ad03670"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-list/u-list.vue"]]);
 wx.createComponent(Component);

@@ -15,7 +15,7 @@ const _sfc_main = create({
     virtualHost: true
   },
   setup(props, { emit }) {
-    const classes = common_vendor.computed$1(() => {
+    const classes = common_vendor.computed(() => {
       const prefixCls = componentName;
       return {
         [prefixCls]: true,
@@ -38,7 +38,7 @@ const _sfc_main = create({
     common_vendor.onBeforeUnmount(unlock);
     common_vendor.onMounted(lock);
     common_vendor.onActivated(lock);
-    const style = common_vendor.computed$1(() => {
+    const style = common_vendor.computed(() => {
       return {
         animationDuration: `${props.duration}s`,
         zIndex: props.zIndex,
@@ -74,5 +74,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/overlay/index.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/overlay/index.vue"]]);
 wx.createComponent(Component);

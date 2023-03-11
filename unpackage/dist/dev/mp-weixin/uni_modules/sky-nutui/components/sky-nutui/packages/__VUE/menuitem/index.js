@@ -57,16 +57,16 @@ const _sfc_main = create({
       }
     };
     const { parent } = useParent();
-    const parentOffset = common_vendor.computed$1(() => {
+    const parentOffset = common_vendor.computed(() => {
       return parent.offset.value;
     });
-    const classes = common_vendor.computed$1(() => {
+    const classes = common_vendor.computed(() => {
       const prefixCls = componentName;
       return {
         [prefixCls]: true
       };
     });
-    const placeholderElementStyle = common_vendor.computed$1(() => {
+    const placeholderElementStyle = common_vendor.computed(() => {
       const heightStyle = { height: "calc(var(--window-top) + " + parent.offset.value + "px)" };
       if (parent.props.direction === "down") {
         return heightStyle;
@@ -148,7 +148,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       }, option.value === _ctx.modelValue ? {
         b: option.value === _ctx.modelValue ? 1 : "",
         c: option.value !== _ctx.modelValue ? 1 : "",
-        d: "d3e2a776-1-" + i0 + ",d3e2a776-0",
+        d: "44a587f0-1-" + i0 + ",44a587f0-0",
         e: common_vendor.p({
           name: _ctx.optionIcon,
           color: _ctx.parent.props.activeColor
@@ -196,5 +196,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     k: _ctx.state.showWrapper && _ctx.parentOffset > 0
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/desktop/ihome2/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menuitem/index.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menuitem/index.vue"]]);
 wx.createComponent(Component);
