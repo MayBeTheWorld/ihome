@@ -52,8 +52,8 @@ export default defineComponent({
       goBackBtn.value = new plus.nativeObj.View('goBackBtn', {
         top: '10%',
         left: '10%',
-        height: '15px',
-        width: '15px'
+        height: '35px',
+        width: '35px'
         // border-radius: '50px',
       },
       [{
@@ -65,19 +65,7 @@ export default defineComponent({
           left: '0%'
         }
       }
-        // {
-        // 	tag: 'font',
-        // 	id: 'font',
-        // 	text: '退出',
-        // 	textStyles: {
-        // 		size: '10px',
-        // 		color: '#ffffff',
-        // 	},
-        // 	position: {
-        // 		width: '80%',
-        // 		left: '10%',
-        // 	}
-        // },
+
       ])
       goBackBtn.value.show()
       console.log(goBackBtn.value)
@@ -124,6 +112,7 @@ export default defineComponent({
         const title = barcodeWebview.getTitle()
       })
     }
+
     return {
       open,
       close,

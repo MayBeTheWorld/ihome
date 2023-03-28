@@ -3,7 +3,7 @@
     <view class="battar">
       <publicTabBar :activePage="1"/>
     </view>
-    <!--    <nut-button type="primary">主要按钮</nut-button>-->
+    <status-bar/>
     <view class="menu">
       <nut-menu>
         <nut-menu-item v-model="state.value1" :options="state.options1"/>
@@ -14,31 +14,32 @@
     </view>
     <!--        把u-list放到一个ulist中，就不担心上面的滚动了，我他妈怎么没想到-->
     <u-list
-        @scrolltolower="scrolltolower" class="postion" height="calc(100vh - 110rpx - 48px)"
+        class="postion" height="calc(100vh - 110rpx - 48px)" @scrolltolower="scrolltolower"
     >
       <!--解决下面baar的馊主意-->
       <u-list-item
           v-for="(item, index) in listBoundless"
           :key="index"
       >
-        <uni-card title="基础卡片" :isFull="true" sub-title="副标题" extra="额外信息"
-                  thumbnail="https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png">
+        <uni-card :isFull="true" extra="额外信息" sub-title="副标题"
+                  thumbnail="https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+                  title="基础卡片">
           <text>这是一个通栏卡片 ，通栏没有外边距，左右会贴合父元素。</text>
           <!--        <view v-for="(item, index) in list" :key="index" @scrolltolower="scrolltolower" :key="index">-->
-          <u-scroll-list @right="right" @left="left" :indicator=false>
+          <u-scroll-list :indicator=false @left="left" @right="right">
             <view class="scroll-list" style="flex-direction: row;">
               <view
-                  class="scroll-list__goods-item"
                   v-for="(item, index) in list"
                   :key="index"
                   :class="[(index === 9) && 'scroll-list__goods-item--no-margin-right']"
+                  class="scroll-list__goods-item"
               >
-                <image class="scroll-list__goods-item__image" :src="item.thumb"></image>
+                <image :src="item.thumb" class="scroll-list__goods-item__image"></image>
                 <text class="scroll-list__goods-item__text">￥{{ item.price }}</text>
               </view>
               <view class="scroll-list__show-more">
                 <text class="scroll-list__show-more__text">查看更多</text>
-                <u-icon name="arrow-leftward" color="#f56c6c" size="12"></u-icon>
+                <u-icon color="#f56c6c" name="arrow-leftward" size="12"></u-icon>
               </view>
             </view>
           </u-scroll-list>
@@ -52,6 +53,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import StatusBar from '../../components/statusBar'
 
 const state = reactive({
   options1: [

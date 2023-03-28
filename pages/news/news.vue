@@ -1,22 +1,23 @@
 <template>
   <view class="systemBox">
+    <status-bar/>
     <view class="header">
       <text class="title">消息中心</text>
       <view class="settings-icon" @click="handleSettingsClick">
-        <img src="../../static/message/setting.svg"/>
+        <image src="../../static/message/setting.png"/>
       </view>
     </view>
     <view class="notification-list">
       <view class="notification-item">
         <view class="icon">
-          <img src="../../static/message/wuLiu.svg"/>
+          <image src="../../static/message/wuLiu.png"/>
         </view>
         <text class="item-title">交易物流</text>
       </view>
       <div class="divider"></div>
       <view class="notification-item">
         <view class="icon">
-          <img src="../../static/message/xiaoXi.svg"/>
+          <image src="../../static/message/xiaoXi.png"/>
         </view>
         <text class="item-title">活动消息</text>
       </view>
@@ -26,6 +27,8 @@
 </template>
 
 <script setup>
+import StatusBar from '../../components/statusBar'
+
 const handleSettingsClick = () => {
   console.log('Settings button clicked')
 }
@@ -63,7 +66,7 @@ const handleSettingsClick = () => {
   height: 40rpx;
   margin-right: 20rpx;
 
-  img {
+  image {
     width: 100%;
     height: 100%;
   }
@@ -89,7 +92,7 @@ const handleSettingsClick = () => {
   height: 60rpx;
   margin-right: 20rpx;
 
-  img {
+  image {
     width: 100%;
     height: 100%;
   }

@@ -1,3 +1,51 @@
+.tabBar[data-v-4e7366ac] {
+	width: 23.4375rem;
+	height: 3.4375rem;
+	position: fixed;
+	z-index: 999;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+.tabBarView[data-v-4e7366ac] {
+	width: 25%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+.tabBarContent[data-v-4e7366ac] {
+	width: 3.0625rem;
+	height: 3.0625rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+.imageView[data-v-4e7366ac] {
+	width: 55%;
+	height: 55%;
+	margin-top: 0.15625rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+uni-image[data-v-4e7366ac] {
+	height: 1.875rem;
+}
+.textView[data-v-4e7366ac] {
+	width: 1.875rem;
+	height: 1rem;
+	color: #FEB814;
+	transform: translateY(-25%);
+	font-size: 0.75rem;
+	text-align: center;
+}
+
 /**
  * 这里是uni-app内置的常用样式变量
  *
@@ -324,54 +372,6 @@ uni-view[data-v-14a988f2], uni-scroll-view[data-v-14a988f2], uni-swiper-item[dat
 .column-value .img-error[data-v-6aaf0fae] {
   background: #f2f2f2 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAiAQMAAAAatXkPAAAABlBMVEUAAADMzMzIT8AyAAAAAXRSTlMAQObYZgAAAIZJREFUCNdlzjEKwkAUBNAfEGyCuYBkLyLuxRYW2SKlV1JSeA2tUiZg4YrLjv9PGsHqNTPMSAQuyAJgRDHSyvBPwtZoSJXakeJI9iuRLGDygdl6V0yKDtyMAeMPZySj8yfD+UapvRPj2JOwkyAooSV5IwdDjPdCPspe8LyTl9IKJvDETKKRv6vnlUasgg0fAAAAAElFTkSuQmCC) no-repeat center center;
 }
-.tabBar[data-v-4e7366ac] {
-	width: 23.4375rem;
-	height: 3.4375rem;
-	position: fixed;
-	z-index: 999;
-	bottom: 0;
-	left: 0;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-}
-.tabBarView[data-v-4e7366ac] {
-	width: 25%;
-	height: 100%;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-}
-.tabBarContent[data-v-4e7366ac] {
-	width: 3.0625rem;
-	height: 3.0625rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-}
-.imageView[data-v-4e7366ac] {
-	width: 55%;
-	height: 55%;
-	margin-top: 0.15625rem;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-}
-uni-image[data-v-4e7366ac] {
-	height: 1.875rem;
-}
-.textView[data-v-4e7366ac] {
-	width: 1.875rem;
-	height: 1rem;
-	color: #FEB814;
-	transform: translateY(-25%);
-	font-size: 0.75rem;
-	text-align: center;
-}
-
 /**
  * 这里是uni-app内置的常用样式变量
  *
