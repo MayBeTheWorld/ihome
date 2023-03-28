@@ -20,7 +20,8 @@ module.exports = {
       }
     ],
     'no-eval': 'error',
-    'no-alert': 'error'
+    'no-alert': 'error',
+     'vue/multi-word-component-names': 0
   },
   globals: {
     uni: 'readonly',
