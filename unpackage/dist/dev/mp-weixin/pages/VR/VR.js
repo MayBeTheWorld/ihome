@@ -20,8 +20,9 @@ const _easycom_uni_card = () => "../../uni_modules/uni-card/components/uni-card/
 const _easycom_u_list_item = () => "../../node-modules/uview-plus/components/u-list-item/u-list-item.js";
 const _easycom_u_list = () => "../../node-modules/uview-plus/components/u-list/u-list.js";
 if (!Math) {
-  (_easycom_publicTabBar + _easycom_nut_menu_item + _easycom_nut_menu + _easycom_u_icon + _easycom_u_scroll_list + _easycom_uni_card + _easycom_u_list_item + _easycom_u_list)();
+  (_easycom_publicTabBar + common_vendor.unref(StatusBar) + _easycom_nut_menu_item + _easycom_nut_menu + _easycom_u_icon + _easycom_u_scroll_list + _easycom_uni_card + _easycom_u_list_item + _easycom_u_list)();
 }
+const StatusBar = () => "../../components/statusBar.js";
 const _sfc_main = {
   __name: "VR",
   setup(__props) {
@@ -171,29 +172,29 @@ const _sfc_main = {
                 d: common_vendor.n(index2 === 9 && "scroll-list__goods-item--no-margin-right")
               };
             }),
-            b: "53e44a0a-10-" + i0 + "," + ("53e44a0a-9-" + i0),
-            c: common_vendor.o(right, index),
-            d: common_vendor.o(left, index),
-            e: "53e44a0a-9-" + i0 + "," + ("53e44a0a-8-" + i0),
-            f: "53e44a0a-8-" + i0 + "," + ("53e44a0a-7-" + i0),
+            b: "53e44a0a-11-" + i0 + "," + ("53e44a0a-10-" + i0),
+            c: common_vendor.o(left, index),
+            d: common_vendor.o(right, index),
+            e: "53e44a0a-10-" + i0 + "," + ("53e44a0a-9-" + i0),
+            f: "53e44a0a-9-" + i0 + "," + ("53e44a0a-8-" + i0),
             g: index,
-            h: "53e44a0a-7-" + i0 + ",53e44a0a-6"
+            h: "53e44a0a-8-" + i0 + ",53e44a0a-7"
           };
         }),
         k: common_vendor.p({
-          name: "arrow-leftward",
           color: "#f56c6c",
+          name: "arrow-leftward",
           size: "12"
         }),
         l: common_vendor.p({
           indicator: false
         }),
         m: common_vendor.p({
-          title: "基础卡片",
           isFull: true,
-          ["sub-title"]: "副标题",
           extra: "额外信息",
-          thumbnail: "https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+          ["sub-title"]: "副标题",
+          thumbnail: "https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png",
+          title: "基础卡片"
         }),
         n: common_vendor.o(scrolltolower),
         o: common_vendor.p({

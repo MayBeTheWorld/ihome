@@ -10789,7 +10789,7 @@ const install2 = (Vue) => {
 const uviewPlus = {
   install: install2
 };
-const props$b = {
+const props$9 = {
   props: {
     // 头像图片路径(不能为相对路径)
     src: {
@@ -11081,7 +11081,7 @@ const icons = {
   "uicon-zh": "",
   "uicon-en": ""
 };
-const props$a = {
+const props$8 = {
   props: {
     // 图标类名
     name: {
@@ -11174,7 +11174,7 @@ const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
 const onPageScroll = /* @__PURE__ */ createHook(ON_PAGE_SCROLL);
-const props$9 = {
+const props$7 = {
   props: {
     // 指示器的整体宽度
     indicatorWidth: {
@@ -11208,7 +11208,7 @@ const props$9 = {
     }
   }
 };
-const props$8 = {
+const props$6 = {
   props: {
     // 用于滚动到指定item
     anchor: {
@@ -11217,7 +11217,7 @@ const props$8 = {
     }
   }
 };
-const props$7 = {
+const props$5 = {
   props: {
     // 控制是否出现滚动条，仅nvue有效
     showScrollbar: {
@@ -11292,117 +11292,7 @@ const props$7 = {
     // vue下，是否开启虚拟列表
   }
 };
-const props$6 = {
-  props: {
-    // 标题
-    title: {
-      type: [String, Number],
-      default: defprops.cell.title
-    },
-    // 标题下方的描述信息
-    label: {
-      type: [String, Number],
-      default: defprops.cell.label
-    },
-    // 右侧的内容
-    value: {
-      type: [String, Number],
-      default: defprops.cell.value
-    },
-    // 左侧图标名称，或者图片链接(本地文件建议使用绝对地址)
-    icon: {
-      type: String,
-      default: defprops.cell.icon
-    },
-    // 是否禁用cell
-    disabled: {
-      type: Boolean,
-      default: defprops.cell.disabled
-    },
-    // 是否显示下边框
-    border: {
-      type: Boolean,
-      default: defprops.cell.border
-    },
-    // 内容是否垂直居中(主要是针对右侧的value部分)
-    center: {
-      type: Boolean,
-      default: defprops.cell.center
-    },
-    // 点击后跳转的URL地址
-    url: {
-      type: String,
-      default: defprops.cell.url
-    },
-    // 链接跳转的方式，内部使用的是uView封装的route方法，可能会进行拦截操作
-    linkType: {
-      type: String,
-      default: defprops.cell.linkType
-    },
-    // 是否开启点击反馈(表现为点击时加上灰色背景)
-    clickable: {
-      type: Boolean,
-      default: defprops.cell.clickable
-    },
-    // 是否展示右侧箭头并开启点击反馈
-    isLink: {
-      type: Boolean,
-      default: defprops.cell.isLink
-    },
-    // 是否显示表单状态下的必填星号(此组件可能会内嵌入input组件)
-    required: {
-      type: Boolean,
-      default: defprops.cell.required
-    },
-    // 右侧的图标箭头
-    rightIcon: {
-      type: String,
-      default: defprops.cell.rightIcon
-    },
-    // 右侧箭头的方向，可选值为：left，up，down
-    arrowDirection: {
-      type: String,
-      default: defprops.cell.arrowDirection
-    },
-    // 左侧图标样式
-    iconStyle: {
-      type: [Object, String],
-      default: () => {
-        return index$1.$u.props.cell.iconStyle;
-      }
-    },
-    // 右侧箭头图标的样式
-    rightIconStyle: {
-      type: [Object, String],
-      default: () => {
-        return index$1.$u.props.cell.rightIconStyle;
-      }
-    },
-    // 标题的样式
-    titleStyle: {
-      type: [Object, String],
-      default: () => {
-        return index$1.$u.props.cell.titleStyle;
-      }
-    },
-    // 单位元的大小，可选值为large
-    size: {
-      type: String,
-      default: defprops.cell.size
-    },
-    // 点击cell是否阻止事件传播
-    stop: {
-      type: Boolean,
-      default: defprops.cell.stop
-    },
-    // 标识符，cell被点击时返回
-    name: {
-      type: [Number, String],
-      default: defprops.cell.name
-    }
-  }
-};
-const props$5 = {
+const props$4 = {
   props: {
     // 显示的内容，数组
     text: {
@@ -11472,7 +11362,7 @@ const props$5 = {
     }
   }
 };
-const props$4 = {
+const props$3 = {
   props: {
     // 主题颜色
     type: {
@@ -11579,39 +11469,6 @@ const props$4 = {
     wordWrap: {
       type: String,
       default: defprops.text.wordWrap
-    }
-  }
-};
-const props$3 = {
-  props: {
-    color: {
-      type: String,
-      default: defprops.line.color
-    },
-    // 长度，竖向时表现为高度，横向时表现为长度，可以为百分比，带px单位的值等
-    length: {
-      type: [String, Number],
-      default: defprops.line.length
-    },
-    // 线条方向，col-竖向，row-横向
-    direction: {
-      type: String,
-      default: defprops.line.direction
-    },
-    // 是否显示细边框
-    hairline: {
-      type: Boolean,
-      default: defprops.line.hairline
-    },
-    // 线条与上下左右元素的间距，字符串形式，如"30px"、"20px 30px"
-    margin: {
-      type: [String, Number],
-      default: defprops.line.margin
-    },
-    // 是否虚线，true-虚线，false-实线
-    dashed: {
-      type: Boolean,
-      default: defprops.line.dashed
     }
   }
 };
@@ -11886,18 +11743,16 @@ exports.onMounted = onMounted;
 exports.onPageScroll = onPageScroll;
 exports.openType = openType;
 exports.p = p;
-exports.props = props$b;
-exports.props$1 = props$a;
-exports.props$10 = props$1;
-exports.props$11 = props;
-exports.props$2 = props$9;
-exports.props$3 = props$8;
-exports.props$4 = props$7;
-exports.props$5 = props$6;
-exports.props$6 = props$5;
-exports.props$7 = props$4;
-exports.props$8 = props$3;
-exports.props$9 = props$2;
+exports.props = props$9;
+exports.props$1 = props$8;
+exports.props$2 = props$7;
+exports.props$3 = props$6;
+exports.props$4 = props$5;
+exports.props$5 = props$4;
+exports.props$6 = props$3;
+exports.props$7 = props$2;
+exports.props$8 = props$1;
+exports.props$9 = props;
 exports.provide = provide;
 exports.reactive = reactive;
 exports.ref = ref;

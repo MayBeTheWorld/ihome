@@ -310,7 +310,7 @@ const isShowScan = ref(false)
 
 // #ifdef APP-PLUS
 function openScan () {
-  scanRef.value.open()
+  scanRef.value.open()//
   isShowScan.value = true
   console.log('父组件触发打开')
 }
@@ -456,11 +456,11 @@ function saveArticle (item) {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, .8);
-  transform: translateX(100%);
+  transform: translateX(100%); //将元素在 X 轴上向右移动 100%，使其在初始状态下不可见。
   transition: transform 0.05s;
 
   &.active {
-    transform: translateX(0)
+    transform: translateX(0) //transform: translateX(0)：将元素在 X 轴上的位置复位到初始位置，使其可见。
   }
 }
 

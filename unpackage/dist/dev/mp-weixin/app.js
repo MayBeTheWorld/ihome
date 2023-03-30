@@ -5,6 +5,7 @@ const store_index = require("./store/index.js");
 if (!Math) {
   "./pages/index/index.js";
   "./pages/VR/VR.js";
+  "./components/scan/scanReturn.js";
   "./pages/news/news.js";
   "./pages/main/main.js";
   "./pages/subpages/login/testLogin.js";
@@ -25,13 +26,10 @@ const _sfc_main = {
         this.$store.commit("storeLogout");
       }
     });
-    console.log("App Launch");
   },
   onShow: function() {
-    console.log("App Show");
   },
   onHide: function() {
-    console.log("App Hide");
   }
 };
 const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/prgraming/myproject/ihome/App.vue"]]);

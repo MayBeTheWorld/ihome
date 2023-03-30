@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/VR/VR",
+    "components/scan/scanReturn",
     "pages/news/news",
     "pages/main/main",
     "pages/subpages/login/testLogin",

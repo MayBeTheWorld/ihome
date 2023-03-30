@@ -2,78 +2,62 @@
 const common_vendor = require("../../common/vendor.js");
 if (!Array) {
   const _easycom_publicTabBar2 = common_vendor.resolveComponent("publicTabBar");
-  const _easycom_u_avatar2 = common_vendor.resolveComponent("u-avatar");
-  const _easycom_u_cell2 = common_vendor.resolveComponent("u-cell");
-  const _easycom_u_list_item2 = common_vendor.resolveComponent("u-list-item");
-  const _easycom_u_list2 = common_vendor.resolveComponent("u-list");
-  (_easycom_publicTabBar2 + _easycom_u_avatar2 + _easycom_u_cell2 + _easycom_u_list_item2 + _easycom_u_list2)();
+  _easycom_publicTabBar2();
 }
 const _easycom_publicTabBar = () => "../../components/publicTabBar/publicTabBar.js";
-const _easycom_u_avatar = () => "../../node-modules/uview-plus/components/u-avatar/u-avatar.js";
-const _easycom_u_cell = () => "../../node-modules/uview-plus/components/u-cell/u-cell.js";
-const _easycom_u_list_item = () => "../../node-modules/uview-plus/components/u-list-item/u-list-item.js";
-const _easycom_u_list = () => "../../node-modules/uview-plus/components/u-list/u-list.js";
 if (!Math) {
-  (_easycom_publicTabBar + _easycom_u_avatar + _easycom_u_cell + _easycom_u_list_item + _easycom_u_list)();
+  (common_vendor.unref(StatusBar) + _easycom_publicTabBar)();
 }
+const StatusBar = () => "../../components/statusBar.js";
 const _sfc_main = {
   __name: "news",
   setup(__props) {
-    const state = common_vendor.reactive({
-      indexList: [],
-      urls: [
-        "https://cdn.uviewui.com/uview/album/1.jpg",
-        "https://cdn.uviewui.com/uview/album/2.jpg",
-        "https://cdn.uviewui.com/uview/album/3.jpg",
-        "https://cdn.uviewui.com/uview/album/4.jpg",
-        "https://cdn.uviewui.com/uview/album/5.jpg",
-        "https://cdn.uviewui.com/uview/album/6.jpg",
-        "https://cdn.uviewui.com/uview/album/7.jpg",
-        "https://cdn.uviewui.com/uview/album/8.jpg",
-        "https://cdn.uviewui.com/uview/album/9.jpg",
-        "https://cdn.uviewui.com/uview/album/10.jpg"
-      ]
-    });
-    const scrolltolower = () => {
-      this.loadmore();
+    const click = () => {
+      console.log("click");
+      common_vendor.index.scanCode({
+        autoDecodeCharset: true,
+        success: function(res) {
+          console.log("success");
+        },
+        fail: function(res) {
+          console.log("fail");
+        },
+        complete: function(res) {
+          console.log("complete");
+          common_vendor.index.navigateTo({
+            url: "/components/scan/scanReturn",
+            success: function(res2) {
+              console.log("navigateTo success");
+            },
+            fail: function(res2) {
+              console.log("navigateTo fail");
+            }
+          });
+        }
+      });
     };
-    common_vendor.onMounted(() => {
-      loadmore();
-    });
-    const loadmore = () => {
-      for (let i = 0; i < 30; i++) {
-        this.indexList.push({
-          url: this.urls[common_vendor.index.$u.random(0, this.urls.length - 1)]
-        });
-      }
-      console.log("loadmore");
+    const handleSettingsClick = () => {
+      console.log("Settings button clicked");
+      common_vendor.index.navigateTo({
+        url: "/components/scan/scanReturn",
+        success: function(res) {
+          console.log("navigateTo success");
+        },
+        fail: function(res) {
+          console.log("navigateTo fail");
+        }
+      });
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.p({
+        a: common_vendor.o(handleSettingsClick),
+        b: common_vendor.o(click),
+        c: common_vendor.p({
           activePage: 2
-        }),
-        b: common_vendor.f(state.indexList, (item, index, i0) => {
-          return {
-            a: "f77813ac-4-" + i0 + "," + ("f77813ac-3-" + i0),
-            b: common_vendor.p({
-              shape: "square",
-              size: "35",
-              src: item.url,
-              customStyle: "margin: -3px 5px -3px 0"
-            }),
-            c: "f77813ac-3-" + i0 + "," + ("f77813ac-2-" + i0),
-            d: common_vendor.p({
-              title: `列表长度-${index + 1}`
-            }),
-            e: index,
-            f: "f77813ac-2-" + i0 + ",f77813ac-1"
-          };
-        }),
-        c: common_vendor.o(scrolltolower)
+        })
       };
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/prgraming/myproject/ihome/pages/news/news.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-24bc9d41"], ["__file", "D:/prgraming/myproject/ihome/pages/news/news.vue"]]);
 wx.createPage(MiniProgramPage);

@@ -14,6 +14,20 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/decoration/decoration",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "components/scan/scanReturn",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

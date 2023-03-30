@@ -53,7 +53,7 @@ if (uni.restoreGlobal) {
     }
     return target;
   };
-  const _sfc_main$r = {
+  const _sfc_main$s = {
     __name: "publicTabBar",
     props: {
       activePage: {
@@ -181,7 +181,7 @@ if (uni.restoreGlobal) {
       };
     }
   };
-  const publicTabBar = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["__scopeId", "data-v-4e7366ac"], ["__file", "D:/prgraming/myproject/ihome/components/publicTabBar/publicTabBar.vue"]]);
+  const publicTabBar = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["__scopeId", "data-v-4e7366ac"], ["__file", "D:/prgraming/myproject/ihome/components/publicTabBar/publicTabBar.vue"]]);
   const icons = {
     "uicon-level": "",
     "uicon-column-line": "",
@@ -2158,7 +2158,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  const _sfc_main$q = {
+  const _sfc_main$r = {
     name: "u-icon",
     data() {
       return {};
@@ -2252,7 +2252,7 @@ if (uni.restoreGlobal) {
       /* CLASS */
     );
   }
-  const __easycom_0$5 = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$j], ["__scopeId", "data-v-1c933a9a"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-icon/u-icon.vue"]]);
+  const __easycom_0$5 = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$j], ["__scopeId", "data-v-1c933a9a"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-icon/u-icon.vue"]]);
   const props$8 = {
     props: {
       // 文字颜色
@@ -2292,7 +2292,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  const _sfc_main$p = {
+  const _sfc_main$q = {
     name: "u-link",
     mixins: [mpMixin, mixin, props$8],
     computed: {
@@ -2327,7 +2327,7 @@ if (uni.restoreGlobal) {
       /* TEXT, STYLE */
     );
   }
-  const __easycom_1$4 = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$i], ["__scopeId", "data-v-dedad317"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-link/u-link.vue"]]);
+  const __easycom_1$4 = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$i], ["__scopeId", "data-v-dedad317"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-link/u-link.vue"]]);
   const value = {
     computed: {
       // 经处理后需要显示的值
@@ -2512,7 +2512,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  const _sfc_main$o = {
+  const _sfc_main$p = {
     name: "u--text",
     mixins: [mpMixin, mixin, value, props$7],
     emits: ["click"],
@@ -2640,8 +2640,8 @@ if (uni.restoreGlobal) {
       /* STYLE */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const uvText = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$h], ["__scopeId", "data-v-5fec1d8b"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-text/u-text.vue"]]);
-  const _sfc_main$n = {
+  const uvText = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$h], ["__scopeId", "data-v-5fec1d8b"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-text/u-text.vue"]]);
+  const _sfc_main$o = {
     name: "u--text",
     mixins: [mpMixin, mixin, props$7],
     components: {
@@ -2675,7 +2675,7 @@ if (uni.restoreGlobal) {
       customStyle: _ctx.customStyle
     }, null, 8, ["type", "show", "text", "prefixIcon", "suffixIcon", "mode", "href", "format", "call", "openType", "bold", "block", "lines", "color", "decoration", "size", "iconStyle", "margin", "lineHeight", "align", "wordWrap", "customStyle"]);
   }
-  const __easycom_1$3 = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$g], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u--text/u--text.vue"]]);
+  const __easycom_1$3 = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$g], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u--text/u--text.vue"]]);
   const props$6 = {
     props: {
       // 头像图片路径(不能为相对路径)
@@ -2755,7 +2755,7 @@ if (uni.restoreGlobal) {
     }
   };
   const base64Avatar = "data:image/jpg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAA8AAD/4QMraHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjREMEQwRkY0RjgwNDExRUE5OTY2RDgxODY3NkJFODMxIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjREMEQwRkY1RjgwNDExRUE5OTY2RDgxODY3NkJFODMxIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NEQwRDBGRjJGODA0MTFFQTk5NjZEODE4Njc2QkU4MzEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NEQwRDBGRjNGODA0MTFFQTk5NjZEODE4Njc2QkU4MzEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAAGBAQEBQQGBQUGCQYFBgkLCAYG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";
-  const _sfc_main$m = {
+  const _sfc_main$n = {
     name: "u-avatar",
     mixins: [mpMixin, mixin, props$6],
     data() {
@@ -2876,8 +2876,8 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$4 = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$f], ["__scopeId", "data-v-14a988f2"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-avatar/u-avatar.vue"]]);
-  const _sfc_main$l = {
+  const __easycom_0$4 = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$f], ["__scopeId", "data-v-14a988f2"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-avatar/u-avatar.vue"]]);
+  const _sfc_main$m = {
     props: {
       value: Array,
       column: {
@@ -3179,8 +3179,8 @@ if (uni.restoreGlobal) {
       ))
     ]);
   }
-  const __easycom_3 = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$e], ["__scopeId", "data-v-6aaf0fae"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/custom-waterfalls-flow/components/custom-waterfalls-flow/custom-waterfalls-flow.vue"]]);
-  const _sfc_main$k = vue.defineComponent({
+  const __easycom_3 = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$e], ["__scopeId", "data-v-6aaf0fae"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/custom-waterfalls-flow/components/custom-waterfalls-flow/custom-waterfalls-flow.vue"]]);
+  const _sfc_main$l = vue.defineComponent({
     setup(props2, ctx) {
       const typeList = [
         plus.barcode.QR
@@ -3200,26 +3200,27 @@ if (uni.restoreGlobal) {
           scanbarColor: "#FFCC33"
         });
         barcode.value.onmarked = (type, result) => {
-          formatAppLog("log", "at components/scan/scan.vue:34", "子组件触发成功回调");
+          formatAppLog("log", "at components/scan/scan.vue:40", "子组件触发成功回调");
           ctx.emit("success", result);
-          formatAppLog("log", "at components/scan/scan.vue:36", "成功触发父组件success事件");
-          formatAppLog("log", "at components/scan/scan.vue:37", result);
+          formatAppLog("log", "at components/scan/scan.vue:42", "成功触发父组件success事件");
+          formatAppLog("log", "at components/scan/scan.vue:43", result);
           openStartRecognize(result);
-          formatAppLog("log", "at components/scan/scan.vue:39", "成功传值给openStartRecognize");
+          formatAppLog("log", "at components/scan/scan.vue:45", "成功传值给openStartRecognize");
           close();
         };
         currentWebview.append(barcode.value);
-        formatAppLog("log", "at components/scan/scan.vue:47", barcode.value);
+        formatAppLog("log", "at components/scan/scan.vue:53", barcode.value);
         barcode.value.start();
-        formatAppLog("log", "at components/scan/scan.vue:49", "开始扫码");
+        formatAppLog("log", "at components/scan/scan.vue:55", "开始扫码");
         goBackBtn.value = new plus.nativeObj.View(
           "goBackBtn",
           {
             top: "10%",
             left: "10%",
             height: "35px",
-            width: "35px"
-            // border-radius: '50px',
+            width: "35px",
+            "border-radius": "35px",
+            "background-color": "#ffffff"
           },
           [
             {
@@ -3231,17 +3232,75 @@ if (uni.restoreGlobal) {
                 left: "0%"
               }
             }
+            // {
+            // tag: 'font',
+            // id: 'font',
+            // text: '退出',
+            // textStyles: {
+            // size: '10px',
+            // color: '#ffffff',
+            // },
+            // position: {
+            // width: '80%',
+            // left: '10%',
+            // }
+            // },
           ]
         );
         goBackBtn.value.show();
-        formatAppLog("log", "at components/scan/scan.vue:71", goBackBtn.value);
-        formatAppLog("log", "at components/scan/scan.vue:72", "返回按钮创建成功");
+        formatAppLog("log", "at components/scan/scan.vue:90", goBackBtn.value);
+        formatAppLog("log", "at components/scan/scan.vue:91", "返回按钮创建成功");
         goBackBtn.value.interceptTouchEvent(true);
         currentWebview.append(goBackBtn.value);
-        formatAppLog("log", "at components/scan/scan.vue:77", "webview添加");
+        formatAppLog("log", "at components/scan/scan.vue:96", "webview添加");
         goBackBtn.value.addEventListener("click", (e) => {
           ctx.emit("goBack");
         });
+        const openGalleryBtn = new plus.nativeObj.View(
+          "openGalleryBtn",
+          {
+            top: "20%",
+            // 调整按钮位置
+            left: "10%",
+            height: "35px",
+            width: "35px",
+            "border-radius": "35px",
+            "background-color": "#ffffff"
+          },
+          [{
+            tag: "img",
+            id: "img",
+            src: "static/index/cha.png",
+            // 更换为你自己的图片路径
+            position: {
+              width: "100%",
+              left: "0%"
+            }
+          }]
+        );
+        openGalleryBtn.show();
+        openGalleryBtn.interceptTouchEvent(true);
+        currentWebview.append(openGalleryBtn);
+        openGalleryBtn.addEventListener("click", openGallery);
+        function openGallery() {
+          plus.gallery.pick(
+            (path) => {
+              formatAppLog("log", "at components/scan/scan.vue:132", "选中的图片路径：" + path);
+            },
+            (e) => {
+              formatAppLog("log", "at components/scan/scan.vue:136", "取消选择图片");
+            },
+            {
+              filter: "image",
+              multiple: false,
+              maximum: 1,
+              system: false,
+              onmaxed: () => {
+                plus.nativeUI.alert("最多只能选择1张图片");
+              }
+            }
+          );
+        }
       }
       function close() {
         barcode.value.close();
@@ -3273,8 +3332,8 @@ if (uni.restoreGlobal) {
   function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view");
   }
-  const __easycom_4$1 = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$d], ["__file", "D:/prgraming/myproject/ihome/components/scan/scan.vue"]]);
-  const _sfc_main$j = {
+  const __easycom_4$1 = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$d], ["__file", "D:/prgraming/myproject/ihome/components/scan/scan.vue"]]);
+  const _sfc_main$k = {
     __name: "index",
     setup(__props) {
       const scanRef = vue.ref();
@@ -3795,7 +3854,7 @@ if (uni.restoreGlobal) {
       };
     }
   };
-  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__file", "D:/prgraming/myproject/ihome/pages/index/index.vue"]]);
+  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__file", "D:/prgraming/myproject/ihome/pages/index/index.vue"]]);
   class BaseLang {
   }
   let Lang$1 = class Lang extends BaseLang {
@@ -4082,7 +4141,7 @@ if (uni.restoreGlobal) {
     return isNaN(Number(value2)) ? String(value2) : `${value2}px`;
   };
   const { componentName: componentName$4, create: create$4 } = createComponent("icon");
-  const _sfc_main$i = create$4({
+  const _sfc_main$j = create$4({
     props: {
       name: { type: String, default: "" },
       size: { type: [String, Number], default: "" },
@@ -4156,7 +4215,7 @@ if (uni.restoreGlobal) {
       /* STABLE_FRAGMENT */
     );
   }
-  const __easycom_0$3 = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$c], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/icon/index.vue"]]);
+  const __easycom_0$3 = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$c], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/icon/index.vue"]]);
   const overlayProps = {
     visible: {
       type: Boolean,
@@ -4187,7 +4246,7 @@ if (uni.restoreGlobal) {
     }
   };
   const { componentName: componentName$3, create: create$3 } = createComponent("overlay");
-  const _sfc_main$h = create$3({
+  const _sfc_main$i = create$3({
     props: overlayProps,
     emits: ["click", "update:visible"],
     options: {
@@ -4264,7 +4323,7 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     });
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$b], ["__scopeId", "data-v-07ec1718"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/overlay/index.vue"]]);
+  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$b], ["__scopeId", "data-v-07ec1718"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/overlay/index.vue"]]);
   let count = 0;
   const useLockScroll = (isLock) => {
     const lock = () => {
@@ -4337,7 +4396,7 @@ if (uni.restoreGlobal) {
       default: false
     }
   };
-  const _sfc_main$g = create$2({
+  const _sfc_main$h = create$2({
     components: {
       [__easycom_0$2.name]: __easycom_0$2,
       [__easycom_0$3.name]: __easycom_0$3
@@ -4601,9 +4660,9 @@ if (uni.restoreGlobal) {
       }, 8, ["name", "onAfterEnter", "onAfterLeave"])
     ]));
   }
-  const __easycom_1$2 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$a], ["__scopeId", "data-v-ce54da7a"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/popup/index.vue"]]);
+  const __easycom_1$2 = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$a], ["__scopeId", "data-v-ce54da7a"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/popup/index.vue"]]);
   const { componentName: componentName$1, create: create$1 } = createComponent("menu-item");
-  const _sfc_main$f = create$1({
+  const _sfc_main$g = create$1({
     props: {
       title: String,
       options: {
@@ -4804,9 +4863,9 @@ if (uni.restoreGlobal) {
       [vue.vShow, _ctx.state.showWrapper && _ctx.parentOffset > 0]
     ]);
   }
-  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$9], ["__scopeId", "data-v-8f4b114a"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menuitem/index.vue"]]);
+  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$9], ["__scopeId", "data-v-8f4b114a"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menuitem/index.vue"]]);
   const { componentName, create } = createComponent("menu");
-  const _sfc_main$e = create({
+  const _sfc_main$f = create({
     props: {
       activeColor: {
         type: String,
@@ -4996,7 +5055,7 @@ if (uni.restoreGlobal) {
       /* CLASS */
     );
   }
-  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$8], ["__scopeId", "data-v-3b380ba4"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menu/index.vue"]]);
+  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$8], ["__scopeId", "data-v-3b380ba4"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/sky-nutui/components/sky-nutui/packages/__VUE/menu/index.vue"]]);
   const props$5 = {
     props: {
       // 指示器的整体宽度
@@ -5035,7 +5094,7 @@ if (uni.restoreGlobal) {
     (Comp.$wxs || (Comp.$wxs = [])).push("wxs");
     (Comp.$wxsModules || (Comp.$wxsModules = {}))["wxs"] = "7f9de7cc";
   };
-  const _sfc_main$d = {
+  const _sfc_main$e = {
     name: "u-scroll-list",
     mixins: [mpMixin, mixin, props$5],
     data() {
@@ -5148,9 +5207,9 @@ if (uni.restoreGlobal) {
     );
   }
   if (typeof block0 === "function")
-    block0(_sfc_main$d);
-  const __easycom_4 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$7], ["__scopeId", "data-v-fea2b4f4"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-scroll-list/u-scroll-list.vue"]]);
-  const _sfc_main$c = {
+    block0(_sfc_main$e);
+  const __easycom_4 = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$7], ["__scopeId", "data-v-fea2b4f4"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-scroll-list/u-scroll-list.vue"]]);
+  const _sfc_main$d = {
     name: "UniCard",
     emits: ["click"],
     props: {
@@ -5312,7 +5371,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_5 = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$6], ["__scopeId", "data-v-ae4bee67"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/uni-card/components/uni-card/uni-card.vue"]]);
+  const __easycom_5 = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$6], ["__scopeId", "data-v-ae4bee67"], ["__file", "D:/prgraming/myproject/ihome/uni_modules/uni-card/components/uni-card/uni-card.vue"]]);
   const props$4 = {
     props: {
       // 用于滚动到指定item
@@ -5322,7 +5381,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  const _sfc_main$b = {
+  const _sfc_main$c = {
     name: "u-list-item",
     mixins: [mpMixin, mixin, props$4],
     data() {
@@ -5394,7 +5453,7 @@ if (uni.restoreGlobal) {
       vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
     ], 10, ["anchor"]);
   }
-  const __easycom_6 = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$5], ["__scopeId", "data-v-32197ac9"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-list-item/u-list-item.vue"]]);
+  const __easycom_6 = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$5], ["__scopeId", "data-v-32197ac9"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-list-item/u-list-item.vue"]]);
   const props$3 = {
     props: {
       // 控制是否出现滚动条，仅nvue有效
@@ -5470,7 +5529,7 @@ if (uni.restoreGlobal) {
       // vue下，是否开启虚拟列表
     }
   };
-  const _sfc_main$a = {
+  const _sfc_main$b = {
     name: "u-list",
     mixins: [mpMixin, mixin, props$3],
     watch: {
@@ -5559,15 +5618,15 @@ if (uni.restoreGlobal) {
       ])
     ], 44, ["scroll-into-view", "scroll-top", "lower-threshold", "upper-threshold", "show-scrollbar", "enable-back-to-top", "scroll-with-animation"]);
   }
-  const __easycom_7 = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$4], ["__scopeId", "data-v-9ad03670"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-list/u-list.vue"]]);
-  const _sfc_main$9 = {
+  const __easycom_7 = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$4], ["__scopeId", "data-v-9ad03670"], ["__file", "D:/prgraming/myproject/ihome/node_modules/uview-plus/components/u-list/u-list.vue"]]);
+  const _sfc_main$a = {
     name: "status-bar"
   };
   function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "status-bar" });
   }
-  const StatusBar = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$3], ["__scopeId", "data-v-826a6678"], ["__file", "D:/prgraming/myproject/ihome/components/statusBar.vue"]]);
-  const _sfc_main$8 = {
+  const StatusBar = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$3], ["__scopeId", "data-v-826a6678"], ["__file", "D:/prgraming/myproject/ihome/components/statusBar.vue"]]);
+  const _sfc_main$9 = {
     __name: "VR",
     setup(__props) {
       const state = vue.reactive({
@@ -6013,12 +6072,122 @@ if (uni.restoreGlobal) {
       };
     }
   };
-  const PagesVRVR = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__file", "D:/prgraming/myproject/ihome/pages/VR/VR.vue"]]);
+  const PagesVRVR = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__file", "D:/prgraming/myproject/ihome/pages/VR/VR.vue"]]);
+  const _sfc_main$8 = {
+    __name: "scanReturn",
+    setup(__props) {
+      const currentSlide = vue.ref(0);
+      const slides = [
+        {
+          image: "https://cdn.uviewui.com/uview/swiper/swiper3.png",
+          description: "Slide 1 description"
+        },
+        {
+          image: "https://cdn.uviewui.com/uview/swiper/swiper2.png",
+          description: "Slide 2 description"
+        },
+        {
+          image: "https://cdn.uviewui.com/uview/swiper/swiper1.png",
+          description: "Slide 3 description"
+        }
+      ];
+      const onSwiperChange = (e) => {
+        currentSlide.value = e.detail.current;
+      };
+      const setCurrentSlide = (index2) => {
+        currentSlide.value = index2;
+      };
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
+          vue.createElementVNode("swiper", {
+            current: currentSlide.value,
+            duration: 300,
+            circular: "",
+            class: "swiper",
+            onChange: onSwiperChange
+          }, [
+            (vue.openBlock(), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList(slides, (slide, index2) => {
+                return vue.createElementVNode("swiper-item", { key: index2 }, [
+                  vue.createElementVNode("image", {
+                    src: slide.image,
+                    class: "slide-image"
+                  }, null, 8, ["src"])
+                ]);
+              }),
+              64
+              /* STABLE_FRAGMENT */
+            ))
+          ], 40, ["current"]),
+          vue.createElementVNode("view", { class: "text-container" }, [
+            vue.createElementVNode(
+              "text",
+              null,
+              vue.toDisplayString(slides[currentSlide.value].description),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "indicators" }, [
+            (vue.openBlock(), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList(slides, (slide, index2) => {
+                return vue.createElementVNode("view", {
+                  key: index2,
+                  class: vue.normalizeClass([{ active: index2 === currentSlide.value }, "indicator"]),
+                  onClick: ($event) => setCurrentSlide(index2)
+                }, null, 10, ["onClick"]);
+              }),
+              64
+              /* STABLE_FRAGMENT */
+            ))
+          ])
+        ]);
+      };
+    }
+  };
+  const ComponentsScanScanReturn = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-7d4095bd"], ["__file", "D:/prgraming/myproject/ihome/components/scan/scanReturn.vue"]]);
   const _sfc_main$7 = {
     __name: "news",
     setup(__props) {
+      const click = () => {
+        formatAppLog("log", "at pages/news/news.vue:34", "click");
+        uni.scanCode({
+          autoDecodeCharset: true,
+          success: function(res) {
+            formatAppLog("log", "at pages/news/news.vue:40", "success");
+          },
+          fail: function(res) {
+            formatAppLog("log", "at pages/news/news.vue:43", "fail");
+          },
+          complete: function(res) {
+            formatAppLog("log", "at pages/news/news.vue:46", "complete");
+            uni.navigateTo({
+              url: "/components/scan/scanReturn",
+              success: function(res2) {
+                formatAppLog("log", "at pages/news/news.vue:51", "navigateTo success");
+              },
+              fail: function(res2) {
+                formatAppLog("log", "at pages/news/news.vue:54", "navigateTo fail");
+              }
+            });
+          }
+        });
+      };
       const handleSettingsClick = () => {
-        formatAppLog("log", "at pages/news/news.vue:33", "Settings button clicked");
+        formatAppLog("log", "at pages/news/news.vue:61", "Settings button clicked");
+        uni.navigateTo({
+          url: "/components/scan/scanReturn",
+          success: function(res) {
+            formatAppLog("log", "at pages/news/news.vue:65", "navigateTo success");
+          },
+          fail: function(res) {
+            formatAppLog("log", "at pages/news/news.vue:68", "navigateTo fail");
+          }
+        });
       };
       return (_ctx, _cache) => {
         const _component_publicTabBar = resolveEasycom(vue.resolveDynamicComponent("publicTabBar"), publicTabBar);
@@ -6048,6 +6217,10 @@ if (uni.restoreGlobal) {
               vue.createElementVNode("text", { class: "item-title" }, "活动消息")
             ])
           ]),
+          vue.createElementVNode("button", {
+            class: "scan-button",
+            onClick: click
+          }, "扫一扫"),
           vue.createVNode(_component_publicTabBar, { activePage: 2 })
         ]);
       };
@@ -8004,6 +8177,7 @@ if (uni.restoreGlobal) {
   const PagesSubpagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__file", "D:/prgraming/myproject/ihome/pages/subpages/login/login.vue"]]);
   __definePage("pages/index/index", PagesIndexIndex);
   __definePage("pages/VR/VR", PagesVRVR);
+  __definePage("components/scan/scanReturn", ComponentsScanScanReturn);
   __definePage("pages/news/news", PagesNewsNews);
   __definePage("pages/main/main", PagesMainMain);
   __definePage("pages/subpages/login/testLogin", PagesSubpagesLoginTestLogin);
@@ -8023,13 +8197,10 @@ if (uni.restoreGlobal) {
           this.$store.commit("storeLogout");
         }
       });
-      formatAppLog("log", "at App.vue:19", "App Launch");
     },
     onShow: function() {
-      formatAppLog("log", "at App.vue:22", "App Show");
     },
     onHide: function() {
-      formatAppLog("log", "at App.vue:25", "App Hide");
     }
   };
   const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "D:/prgraming/myproject/ihome/App.vue"]]);

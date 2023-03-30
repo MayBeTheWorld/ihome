@@ -16,13 +16,13 @@ export default {
         this.$store.commit('storeLogout')
       }
     })
-    console.log('App Launch')
+    // console.log('App Launch')
   },
   onShow: function () {
-    console.log('App Show')
+    // console.log('App Show')
   },
   onHide: function () {
-    console.log('App Hide')
+    // console.log('App Hide')
   }
 }
 </script>
@@ -30,6 +30,5 @@ export default {
 <style lang="scss">
 @import "uview-plus/index.scss";
 @import '@/uni_modules/sky-nutui/components/sky-nutui/app.scss';
-
 
 </style>

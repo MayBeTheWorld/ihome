@@ -8,6 +8,7 @@
     "u-scroll-list": "../../node-modules/uview-plus/components/u-scroll-list/u-scroll-list",
     "uni-card": "../../uni_modules/uni-card/components/uni-card/uni-card",
     "u-list-item": "../../node-modules/uview-plus/components/u-list-item/u-list-item",
-    "u-list": "../../node-modules/uview-plus/components/u-list/u-list"
+    "u-list": "../../node-modules/uview-plus/components/u-list/u-list",
+    "status-bar": "../../components/statusBar"
   }
 }
