@@ -18,30 +18,35 @@ const _sfc_main = {
         description: "Slide 3 description"
       }
     ];
-    const onSwiperChange = (e) => {
-      currentSlide.value = e.detail.current;
+    const onTouchStart = (e) => {
+      startX.value = e.touches[0].clientX;
     };
+    const onTouchEnd = (e) => {
+      const endX = e.changedTouches[0].clientX;
+      const delta = startX.value - endX;
+      if (delta > 50) {
+        setCurrentSlide((currentSlide.value + 1) % slides.length);
+      } else if (delta < -50) {
+        setCurrentSlide((currentSlide.value - 1 + slides.length) % slides.length);
+      }
+    };
+    const startX = common_vendor.ref(0);
     const setCurrentSlide = (index) => {
       currentSlide.value = index;
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.f(slides, (slide, index, i0) => {
+        a: slides[currentSlide.value].image,
+        b: common_vendor.t(slides[currentSlide.value].description),
+        c: common_vendor.f(slides, (slide, index, i0) => {
           return {
-            a: slide.image,
-            b: common_vendor.t(slide.description),
-            c: common_vendor.f(slides, (s, i, i1) => {
-              return {
-                a: i,
-                b: i === currentSlide.value ? 1 : "",
-                c: common_vendor.o(($event) => setCurrentSlide(i), i)
-              };
-            }),
-            d: index
+            a: index,
+            b: index === currentSlide.value ? 1 : "",
+            c: common_vendor.o(($event) => setCurrentSlide(index), index)
           };
         }),
-        b: currentSlide.value,
-        c: common_vendor.o(onSwiperChange)
+        d: common_vendor.o(onTouchStart),
+        e: common_vendor.o(onTouchEnd)
       };
     };
   }
