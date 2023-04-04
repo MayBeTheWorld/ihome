@@ -10789,6 +10789,32 @@ const install2 = (Vue) => {
 const uviewPlus = {
   install: install2
 };
+/*!
+  * vue-router v4.1.6
+  * (c) 2022 Eduardo San Martin Morote
+  * @license MIT
+  */
+var NavigationType;
+(function(NavigationType2) {
+  NavigationType2["pop"] = "pop";
+  NavigationType2["push"] = "push";
+})(NavigationType || (NavigationType = {}));
+var NavigationDirection;
+(function(NavigationDirection2) {
+  NavigationDirection2["back"] = "back";
+  NavigationDirection2["forward"] = "forward";
+  NavigationDirection2["unknown"] = "";
+})(NavigationDirection || (NavigationDirection = {}));
+var NavigationFailureType;
+(function(NavigationFailureType2) {
+  NavigationFailureType2[NavigationFailureType2["aborted"] = 4] = "aborted";
+  NavigationFailureType2[NavigationFailureType2["cancelled"] = 8] = "cancelled";
+  NavigationFailureType2[NavigationFailureType2["duplicated"] = 16] = "duplicated";
+})(NavigationFailureType || (NavigationFailureType = {}));
+const routerKey = Symbol("router");
+function useRouter() {
+  return inject(routerKey);
+}
 const props$9 = {
   props: {
     // 头像图片路径(不能为相对路径)
@@ -11762,6 +11788,7 @@ exports.sr = sr;
 exports.t = t;
 exports.toRefs = toRefs;
 exports.unref = unref;
+exports.useRouter = useRouter;
 exports.useStore = useStore;
 exports.uviewPlus = uviewPlus;
 exports.value = value;

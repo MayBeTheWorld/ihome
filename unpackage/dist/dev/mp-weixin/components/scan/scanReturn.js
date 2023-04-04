@@ -3,6 +3,7 @@ const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   __name: "scanReturn",
   setup(__props) {
+    common_vendor.useRouter();
     const currentSlide = common_vendor.ref(0);
     const slides = [
       {
@@ -24,12 +25,18 @@ const _sfc_main = {
     const setCurrentSlide = (index) => {
       currentSlide.value = index;
     };
+    const navigateToVR = () => {
+      common_vendor.index.switchTab({
+        url: "/pages/VR/VR"
+      });
+    };
     return (_ctx, _cache) => {
       return {
         a: common_vendor.f(slides, (slide, index, i0) => {
           return {
             a: slide.image,
-            b: index
+            b: common_vendor.o(navigateToVR, index),
+            c: index
           };
         }),
         b: currentSlide.value,

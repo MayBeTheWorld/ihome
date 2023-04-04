@@ -10,7 +10,7 @@
           v-for="(slide, index) in slides"
           :key="index"
       >
-        <image :src="slide.image" class="slide-image" />
+        <image :src="slide.image" class="slide-image" @tap="navigateToVR"/>
       </swiper-item>
     </swiper>
     <view class="text-container">
@@ -30,7 +30,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const currentSlide = ref(0)
 const slides = [
   {
@@ -54,6 +56,12 @@ const onSwiperChange = (e) => {
 const setCurrentSlide = (index) => {
   currentSlide.value = index
 }
+
+const navigateToVR = () => {
+  uni.switchTab({
+    url: '/pages/VR/VR'
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -64,7 +72,6 @@ const setCurrentSlide = (index) => {
   align-items: center;
   width: 100%;
   height: 100%;
-  /*关键代码，这样才能全屏*/
   position: absolute;
   top: 0;
   left: 0;
@@ -89,19 +96,17 @@ const setCurrentSlide = (index) => {
     left: 50%;
     transform: translateX(-50%);
     width: 600rpx;
-    // 高度和宽度比例为黄金分割
     height: 600rpx * 1.618;
-    //  阴影
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    //  圆角
     border-radius: 10px;
   }
 
   .text-container {
     position: absolute;
-    bottom: 250rpx; // 调整这个值以放置文本到合适的位置
+    bottom: 280rpx;
     width: 100%;
     text-align: center;
+    font-size: 32rpx;
   }
 
   .indicators {
@@ -118,10 +123,18 @@ const setCurrentSlide = (index) => {
       background-color: #ccc;
       border-radius: 50%;
       transition: background-color 0.3s ease;
+
+      // 添加过渡动画
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      // 初始大小
+      transform: scale(1);
     }
 
     .active {
       background-color: skyblue;
+
+      // 放大指示器
+      transform: scale(1.3);
     }
   }
 }

@@ -6073,9 +6073,36 @@ if (uni.restoreGlobal) {
     }
   };
   const PagesVRVR = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__file", "D:/prgraming/myproject/ihome/pages/VR/VR.vue"]]);
+  /*!
+    * vue-router v4.1.6
+    * (c) 2022 Eduardo San Martin Morote
+    * @license MIT
+    */
+  var NavigationType;
+  (function(NavigationType2) {
+    NavigationType2["pop"] = "pop";
+    NavigationType2["push"] = "push";
+  })(NavigationType || (NavigationType = {}));
+  var NavigationDirection;
+  (function(NavigationDirection2) {
+    NavigationDirection2["back"] = "back";
+    NavigationDirection2["forward"] = "forward";
+    NavigationDirection2["unknown"] = "";
+  })(NavigationDirection || (NavigationDirection = {}));
+  var NavigationFailureType;
+  (function(NavigationFailureType2) {
+    NavigationFailureType2[NavigationFailureType2["aborted"] = 4] = "aborted";
+    NavigationFailureType2[NavigationFailureType2["cancelled"] = 8] = "cancelled";
+    NavigationFailureType2[NavigationFailureType2["duplicated"] = 16] = "duplicated";
+  })(NavigationFailureType || (NavigationFailureType = {}));
+  const routerKey = Symbol("router");
+  function useRouter() {
+    return vue.inject(routerKey);
+  }
   const _sfc_main$8 = {
     __name: "scanReturn",
     setup(__props) {
+      useRouter();
       const currentSlide = vue.ref(0);
       const slides = [
         {
@@ -6097,6 +6124,11 @@ if (uni.restoreGlobal) {
       const setCurrentSlide = (index2) => {
         currentSlide.value = index2;
       };
+      const navigateToVR = () => {
+        uni.switchTab({
+          url: "/pages/VR/VR"
+        });
+      };
       return (_ctx, _cache) => {
         return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
           vue.createElementVNode("swiper", {
@@ -6112,7 +6144,8 @@ if (uni.restoreGlobal) {
                 return vue.createElementVNode("swiper-item", { key: index2 }, [
                   vue.createElementVNode("image", {
                     src: slide.image,
-                    class: "slide-image"
+                    class: "slide-image",
+                    onClick: navigateToVR
                   }, null, 8, ["src"])
                 ]);
               }),
