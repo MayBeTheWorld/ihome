@@ -35,15 +35,19 @@
   top: 0;
   left: 0;
 }
-.container .slide-content.data-v-7d4095bd {
-  position: relative;
+.container .swiper.data-v-7d4095bd {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
 }
-.container .slide-content .slide-image.data-v-7d4095bd {
+.container .swiper-item.data-v-7d4095bd {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.container .slide-image.data-v-7d4095bd {
   position: absolute;
   top: 100rpx;
   left: 50%;
@@ -53,20 +57,20 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
-.container .slide-content .text-container.data-v-7d4095bd {
+.container .text-container.data-v-7d4095bd {
   position: absolute;
   bottom: 250rpx;
   width: 100%;
   text-align: center;
 }
-.container .slide-content .indicators.data-v-7d4095bd {
+.container .indicators.data-v-7d4095bd {
   position: absolute;
   bottom: 200rpx;
   width: 100%;
   display: flex;
   justify-content: center;
 }
-.container .slide-content .indicators .indicator.data-v-7d4095bd {
+.container .indicators .indicator.data-v-7d4095bd {
   width: 10px;
   height: 10px;
   margin: 0 5px;
@@ -74,6 +78,6 @@
   border-radius: 50%;
   transition: background-color 0.3s ease;
 }
-.container .slide-content .indicators .active.data-v-7d4095bd {
+.container .indicators .active.data-v-7d4095bd {
   background-color: skyblue;
 }

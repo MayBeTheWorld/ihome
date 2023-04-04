@@ -6101,7 +6101,6 @@ if (uni.restoreGlobal) {
         return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
           vue.createElementVNode("swiper", {
             current: currentSlide.value,
-            duration: 300,
             circular: "",
             class: "swiper",
             onChange: onSwiperChange
