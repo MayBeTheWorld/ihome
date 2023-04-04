@@ -3215,8 +3215,10 @@ if (uni.restoreGlobal) {
         goBackBtn.value = new plus.nativeObj.View(
           "goBackBtn",
           {
-            top: "10%",
-            left: "10%",
+            bottom: "20px",
+            // 更新位置
+            left: "20px",
+            // 更新位置
             height: "35px",
             width: "35px",
             "border-radius": "35px",
@@ -3259,9 +3261,10 @@ if (uni.restoreGlobal) {
         const openGalleryBtn = new plus.nativeObj.View(
           "openGalleryBtn",
           {
-            top: "20%",
-            // 调整按钮位置
-            left: "10%",
+            bottom: "500px",
+            // 更新位置
+            right: "50px",
+            // 更新位置
             height: "35px",
             width: "35px",
             "border-radius": "35px",
@@ -3270,11 +3273,11 @@ if (uni.restoreGlobal) {
           [{
             tag: "img",
             id: "img",
-            src: "static/index/cha.png",
+            src: "static/scan/album.png",
             // 更换为你自己的图片路径
             position: {
               width: "100%",
-              left: "0%"
+              right: "0%"
             }
           }]
         );
@@ -3286,9 +3289,18 @@ if (uni.restoreGlobal) {
           plus.gallery.pick(
             (path) => {
               formatAppLog("log", "at components/scan/scan.vue:132", "选中的图片路径：" + path);
+              uni.navigateTo({
+                url: "/components/scan/scanReturn",
+                success: function(res) {
+                  formatAppLog("log", "at components/scan/scan.vue:138", "navigateTo success");
+                },
+                fail: function(res) {
+                  formatAppLog("log", "at components/scan/scan.vue:141", "navigateTo fail");
+                }
+              });
             },
             (e) => {
-              formatAppLog("log", "at components/scan/scan.vue:136", "取消选择图片");
+              formatAppLog("log", "at components/scan/scan.vue:146", "取消选择图片");
             },
             {
               filter: "image",
@@ -6185,30 +6197,6 @@ if (uni.restoreGlobal) {
   const _sfc_main$7 = {
     __name: "news",
     setup(__props) {
-      const click = () => {
-        formatAppLog("log", "at pages/news/news.vue:34", "click");
-        uni.scanCode({
-          autoDecodeCharset: true,
-          success: function(res) {
-            formatAppLog("log", "at pages/news/news.vue:40", "success");
-          },
-          fail: function(res) {
-            formatAppLog("log", "at pages/news/news.vue:43", "fail");
-          },
-          complete: function(res) {
-            formatAppLog("log", "at pages/news/news.vue:46", "complete");
-            uni.navigateTo({
-              url: "/components/scan/scanReturn",
-              success: function(res2) {
-                formatAppLog("log", "at pages/news/news.vue:51", "navigateTo success");
-              },
-              fail: function(res2) {
-                formatAppLog("log", "at pages/news/news.vue:54", "navigateTo fail");
-              }
-            });
-          }
-        });
-      };
       const handleSettingsClick = () => {
         formatAppLog("log", "at pages/news/news.vue:61", "Settings button clicked");
         uni.navigateTo({
@@ -6249,10 +6237,7 @@ if (uni.restoreGlobal) {
               vue.createElementVNode("text", { class: "item-title" }, "活动消息")
             ])
           ]),
-          vue.createElementVNode("button", {
-            class: "scan-button",
-            onClick: click
-          }, "扫一扫"),
+          vue.createCommentVNode('    <button class="scan-button" @click="click">扫一扫</button>'),
           vue.createVNode(_component_publicTabBar, { activePage: 2 })
         ]);
       };

@@ -12,30 +12,6 @@ const StatusBar = () => "../../components/statusBar.js";
 const _sfc_main = {
   __name: "news",
   setup(__props) {
-    const click = () => {
-      console.log("click");
-      common_vendor.index.scanCode({
-        autoDecodeCharset: true,
-        success: function(res) {
-          console.log("success");
-        },
-        fail: function(res) {
-          console.log("fail");
-        },
-        complete: function(res) {
-          console.log("complete");
-          common_vendor.index.navigateTo({
-            url: "/components/scan/scanReturn",
-            success: function(res2) {
-              console.log("navigateTo success");
-            },
-            fail: function(res2) {
-              console.log("navigateTo fail");
-            }
-          });
-        }
-      });
-    };
     const handleSettingsClick = () => {
       console.log("Settings button clicked");
       common_vendor.index.navigateTo({
@@ -51,8 +27,7 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return {
         a: common_vendor.o(handleSettingsClick),
-        b: common_vendor.o(click),
-        c: common_vendor.p({
+        b: common_vendor.p({
           activePage: 2
         })
       };

@@ -22,7 +22,7 @@
         <text class="item-title">活动消息</text>
       </view>
     </view>
-    <button class="scan-button" @click="click">扫一扫</button>
+    <!--    <button class="scan-button" @click="click">扫一扫</button>-->
     <publicTabBar :activePage="2"/>
   </view>
 </template>
