@@ -29,19 +29,19 @@ const _sfc_main = {
         a: common_vendor.f(slides, (slide, index, i0) => {
           return {
             a: slide.image,
-            b: index
+            b: common_vendor.t(slide.description),
+            c: common_vendor.f(slides, (s, i, i1) => {
+              return {
+                a: i,
+                b: i === currentSlide.value ? 1 : "",
+                c: common_vendor.o(($event) => setCurrentSlide(i), i)
+              };
+            }),
+            d: index
           };
         }),
         b: currentSlide.value,
-        c: common_vendor.o(onSwiperChange),
-        d: common_vendor.t(slides[currentSlide.value].description),
-        e: common_vendor.f(slides, (slide, index, i0) => {
-          return {
-            a: index,
-            b: index === currentSlide.value ? 1 : "",
-            c: common_vendor.o(($event) => setCurrentSlide(index), index)
-          };
-        })
+        c: common_vendor.o(onSwiperChange)
       };
     };
   }

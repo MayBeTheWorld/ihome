@@ -30,13 +30,17 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-top: 100rpx;
+  /*关键代码，这样才能全屏*/
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .container .swiper.data-v-7d4095bd {
-  width: 600rpx;
-  height: 970.8rpx;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 .container .swiper-item.data-v-7d4095bd {
   width: 100%;
@@ -44,19 +48,27 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .container .slide-image.data-v-7d4095bd {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  position: absolute;
+  top: 100rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600rpx;
+  height: 970.8rpx;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 .container .text-container.data-v-7d4095bd {
-  margin-top: 100rpx;
+  position: absolute;
+  bottom: 250rpx;
+  width: 100%;
   text-align: center;
 }
 .container .indicators.data-v-7d4095bd {
+  position: absolute;
+  bottom: 200rpx;
+  width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 100rpx;
 }
 .container .indicators .indicator.data-v-7d4095bd {
   width: 10px;
