@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "测试登录",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-notice-bar": "../../../node-modules/uview-plus/components/u-notice-bar/u-notice-bar"
+  }
+}

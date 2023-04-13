@@ -88,7 +88,7 @@
     "uni-app": {
       "control": "uni-v3",
       "vueVersion": "3",
-      "compilerVersion": "3.6.17",
+      "compilerVersion": "3.7.0",
       "nvueCompiler": "uni-app",
       "renderer": "auto",
       "nvue": {
@@ -115,16 +115,16 @@
           "pagePath": "pages/index/index"
         },
         {
-          "text": "装修",
-          "pagePath": "pages/decoration/decoration"
+          "text": "VR",
+          "pagePath": "pages/VR/VR"
         },
         {
-          "text": "社区",
-          "pagePath": "pages/community/community"
+          "text": "消息",
+          "pagePath": "pages/news/news"
         },
         {
           "text": "我的",
-          "pagePath": "pages/my/my"
+          "pagePath": "pages/main/main"
         }
       ],
       "selectedIndex": 0,

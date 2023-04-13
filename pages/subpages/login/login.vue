@@ -17,6 +17,9 @@
 			<input class="input-row" v-model="password" @confirm="bindLogin" 
 			type="password" maxlength="32" placeholder="输入密码" confirm-type="登录"/>
 			<button type="button" class="login-btn" @click="bindLogin">登录</button>
+			<!-- 账号密码
+			loginName: 'test',
+			password: 'a1915f03b38bf54926700dfc9ea699f8' -->
 			<view class="bot">
 				<!-- 待接口完成后完善 -->
 				<view class="forget" hover-class="none" @click="tip">

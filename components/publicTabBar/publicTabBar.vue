@@ -63,12 +63,13 @@
 				case '0':
 					uni.switchTab({
 						url: '../../pages/index/index',
-					})
+					});
+					console.log('跳转首页')
 					break;
 				case '1':
 					uni.switchTab({
 						url: '../../pages/VR/VR',
-					})
+					});
 					break;
 				case '2':
 					uni.switchTab({

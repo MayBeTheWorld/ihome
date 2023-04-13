@@ -4,7 +4,8 @@
     "pages/VR/VR",
     "pages/news/news",
     "pages/main/main",
-    "pages/login/testLogin"
+    "pages/subpages/login/testLogin",
+    "pages/subpages/login/login"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -34,6 +35,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

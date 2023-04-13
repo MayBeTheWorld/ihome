@@ -1,4 +1,1 @@
-"use strict";
-class BaseLang {
-}
-exports.BaseLang = BaseLang;
+"use strict";class s{}exports.BaseLang=s;

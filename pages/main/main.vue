@@ -10,7 +10,7 @@
 			
 			<view v-if="isLogin" :key="isLogin">
 				<!-- 头像与用户名 -->
-				<view class="loginState" @click="login">
+				<view class="loginState" @click="loginout">
 					<!-- #ifdef MP-WEIXIN -->
 						<view class="profileView">
 							<u-avatar :src="profile" shape="circle" size="150"></u-avatar>
@@ -141,6 +141,14 @@
 				console.log(res)
 			}
 		})
+	};
+	
+	function loginout () {
+		store.commit('storeLogout');
+		console.log('成功退出登录')
+		uni.reLaunch({
+			url: '/pages/main/main'
+		});
 	};
 </script>
 

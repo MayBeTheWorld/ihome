@@ -15,7 +15,7 @@
     </view>
     <!--        把u-list放到一个ulist中，就不担心上面的滚动了，我他妈怎么没想到-->
     <u-list
-        @scrolltolower="scrolltolower" class="postion" height="1000rpx"
+        @scrolltolower="scrolltolower" class="postion" height="calc(100vh - 48px - 110rpx)"
     >
       <!--解决下面baar的馊主意-->
       <u-list-item

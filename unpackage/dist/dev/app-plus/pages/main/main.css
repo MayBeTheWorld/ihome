@@ -280,6 +280,7 @@ uni-view[data-v-14a988f2], uni-scroll-view[data-v-14a988f2], uni-swiper-item[dat
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
+	background-color: rgba(255, 255, 255, 1);
 }
 .tabBarView[data-v-4e7366ac] {
 	width: 25%;

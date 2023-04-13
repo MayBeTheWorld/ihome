@@ -53,7 +53,6 @@
 					left: '10%',
 					height: '15px',
 					width: '15px',
-					// border-radius: '50px',
 				}, 
 				[{
 					tag: 'img',
@@ -64,19 +63,6 @@
 						left: '0%',
 					}
 				},
-				// {
-				// 	tag: 'font',
-				// 	id: 'font',
-				// 	text: '退出',
-				// 	textStyles: {
-				// 		size: '10px',
-				// 		color: '#ffffff',
-				// 	},
-				// 	position: {
-				// 		width: '80%',
-				// 		left: '10%',
-				// 	}
-				// },
 				]);
 				goBackBtn.value.show()
 				console.log(goBackBtn.value)
