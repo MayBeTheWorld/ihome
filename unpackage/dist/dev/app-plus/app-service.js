@@ -3215,9 +3215,9 @@ if (uni.restoreGlobal) {
         goBackBtn.value = new plus.nativeObj.View(
           "goBackBtn",
           {
-            bottom: "20px",
+            bottom: "100px",
             // 更新位置
-            left: "20px",
+            left: "300px",
             // 更新位置
             height: "35px",
             width: "35px",
@@ -3228,7 +3228,7 @@ if (uni.restoreGlobal) {
             {
               tag: "img",
               id: "img",
-              src: "static/index/cha.png",
+              src: "static/scan/cha.png",
               position: {
                 width: "100%",
                 left: "0%"
@@ -3261,9 +3261,9 @@ if (uni.restoreGlobal) {
         const openGalleryBtn = new plus.nativeObj.View(
           "openGalleryBtn",
           {
-            bottom: "500px",
+            bottom: "100px",
             // 更新位置
-            right: "50px",
+            left: "50px",
             // 更新位置
             height: "35px",
             width: "35px",
@@ -3277,7 +3277,7 @@ if (uni.restoreGlobal) {
             // 更换为你自己的图片路径
             position: {
               width: "100%",
-              right: "0%"
+              left: "0%"
             }
           }]
         );
@@ -3292,15 +3292,15 @@ if (uni.restoreGlobal) {
               uni.navigateTo({
                 url: "/components/scan/scanReturn",
                 success: function(res) {
-                  formatAppLog("log", "at components/scan/scan.vue:138", "navigateTo success");
+                  formatAppLog("log", "at components/scan/scan.vue:137", "navigateTo success");
                 },
                 fail: function(res) {
-                  formatAppLog("log", "at components/scan/scan.vue:141", "navigateTo fail");
+                  formatAppLog("log", "at components/scan/scan.vue:140", "navigateTo fail");
                 }
               });
             },
             (e) => {
-              formatAppLog("log", "at components/scan/scan.vue:146", "取消选择图片");
+              formatAppLog("log", "at components/scan/scan.vue:145", "取消选择图片");
             },
             {
               filter: "image",

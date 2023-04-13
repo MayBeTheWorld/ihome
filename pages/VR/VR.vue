@@ -1,54 +1,54 @@
 <template>
-  <view class="systemBox">
-    <view class="battar">
-      <publicTabBar :activePage="1"/>
-    </view>
-    <status-bar/>
-    <view class="menu">
-      <nut-menu>
-        <nut-menu-item v-model="state.value1" :options="state.options1"/>
-        <nut-menu-item v-model="state.value1" :options="state.options2"/>
-        <nut-menu-item v-model="state.value1" :options="state.options3"/>
-        <nut-menu-item v-model="state.value1" :options="state.options4"/>
-      </nut-menu>
-    </view>
-    <!--        把u-list放到一个ulist中，就不担心上面的滚动了，我他妈怎么没想到-->
-    <u-list
-        class="postion" height="calc(100vh - 110rpx - 48px)" @scrolltolower="scrolltolower"
-    >
-      <!--解决下面baar的馊主意-->
-      <u-list-item
-          v-for="(item, index) in listBoundless"
-          :key="index"
-      >
-        <uni-card :isFull="true" extra="额外信息" sub-title="副标题"
-                  thumbnail="https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-                  title="基础卡片">
-          <text>这是一个通栏卡片 ，通栏没有外边距，左右会贴合父元素。</text>
-          <!--        <view v-for="(item, index) in list" :key="index" @scrolltolower="scrolltolower" :key="index">-->
-          <u-scroll-list :indicator=false @left="left" @right="right">
-            <view class="scroll-list" style="flex-direction: row;">
-              <view
-                  v-for="(item, index) in list"
-                  :key="index"
-                  :class="[(index === 9) && 'scroll-list__goods-item--no-margin-right']"
-                  class="scroll-list__goods-item"
-              >
-                <image :src="item.thumb" class="scroll-list__goods-item__image"></image>
-                <text class="scroll-list__goods-item__text">￥{{ item.price }}</text>
-              </view>
-              <view class="scroll-list__show-more">
-                <text class="scroll-list__show-more__text">查看更多</text>
-                <u-icon color="#f56c6c" name="arrow-leftward" size="12"></u-icon>
-              </view>
-            </view>
-          </u-scroll-list>
-          <!--        </view>-->
-        </uni-card>
-      </u-list-item>
-    </u-list>
+    <view class="systemBox">
+        <view class="battar">
+            <publicTabBar :activePage="1"/>
+        </view>
+        <status-bar/>
+        <view class="menu">
+            <nut-menu>
+                <nut-menu-item v-model="state.value1" :options="state.options1"/>
+                <nut-menu-item v-model="state.value1" :options="state.options2"/>
+                <nut-menu-item v-model="state.value1" :options="state.options3"/>
+                <nut-menu-item v-model="state.value1" :options="state.options4"/>
+            </nut-menu>
+        </view>
+        <!--        把u-list放到一个ulist中，就不担心上面的滚动了，我他妈怎么没想到-->
+        <u-list
+                class="postion" height="calc(100vh - 110rpx - 48px)" @scrolltolower="scrolltolower"
+        >
+            <!--解决下面baar的馊主意-->
+            <u-list-item
+                    v-for="(item, index) in listBoundless"
+                    :key="index"
+            >
+                <uni-card :isFull="true" extra="额外信息" sub-title="副标题"
+                          thumbnail="https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+                          title="基础卡片">
+                    <text>这是一个通栏卡片 ，通栏没有外边距，左右会贴合父元素。</text>
+                    <!--        <view v-for="(item, index) in list" :key="index" @scrolltolower="scrolltolower" :key="index">-->
+                    <u-scroll-list :indicator=false @left="left" @right="right">
+                        <view class="scroll-list" style="flex-direction: row;">
+                            <view
+                                    v-for="(item, index) in list"
+                                    :key="index"
+                                    :class="[(index === 9) && 'scroll-list__goods-item--no-margin-right']"
+                                    class="scroll-list__goods-item"
+                            >
+                                <image :src="item.thumb" class="scroll-list__goods-item__image"></image>
+                                <text class="scroll-list__goods-item__text">￥{{ item.price }}</text>
+                            </view>
+                            <view class="scroll-list__show-more">
+                                <text class="scroll-list__show-more__text">查看更多</text>
+                                <u-icon color="#f56c6c" name="arrow-leftward" size="12"></u-icon>
+                            </view>
+                        </view>
+                    </u-scroll-list>
+                    <!--        </view>-->
+                </uni-card>
+            </u-list-item>
+        </u-list>
 
-  </view>
+    </view>
 </template>
 
 <script setup>

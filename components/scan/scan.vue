@@ -1,6 +1,6 @@
 <template>
-  <view>
-  </view>
+    <view>
+    </view>
 </template>
 
 <script>
@@ -56,8 +56,8 @@ export default defineComponent({
 
       // 创建一个返回按钮
       goBackBtn.value = new plus.nativeObj.View('goBackBtn', {
-        bottom: '20px', // 更新位置
-        left: '20px', // 更新位置
+        bottom: '100px', // 更新位置
+        left: '300px', // 更新位置
         height: '35px',
         width: '35px',
         'border-radius': '35px',
@@ -66,7 +66,7 @@ export default defineComponent({
       [{
         tag: 'img',
         id: 'img',
-        src: 'static/index/cha.png',
+        src: 'static/scan/cha.png',
         position: {
           width: '100%',
           left: '0%'
@@ -100,8 +100,8 @@ export default defineComponent({
       })
 
       const openGalleryBtn = new plus.nativeObj.View('openGalleryBtn', {
-        bottom: '500px', // 更新位置
-        right: '50px', // 更新位置
+        bottom: '100px', // 更新位置
+        left: '50px', // 更新位置
         height: '35px',
         width: '35px',
         'border-radius': '35px',
@@ -113,7 +113,7 @@ export default defineComponent({
         src: 'static/scan/album.png', // 更换为你自己的图片路径
         position: {
           width: '100%',
-          right: '0%'
+          left: '0%'
         }
       }])
 
@@ -131,7 +131,6 @@ export default defineComponent({
           (path) => {
             console.log('选中的图片路径：' + path)
             // 在这里实现上传图片的功
-
             uni.navigateTo({
               url: '/components/scan/scanReturn',
               success: function (res) {
@@ -144,8 +143,7 @@ export default defineComponent({
           },
           (e) => {
             console.log('取消选择图片')
-          },
-          {
+          }, {
             filter: 'image',
             multiple: false,
             maximum: 1,

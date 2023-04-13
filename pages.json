@@ -24,6 +24,7 @@
       "style": {
         "navigationBarTitleText": "VR",
         "app-plus": {
+          "titleNView": false
         }
       }
     },
