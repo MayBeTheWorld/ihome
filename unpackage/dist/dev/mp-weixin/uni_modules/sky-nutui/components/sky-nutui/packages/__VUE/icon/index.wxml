@@ -1,1 +1,0 @@
-<image wx:if="{{a}}" class="{{b}}" style="{{c}}" bindtap="{{d}}" src="{{e}}"></image><text wx:if="{{f}}" class="{{g}}" style="{{h}}" bindtap="{{i}}"></text>

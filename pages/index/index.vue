@@ -309,7 +309,7 @@
 		for (let i = 0;i <= 5;i++) {
 			console.log(index)
 			console.log(article[i])
-		}	
+		}
 	}
 </script>
 

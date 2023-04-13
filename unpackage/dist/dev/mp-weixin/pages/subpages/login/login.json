@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "登录",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "u-avatar": "../../../node-modules/uview-plus/components/u-avatar/u-avatar"
-  }
-}

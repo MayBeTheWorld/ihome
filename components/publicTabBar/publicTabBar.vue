@@ -47,7 +47,7 @@
 
 <script setup name="publicTabBar">
 	import { defineProps } from 'vue'
-	
+
 	uni.hideTabBar();
 	//取得父组件传值并解构
 	const props = defineProps({
@@ -56,7 +56,7 @@
 			default: 0
 		}
 	})
-	
+
 	function gotoIndexMenu (aim) {
 		if (aim != props.activePage) {
 			switch (aim) {

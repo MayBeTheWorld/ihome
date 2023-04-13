@@ -1,1 +1,0 @@
-"use strict";const e={visible:{type:Boolean,default:!1},zIndex:{type:[Number,String],default:2e3},duration:{type:[Number,String],default:.3},overlayClass:{type:String,default:""},lockScroll:{type:Boolean,default:!1},overlayStyle:{type:Object},closeOnClickOverlay:{type:Boolean,default:!0}};exports.overlayProps=e;
