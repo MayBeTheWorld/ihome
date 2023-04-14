@@ -23,7 +23,7 @@
       </view>
     </view>
     <!--    <button class="scan-button" @click="click">扫一扫</button>-->
-    <publicTabBar :activePage="2"/>
+    <publicTabBar :activePage="3"/>
   </view>
 </template>
 
