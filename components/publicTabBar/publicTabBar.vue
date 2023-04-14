@@ -19,7 +19,7 @@
                 <view class="imageView">
                     <image src="../../static/VR/vr.png" mode="aspectFit"></image>
                 </view>
-                <view class="textView">商城</view>
+                <view class="textView">装修</view>
             </view>
         </view>
         <view class="tabBarView"

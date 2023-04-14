@@ -86,7 +86,7 @@
     </view>
 </template>
 
-<script setup>
+<script setup >
 import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
 import {ref, reactive, onActivated, nextTick} from "vue";
 import {useStore} from 'vuex'
@@ -152,7 +152,7 @@ function loginout() {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url("../overall/system.css");
 // 手机状态栏
 .status-bar {
@@ -168,19 +168,19 @@ function loginout() {
 // 用户未登录时展示部分
 .emptyUser {
   background: #fff;
-  padding-top: 40 rpx;
+  padding-top: 40rpx;
   text-align: center;
-  line-height: 50 rpx;
+  line-height: 50rpx;
 
   .btn {
-    width: 710 rpx;
-    height: 80 rpx;
-    margin: 22 rpx auto 0;
+    width: 710rpx;
+    height: 80rpx;
+    margin: 22rpx auto 0;
     text-align: center;
-    line-height: 80 rpx;
-    border: 2 rpx solid #cdcdcd;
-    border-radius: 80 rpx;
-    font-size: 32 rpx;
+    line-height: 80rpx;
+    border: 2rpx solid #cdcdcd;
+    border-radius: 80rpx;
+    font-size: 32rpx;
   }
 }
 
@@ -189,12 +189,12 @@ function loginout() {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  font-size: 40 rpx;
+  font-size: 40rpx;
   font-weight: 900;
-  padding: 30 rpx 0;
+  padding: 30rpx 0;
 
   .profileView {
-    margin: 0 30 rpx;
+    margin: 0 30rpx;
   }
 }
 
@@ -203,8 +203,8 @@ function loginout() {
   flex-direction: row;
   justify-content: space-between;
   color: #666666;
-  margin: 0 40 rpx;
-  font-size: 30 rpx;
+  margin: 0 40rpx;
+  font-size: 30rpx;
 
   .Info {
     flex: 1;
@@ -217,48 +217,48 @@ function loginout() {
 
 // 常用工具部分
 .functionsTitle {
-  margin: 40 rpx 40 rpx 0 40 rpx;
+  margin: 40rpx 40rpx 0 40rpx;
   font-weight: 900;
 }
 
 .functions {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 160 rpx);
-  margin: 20 rpx 40 rpx;
+  grid-template-rows: repeat(2, 160rpx);
+  margin: 20rpx 40rpx;
 
   .functioinItem {
     display: flex;
     flex-direction: column;
     justify-items: center;
     width: 100%;
-    margin: 20 rpx 0;
+    margin: 20rpx 0;
 
     .functionsText {
       display: flex;
       justify-content: center;
-      margin-top: 15 rpx;
+      margin-top: 15rpx;
       color: #666666;
-      font-size: 26 rpx;
+      font-size: 26rpx;
     }
   }
 }
 
 // 话题部分
 .topic {
-  margin: 0 40 rpx 30 rpx 40 rpx;
-  padding: 40 rpx 40 rpx 30 rpx 40 rpx;
-  border-radius: 40 rpx;
+  margin: 0 40rpx 30rpx 40rpx;
+  padding: 40rpx 40rpx 30rpx 40rpx;
+  border-radius: 40rpx;
 
   .topicTitle {
-    font-size: 36 rpx;
-    margin-bottom: 20 rpx;
+    font-size: 36rpx;
+    margin-bottom: 20rpx;
   }
 
   .topicText {
-    font-size: 24 rpx;
-    margin-left: 20 rpx;
-    margin-bottom: 15 rpx;
+    font-size: 24rpx;
+    margin-left: 20rpx;
+    margin-bottom: 15rpx;
     color: #8f8f8f;
   }
 }
@@ -273,6 +273,6 @@ function loginout() {
 
 // 话题底部填充
 .gap {
-  height: 20 rpx;
+  height: 20rpx;
 }
 </style>

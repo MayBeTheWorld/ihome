@@ -5,7 +5,7 @@
         </view>
         <status-bar/>
         <view class="menu">
-            <nut-menu>
+            <nut-menu active-color="#FEB814">
                 <nut-menu-item v-model="state.value1" :options="state.options1"/>
                 <nut-menu-item v-model="state.value1" :options="state.options2"/>
                 <nut-menu-item v-model="state.value1" :options="state.options3"/>
@@ -16,26 +16,23 @@
         <u-list
                 class="postion" height="calc(100vh - 110rpx - 48px)" @scrolltolower="scrolltolower"
         >
-            <!--解决下面baar的馊主意-->
             <u-list-item
                     v-for="(item, index) in listBoundless"
                     :key="index"
             >
-                <uni-card :isFull="true" extra="额外信息" sub-title="副标题"
-                          thumbnail="https://web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-                          title="基础卡片">
-                    <text>这是一个通栏卡片 ，通栏没有外边距，左右会贴合父元素。</text>
-                    <!--        <view v-for="(item, index) in list" :key="index" @scrolltolower="scrolltolower" :key="index">-->
+                <uni-card :isFull="true" :extra="'联系商家'" :sub-title="'近期服务' + item.service + '人'"
+                          :thumbnail="item.thumbnail"
+                          :title="item.title">
+                    <text>{{ item.text }}</text>
                     <u-scroll-list :indicator=false @left="left" @right="right">
                         <view class="scroll-list" style="flex-direction: row;">
                             <view
-                                    v-for="(item, index) in list"
-                                    :key="index"
-                                    :class="[(index === 9) && 'scroll-list__goods-item--no-margin-right']"
+                                    v-for="(img, idx) in item.images"
+                                    :key="idx"
+                                    :class="[(idx === item.images.length - 1) && 'scroll-list__goods-item--no-margin-right']"
                                     class="scroll-list__goods-item"
                             >
-                                <image :src="item.thumb" class="scroll-list__goods-item__image"></image>
-                                <text class="scroll-list__goods-item__text">￥{{ item.price }}</text>
+                                <image :src="img" class="scroll-list__goods-item__image"></image>
                             </view>
                             <view class="scroll-list__show-more">
                                 <text class="scroll-list__show-more__text">查看更多</text>
@@ -43,7 +40,6 @@
                             </view>
                         </view>
                     </u-scroll-list>
-                    <!--        </view>-->
                 </uni-card>
             </u-list-item>
         </u-list>
@@ -57,217 +53,46 @@ import StatusBar from '../../components/statusBar.vue'
 const state = reactive({
     options1: [
         {
-            text: '设计费',
+            text: '装修公司',
             value: 0
         },
         {
-            text: '新款商品',
+            text: '上榜商家',
             value: 1
         },
         {
-            text: '活动商品',
+            text: '连锁品牌',
             value: 2
         }
     ],
     options2: [
         {
-            text: '风格',
+            text: '设计师',
             value: 0
         },
         {
-            text: '新款商品',
+            text: '现代简约',
             value: 1
         },
         {
-            text: '活动商品',
+            text: '轻奢',
             value: 2
+        }, {
+            text: '新中式',
+            value: 3
         }
     ],
     options3: [
         {
-            text: '施工',
+            text: '装修套餐',
             value: 0
         },
         {
-            text: '新款商品',
+            text: '仅设计',
             value: 1
         },
         {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options4: [
-        {
-            text: '筛选',
-            value: 0
-        },
-        {
-            text: '好评排序',
-            value: 'b'
-        },
-        {
-            text: '销量排序',
-            value: 'c'
-        }
-    ],
-    value1: 0
-}, {
-    options1: [
-        {
-            text: '设计费',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options2: [
-        {
-            text: '风格',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options3: [
-        {
-            text: '施工',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options4: [
-        {
-            text: '筛选',
-            value: 0
-        },
-        {
-            text: '好评排序',
-            value: 'b'
-        },
-        {
-            text: '销量排序',
-            value: 'c'
-        }
-    ],
-    value1: 0
-}, {
-    options1: [
-        {
-            text: '设计费',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options2: [
-        {
-            text: '风格',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options3: [
-        {
-            text: '施工',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options4: [
-        {
-            text: '筛选',
-            value: 0
-        },
-        {
-            text: '好评排序',
-            value: 'b'
-        },
-        {
-            text: '销量排序',
-            value: 'c'
-        }
-    ],
-    value1: 0
-}, {
-    options1: [
-        {
-            text: '设计费',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options2: [
-        {
-            text: '风格',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
-            value: 2
-        }
-    ],
-    options3: [
-        {
-            text: '施工',
-            value: 0
-        },
-        {
-            text: '新款商品',
-            value: 1
-        },
-        {
-            text: '活动商品',
+            text: '整套装修',
             value: 2
         }
     ],
@@ -287,6 +112,7 @@ const state = reactive({
     ],
     value1: 0
 })
+
 // const handleChange = val => {
 //   console.log('val', val)
 // }
@@ -298,45 +124,64 @@ const right = () => {
 }
 const scrolltolower = () => {
     console.log('scrolltolower')
-    for (let i = 0; i < 5; i++) {
-        listBoundless.value.push(i)
+    for (let i = 0; i < 4; i++) {
+    //    在listBoundless中添加与之前相同的数据
+        listBoundless.value.push(listBoundless.value[i])
     }
 }
 // 0-100的数组
 
-const listBoundless = ref([])
-// 让数组变成无限循环的数组
-for (let i = 0; i < 5; i++) {
-    listBoundless.value.push(i)
-}
-const list = ref([
+const listBoundless = ref([
     {
-        price: '230.5',
-        thumb: 'https://cdn.uviewui.com/uview/goods/1.jpg'
-    }, {
-        price: '74.1',
-        thumb: 'https://cdn.uviewui.com/uview/goods/2.jpg'
-    }, {
-        price: '8457',
-        thumb: 'https://cdn.uviewui.com/uview/goods/6.jpg'
-    }, {
-        price: '1442',
-        thumb: 'https://cdn.uviewui.com/uview/goods/5.jpg'
-    }, {
-        price: '541',
-        thumb: 'https://cdn.uviewui.com/uview/goods/2.jpg'
-    }, {
-        price: '234',
-        thumb: 'https://cdn.uviewui.com/uview/goods/3.jpg'
-    }, {
-        price: '562',
-        thumb: 'https://cdn.uviewui.com/uview/goods/4.jpg'
-    }, {
-        price: '251.5',
-        thumb: 'https://cdn.uviewui.com/uview/goods/1.jpg'
-    }]
-)
-
+        thumbnail: '../../static/zhaungxiu/img.png',
+        title: '深圳轩怡雅居装饰设计工程有限公司',
+        text: '2021年度十大最具影响力品牌',
+        service: 1771,
+        images: [
+            '../../static/zhaungxiu/img_1.png',
+            '../../static/zhaungxiu/img_2.png',
+            '../../static/zhaungxiu/img_3.png',
+            '../../static/zhaungxiu/img_4.png'
+        ]
+    },
+    {
+        thumbnail: '../../static/zhaungxiu/img_5.png',
+        title: '东易日盛家居装饰集团股份有限公司深圳分公司',
+        text: '人气榜第8名',
+        service: 1771,
+        images: [
+            '../../static/zhaungxiu/img_6.png',
+            '../../static/zhaungxiu/img_7.png',
+            '../../static/zhaungxiu/img_8.png',
+            '../../static/zhaungxiu/img_9.png'
+        ]
+    },
+    {
+        thumbnail: '../../static/zhaungxiu/img_10.png',
+        title: '深圳市恒泰兴装饰设计工程有限公司',
+        text: '2021年度最具人气品牌',
+        service: 1256,
+        images: [
+            '../../static/zhaungxiu/img_11.png',
+            '../../static/zhaungxiu/img_12.png',
+            '../../static/zhaungxiu/img_13.png',
+            '../../static/zhaungxiu/img_14.png'
+        ]
+    },
+    {
+        thumbnail: '../../static/zhaungxiu/img_10.png',
+        title: '深圳市佳美域品牌装饰设计工程有限公司',
+        text: '2021年金兔奖',
+        service: 2027,
+        images: [
+            '../../static/zhaungxiu/img_16.png',
+            '../../static/zhaungxiu/img_17.png',
+            '../../static/zhaungxiu/img_18.png',
+            '../../static/zhaungxiu/img_19.png'
+        ]
+    }
+])
+// 让数组变成无限循环的数组
 </script>
 
 <style lang="scss">
@@ -347,8 +192,9 @@ const list = ref([
     margin-right: 20px;
 
     &__image {
-      width: 60px;
-      height: 60px;
+      width: 150rpx;
+      height: 92.7rpx;
+      border-radius: 4px;
       border-radius: 4px;
     }
 
@@ -380,18 +226,4 @@ const list = ref([
   z-index: 999;
 }
 
-//.postion {
-//  position: fixed;
-//  bottom: 110rpx;
-//  top: 100rpx;
-//}
-
-//.menu {
-//  width: 100%;
-//  height: 30px;
-//  background-color: #ff381e;
-//  position: fixed;
-//  top: 0;
-//}
-//只要设置固定位置组件就不见了
 </style>
