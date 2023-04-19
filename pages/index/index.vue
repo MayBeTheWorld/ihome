@@ -10,24 +10,30 @@
 		<!-- 头部功能 -->
 		<view class="header">
 			<view class="profileView">
-				<image :src='profile' @click="m" mode="aspectFit"></image>
+				<image :src='profile' mode="aspectFit"></image>
 				<!-- "../../static/my/我的.png" -->
 			</view>
-			<view class="searchBox">
+			<!-- <view class="searchBox">
 				<input type="text" class="search" placeholder="搜索" />
 				<image class="icon" src="../../static/index/search.png" mode="aspectFit"></image>
-			</view>
+			</view> -->
+			<u--input placeholder="请输入内容" border="surround" prefixIcon="search"
+				prefixIconStyle="font-size: 22px;color: #909399" shape="circle"></u--input>
 			<view class="imageView">
-				<image class="icon" @click="openScan" src="../../static/index/扫一扫.png" mode="aspectFit"></image>
+				<image class="icon" @click="openScan" src="../../static/index/scan.png" mode="aspectFit"></image>
 			</view>
 		</view>
 
 
 		<scroll-view class="indexView" scroll-x="true">
 			<!-- 风格选择栏 -->
-			<view class="styleChooseBox">
-				<view class="buildingStyle" v-for="(item,index) in styleLIst" @click="chooseStyle(index)"
-					:style="{ color: styleItem == index?'#FEB814':'#363636' }">{{item}}</view>
+			<view class="styleBox">
+				<view class="styleChooseBox">
+					<view class="buildingStyle" v-for="(item,index) in styleList" @click="chooseStyle(index)"
+						:style="{ color: styleItem == index?'#FEB814':'#363636' }">{{item}}</view>
+					<view class="styleChooseMore"></view>
+				</view>
+				<view class="editButton" @click="JumpToEdit()">编辑</view>
 			</view>
 
 			<!-- 瀑布流展示组件 -->
@@ -39,8 +45,7 @@
 							<custom-waterfalls-flow class="swiper-item" :column="column" :listStyle="listStyle"
 								ref="waterfallsFlowRef" :value="items">
 								<!-- #ifdef MP-WEIXIN -->
-								<view class="flowItem" v-for="(item,index) in items" :key="index"
-									slot="slot{{index}}">
+								<view class="flowItem" v-for="(item,index) in items" :key="index" slot="slot{{index}}">
 									<view class="descBox">
 										<view class="desc">{{item.desc}}</view>
 										<view class="userBox">
@@ -112,7 +117,7 @@
 	const store = useStore();
 
 
-	// 扫一扫功能
+	/* 扫一扫功能 */
 	const scanRef = ref();
 	const isShowScan = ref(false);
 	// #ifdef APP-PLUS
@@ -151,26 +156,18 @@
 	// #endif
 
 
-	// 测试函数
-	const m = () => {
-		console.log(styleItem.value)
-	}
-
-	// 风格选择栏功能
+	/* 风格选择栏功能 */
 	//风格索引，默认第一个
 	const styleItem = ref(0);
 	// 定义风格列表
-	const styleLIst = reactive(['简欧风', '中式风', '美式风', '日式风', '田园风'])
+	const styleList = ref(['简欧风', '中式风', '美式风', '日式风', '田园风'])
 	// 定义可选风格列表
 	const styleOption = reactive(['简欧风', '中式风', '美式风', '日式风', '田园风', '现代主义风', '园林风'])
-	const oldStyle = reactive({
-		styleItem: 0
-	});
-	// 捆绑scroll-view的change事件
+	// 捆绑scroll-view的change事件,实现不同风格索引跳转对应位置组件
 	function swiperChange(e) {
 		styleItem.value = e.detail.current;
-		console.log(e.detail.current);
 	};
+
 	function chooseStyle(num) {
 		if (styleItem.value == num) {
 			return false
@@ -181,13 +178,28 @@
 		}
 	};
 
-	// 瀑布流组件功能
+	function JumpToEdit() {
+		// 跳转编辑页面并传入styleList
+		uni.navigateTo({
+			url: `../subpages/edit/edit?styleList=${styleList.value}`,
+			events: {
+				// 为指定事件添加一个监听器，获取被打开页面传出的data，并覆盖掉原来的styleList
+				getNewStyleLIst: function(data) {
+					console.log(styleList.value)
+					styleList.value = data.data
+				}
+			}
+		})
+	}
+
+
+	/* 瀑布流组件功能 */
 	// 瀑布流展示数据
 	const article = reactive([])
 	// 初始化各个风格数据
-	for (let i = 0; i < styleLIst.length; i++) {
-	  const innerArr = [];
-	  innerArr.push({
+	for (let i = 0; i < styleList.value.length; i++) {
+		const innerArr = [];
+		innerArr.push({
 			image: 'https://p3.itc.cn/q_70/images03/20210228/77c2895860cd4b8a84d4a7047a48e92d.jpeg',
 			title: '',
 			desc: '该建筑位于郑州的一个休闲中心，以地势地貌为依托，将建筑、环境、人文汇聚于此。虽然没有使用坡屋顶，但是出挑的屋檐，庭院都有中国传统建筑的意味。',
@@ -228,7 +240,7 @@
 			desc: '这个二层别墅是个外观不出挑的简欧风格，比起看到的很多华丽造型的欧式建筑，这个简欧住宅更偏向于一种复古的氛围感，浅黄色墙面砖就素雅了许多，拱形门洞也给人欧式古堡感觉，虽大体上比较现代化，但氛围感却十足',
 			id: 1008,
 		});
-	  article.push(innerArr);
+		article.push(innerArr);
 	}
 	// 随机添加示例数据
 	const data = reactive({
@@ -283,11 +295,12 @@
 	//瀑布流组件初始化数据
 	const waterfallsFlowRef = ref(null);
 	//用户头像变量
-	const profile = ref('../../static/main/我的.png');
+	const profile = ref('../../static/main/mine.png');
 	// 文字作者头像变量
 	const src = ref('https://cdn.uviewui.com/uview/album/1.jpg')
 	// 收藏文章
 	const collectIds = reactive([])
+
 	function saveArticle(item) {
 		if (collectIds.indexOf(item.id) == -1) {
 			collectIds.push(item.id)
@@ -300,15 +313,11 @@
 	// 捆绑scroll-view的scrolltolower事件,触底刷新功能
 	function addNew(index) {
 		let length = article[index].length
-		for (let i = 0;i <= 4;i++) {
+		for (let i = 0; i <= 4; i++) {
 			let t = Math.random()
 			const num = ref(Math.floor(0 * (1 - t) + data.list0.length * t))
 			article[index].push(data.list0[num.value]);
 			article[index][length - 1].id += 1
-		}
-		for (let i = 0;i <= 5;i++) {
-			console.log(index)
-			console.log(article[i])
 		}
 	}
 </script>
@@ -342,11 +351,12 @@
 	.header {
 		width: 100%;
 		height: 100rpx;
+		background-color: #fff;
 		position: relative;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
-		margin-top: 10rpx;
+		padding-top: 10rpx;
 	}
 
 	.profileView {
@@ -356,8 +366,8 @@
 	}
 
 	.profileView>image {
-		width: 80rpx;
-		height: 80rpx;
+		width: 65rpx;
+		height: 65rpx;
 	}
 
 	.imageView {
@@ -373,19 +383,19 @@
 		height: 60rpx;
 	}
 
-	.searchBox {
-		width: 100%;
-		margin: 0 0 0 20rpx;
-		padding: 10rpx 20rpx;
-		display: flex;
-		flex-direction: row;
-		justify-items: center;
-		align-items: center;
-		border-radius: 50rpx;
-		border: 0rpx;
-		background-color: rgba(0, 0, 0, 0.05);
+	// .searchBox {
+	// 	width: 100%;
+	// 	margin: 0 0 0 20rpx;
+	// 	padding: 10rpx 20rpx;
+	// 	display: flex;
+	// 	flex-direction: row;
+	// 	justify-items: center;
+	// 	align-items: center;
+	// 	border-radius: 50rpx;
+	// 	border: 0rpx;
+	// 	background-color: rgba(0, 0, 0, 0.05);
+	// }
 
-	}
 
 	.search {
 		height: 100%;
@@ -401,28 +411,54 @@
 	}
 
 	/* 风格选择栏部分 */
+	.styleBox {
+		display: flex;
+		flex-direction: row;
+		background-color: #fff;
+		padding: 20rpx 0;
+	}
+
 	.styleChooseBox {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		flex-wrap: nowrap;
+		/* 弹性盒子不折行 */
+		overflow-x: scroll;
+		overflow-y: hidden;
+		flex: 1;
+	}
+
+	// 在风格选择栏的右侧添加一个渐变图片
+	.styleChooseMore {
+		position: absolute;
+		right: 98rpx;
+		height: 50rpx;
+		width: 98rpx;
+		display: block;
+		background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff);
+	}
+
+	.editButton {
+		display: flex;
 		align-items: center;
-		flex-wrap: wrap;
-		padding: 20rpx 0;
+		justify-content: center;
+		flex-basis: 98rpx;
 	}
 
 	.buildingStyle {
 		display: flex;
 		align-items: center;
+		justify-content: center;
+		flex-basis: 150rpx;
+		flex-shrink: 0; // 弹性盒子不收缩
 		font-weight: 900;
 		height: 50rpx;
 	}
 
-	.styleChooseView {
-		height: 90rpx;
-	}
 
 	/* 瀑布流组件部分 */
 	.waterfallsFlowBox {
+		background: #fff;
 		height: calc(100vh - var(--status-bar-height) - 110rpx - 90rpx - 110rpx);
 	}
 

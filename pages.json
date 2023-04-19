@@ -65,6 +65,13 @@
         "enablePullDownRefresh": false
       }
     }
+    ,{
+	  "path" : "pages/subpages/edit/edit",
+      "style" : {
+        "navigationBarTitleText": "风格频道编辑",
+        "enablePullDownRefresh": false
+      }    
+    }
   ],
   "tabBar": {
     "color": "#7A7E83",
@@ -92,6 +99,9 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "爱佳装",
     "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "backgroundColor": "#F8F8F8",
+	"app-plus": {
+		"bounce": "none"
+	}
   }
 }

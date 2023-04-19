@@ -7,7 +7,7 @@
 			<view class="tabBarContent">
 				<view class="imageView">
 					<!-- 图标设置 -->
-					<image src="../../static/index/首页.png" mode="aspectFit"></image>
+					<image src="../../static/index/index.png" mode="aspectFit"></image>
 				</view>
 				<view class="textView">首页</view>
 			</view>
@@ -27,7 +27,7 @@
 			@click="gotoIndexMenu('2')">
 			<view class="tabBarContent">
 				<view class="imageView">
-					<image src="../../static/news/消息.png" mode="aspectFit"></image>
+					<image src="../../static/news/notion.png" mode="aspectFit"></image>
 				</view>
 				<view class="textView">消息</view>
 			</view>
@@ -37,7 +37,7 @@
 			@click="gotoIndexMenu('3')">
 			<view class="tabBarContent">
 				<view class="imageView">
-					<image src="../../static/main/我的.png" mode="aspectFit"></image>
+					<image src="../../static/main/mine.png" mode="aspectFit"></image>
 				</view>
 				<view class="textView">我的</view>
 			</view>

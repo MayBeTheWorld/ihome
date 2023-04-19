@@ -166,7 +166,6 @@
 
 // 用户未登录时展示部分
 .emptyUser {
-	background: #fff;
 	padding-top: 40rpx;
 	text-align: center;
 	line-height: 50rpx;
