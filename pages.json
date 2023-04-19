@@ -38,8 +38,16 @@
         },
         {
             "path": "components/scan/scanReturn",
-            "style": {}
-        },
+            "style": {
+                "navigationBarTitleText": "风格选择"
+            },
+            "app-plus": {
+                "titleNView": {
+                    "titleText": "风格选择"
+                }
+            }
+        }
+    ,
         {
             "path": "pages/news/news",
             "style": {
@@ -100,7 +108,6 @@
     },
     "globalStyle": {
         "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "爱佳装",
         "navigationBarBackgroundColor": "#F8F8F8",
         "backgroundColor": "#F8F8F8",
         "app-plus": {

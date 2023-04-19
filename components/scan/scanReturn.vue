@@ -36,16 +36,16 @@ const router = useRouter()
 const currentSlide = ref(0)
 const slides = [
   {
-    image: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-    description: 'Slide 1 description'
+    image: 'static/scanreturn/img.png',
+    description: '北欧极简'
   },
   {
-    image: 'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-    description: 'Slide 2 description'
+    image: 'static/scanreturn/img_1.png',
+    description: '现代简约'
   },
   {
-    image: 'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-    description: 'Slide 3 description'
+    image: 'static/scanreturn/img_2.png',
+    description: '美式田园'
   }
 ]
 
@@ -59,7 +59,7 @@ const setCurrentSlide = (index) => {
 
 const navigateToVR = () => {
   uni.switchTab({
-    url: '/pages/VR/VR'
+    url: '/pages/shopping-centre/shopping-centre'
   })
 }
 </script>

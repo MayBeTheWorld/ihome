@@ -283,7 +283,7 @@
 	//瀑布流组件初始化数据
 	const waterfallsFlowRef = ref(null);
 	//用户头像变量
-	const profile = ref('../../static/main/mine.png');
+	const profile = ref('../../static/index/logo.png');
 	// 文字作者头像变量
 	const src = ref('https://cdn.uviewui.com/uview/album/1.jpg')
 	// 收藏文章

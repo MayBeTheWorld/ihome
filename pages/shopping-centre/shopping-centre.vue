@@ -179,6 +179,17 @@ const listBoundless = ref([
             '../../static/zhaungxiu/img_18.png',
             '../../static/zhaungxiu/img_19.png'
         ]
+    },  {
+        thumbnail: '../../static/zhaungxiu/img.png',
+        title: '深圳轩怡雅居装饰设计工程有限公司',
+        text: '2021年度十大最具影响力品牌',
+        service: 1771,
+        images: [
+            '../../static/zhaungxiu/img_1.png',
+            '../../static/zhaungxiu/img_2.png',
+            '../../static/zhaungxiu/img_3.png',
+            '../../static/zhaungxiu/img_4.png'
+        ]
     }
 ])
 // 让数组变成无限循环的数组

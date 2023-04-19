@@ -17,7 +17,7 @@
               @click="gotoIndexMenu('1')">
             <view class="tabBarContent">
                 <view class="imageView">
-                    <image src="../../static/VR/vr.png" mode="aspectFit"></image>
+                    <image src="../../static/VR/zhuang.png" mode="aspectFit"></image>
                 </view>
                 <view class="textView">装修</view>
             </view>
