@@ -11,14 +11,14 @@
 		<view class="header">
 			<view class="profileView">
 				<image :src='profile' @click="m" mode="aspectFit"></image>
-				<!-- "../../static/my/我的.png" -->
+				<!-- "../../static/my/mine.png" -->
 			</view>
 			<view class="searchBox">
 				<input type="text" class="search" placeholder="搜索" />
 				<image class="icon" src="../../static/index/search.png" mode="aspectFit"></image>
 			</view>
 			<view class="imageView">
-				<image class="icon" @click="openScan" src="../../static/index/扫一扫.png" mode="aspectFit"></image>
+				<image class="icon" @click="openScan" src="../../static/index/scan.png" mode="aspectFit"></image>
 			</view>
 		</view>
 
@@ -283,7 +283,7 @@
 	//瀑布流组件初始化数据
 	const waterfallsFlowRef = ref(null);
 	//用户头像变量
-	const profile = ref('../../static/main/我的.png');
+	const profile = ref('../../static/main/mine.png');
 	// 文字作者头像变量
 	const src = ref('https://cdn.uviewui.com/uview/album/1.jpg')
 	// 收藏文章
