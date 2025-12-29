@@ -10,7 +10,7 @@
 		<!-- 头部功能 -->
 		<view class="header">
 			<view class="profileView">
-				<image :src='profile' @click="m" mode="aspectFit"></image>
+				<image :src='profile' @click="mine" mode="aspectFit"></image>
 				<!-- "../../static/my/mine.png" -->
 			</view>
 			<view class="searchBox">
@@ -34,51 +34,49 @@
 			<swiper class="waterfallsFlowBox" :autoplay="false" :circular="true" :current="styleItem"
 				@change="swiperChange">
 				<swiper-item v-for="(items,articleIndex) in article">
-					<scroll-view class="waterfallsFlowBox" scroll-y="true" @scrolltolower="addNew(articleIndex)">
-						<view>
-							<custom-waterfalls-flow class="swiper-item" :column="column" :listStyle="listStyle"
-								ref="waterfallsFlowRef" :value="items">
-								<!-- #ifdef MP-WEIXIN -->
-								<view class="flowItem" v-for="(item,index) in items" :key="index"
-									slot="slot{{index}}">
+					<scroll-view class="waterfallsFlowBox" scroll-y="true" @scrolltolower="addNew(articleIndex)" :lower-threshold="600">
+						<waterfallList class="swiper-item" :column="column" :listStyle="listStyle"
+							ref="waterfallsFlowRef" :value="items">
+							<!-- #ifdef MP-WEIXIN -->
+							<view class="flowItem" v-for="(item,index) in items" :key="index"
+								slot="slot{{index}}">
+								<view class="descBox">
+									<view class="desc">{{item.desc}}</view>
+									<view class="userBox">
+										<view class="user">
+											<u-avatar :src="src" shape="circle" size="40"></u-avatar>
+											<text class="userName">用户名</text>
+										</view>
+										<view class="star" @click="saveArticle(item)">
+											<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
+												:color="collectIds.includes(item.id)?'#FEB814':'#363636'" size="40">
+											</u-icon>
+										</view>
+									</view>
+								</view>
+							</view>
+							<!-- #endif -->
+							<!-- #ifndef MP-WEIXIN -->
+							<template v-slot:default="item">
+								<view class="flowItem">
 									<view class="descBox">
 										<view class="desc">{{item.desc}}</view>
 										<view class="userBox">
 											<view class="user">
-												<u-avatar :src="src" shape="circle" size="40"></u-avatar>
-												<text class="userName">1232321312</text>
+												<u-avatar :src="src" shape="circle" size="50"></u-avatar>
+												<text class="userName">用户名</text>
 											</view>
 											<view class="star" @click="saveArticle(item)">
 												<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
-													:color="collectIds.includes(item.id)?'#FEB814':'#363636'" size="40">
-												</u-icon>
+													:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
+													size="40"></u-icon>
 											</view>
 										</view>
 									</view>
 								</view>
-								<!-- #endif -->
-								<!-- #ifndef MP-WEIXIN -->
-								<template v-slot:default="item">
-									<view class="flowItem">
-										<view class="descBox">
-											<view class="desc">{{item.desc}}</view>
-											<view class="userBox">
-												<view class="user">
-													<u-avatar :src="src" shape="circle" size="50"></u-avatar>
-													<text class="userName">1232321312</text>
-												</view>
-												<view class="star" @click="saveArticle(item)">
-													<u-icon :name="collectIds.includes(item.id)?'star-fill':'star'"
-														:color="collectIds.includes(item.id)?'#FEB814':'#363636'"
-														size="40"></u-icon>
-												</view>
-											</view>
-										</view>
-									</view>
-								</template>
-								<!-- #endif -->
-							</custom-waterfalls-flow>
-						</view>
+							</template>
+							<!-- #endif -->
+						</waterfallList>
 					</scroll-view>
 				</swiper-item>
 			</swiper>
@@ -102,6 +100,7 @@
 		nextTick
 	} from "vue";
 	import publicTabBar from "@/components/publicTabBar/publicTabBar.vue";
+	import waterfallList from "../../components/waterfallList.vue";
 	// #ifdef APP-PLUS
 	import scan from "@/components/scan/scan.vue";
 	// #endif
@@ -119,17 +118,14 @@
 	function openScan() {
 		scanRef.value.open();
 		isShowScan.value = true;
-		console.log('父组件触发打开');
 	};
 	// 隐藏扫描
 	function closeScan() {
 		scanRef.value.close();
 		isShowScan.value = false;
-		console.log('父组件触发关闭');
 	};
 	// 扫码成功
 	function getScanCode(val) {
-		console.log('父组件扫码成功')
 		closeScan();
 		uni.showToast({
 			icon: 'none',
@@ -141,10 +137,8 @@
 	function openScan() {
 		uni.scanCode({
 			success: function() {
-				console.log('扫码成功')
 			},
 			fail: function() {
-				console.log('扫码失败')
 			}
 		})
 	}
@@ -152,8 +146,8 @@
 
 
 	// 测试函数
-	const m = () => {
-		console.log(styleItem.value)
+	const mine = () => {
+		// 调转我的界面
 	}
 
 	// 风格选择栏功能
@@ -169,7 +163,6 @@
 	// 捆绑scroll-view的change事件
 	function swiperChange(e) {
 		styleItem.value = e.detail.current;
-		console.log(e.detail.current);
 	};
 	function chooseStyle(num) {
 		if (styleItem.value == num) {
@@ -291,24 +284,19 @@
 	function saveArticle(item) {
 		if (collectIds.indexOf(item.id) == -1) {
 			collectIds.push(item.id)
-			console.log('收藏成功')
 		} else {
 			collectIds.splice(collectIds.indexOf(item.id), 1);
-			console.log('收藏取消')
 		}
 	}
 	// 捆绑scroll-view的scrolltolower事件,触底刷新功能
 	function addNew(index) {
+		const batch = 10; // 预加载更大批次，提前准备更多卡片
 		let length = article[index].length
-		for (let i = 0;i <= 4;i++) {
+		for (let i = 0;i <= batch;i++) {
 			let t = Math.random()
 			const num = ref(Math.floor(0 * (1 - t) + data.list0.length * t))
 			article[index].push(data.list0[num.value]);
 			article[index][length - 1].id += 1
-		}
-		for (let i = 0;i <= 5;i++) {
-			console.log(index)
-			console.log(article[i])
 		}
 	}
 </script>

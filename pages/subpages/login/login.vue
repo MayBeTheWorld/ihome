@@ -13,7 +13,7 @@
 		<view class="login-form">
 			<input class="input-row js-input-numer" v-model="account" maxlength="20" 
 			placeholder="输入账号"/>
-			<!-- <input class="input-row js-input-numer" v-model="account" type="number" maxlength="11" placeholder="输入手机号"/> -->
+
 			<input class="input-row" v-model="password" @confirm="bindLogin" 
 			type="password" maxlength="32" placeholder="输入密码" confirm-type="登录"/>
 			<button type="button" class="login-btn" @click="bindLogin">登录</button>
@@ -137,8 +137,8 @@
 		
 		// 实现登录
 		console.log(account.value + ',' + password.value)
-		uni.$u.http.post('http://43.140.203.85:8102/user/login', {
-			loginName: account.value,
+		uni.$u.http.post('http://127.0.0.1:4523/m1/4064251-3701784-default/api/login', {
+			username: account.value,
 			password: password.value
 			// loginName: 'test',
 			// password: 'a1915f03b38bf54926700dfc9ea699f8'
@@ -153,7 +153,7 @@
 					duration: 2000
 				});
 			};
-			// console.log(res.data.content);
+			console.log(res.data.content.id);
 			store.commit('storeLogin', res.data.content);
 			uni.reLaunch({
 				url: '/pages/index/index'

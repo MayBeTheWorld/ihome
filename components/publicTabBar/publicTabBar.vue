@@ -87,5 +87,57 @@
 </script>
 
 <style>
-	@import url("publicTabBar.css");
+	.tabBar {
+		width: 750rpx;
+		height: 110rpx;
+		position: fixed;
+		z-index: 999;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		background-color: rgba(255, 255, 255, 1);
+	}
+	
+	.tabBarView {
+		width: 25%;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.tabBarContent {
+		width: 98rpx;
+		height: 98rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.imageView {
+		width: 55%;
+		height: 55%;
+		margin-top: 5rpx;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	image {
+		height: 60rpx;
+	}
+	
+	.textView {
+		width: 60rpx;
+		height: 32rpx;
+		color: #FEB814;
+		transform: translateY(-25%);
+		font-size: 24rpx;
+		text-align: center;
+	}
 </style>
